@@ -21,5 +21,13 @@
   },
   "devDependencies": {
     "nodemon": "^1.18.10"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/olegs7771/coolalbum.git"
+  },
+  "bugs": {
+    "url": "https://github.com/olegs7771/coolalbum/issues"
+  },
+  "homepage": "https://github.com/olegs7771/coolalbum#readme"
 }
