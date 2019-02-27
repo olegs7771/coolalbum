@@ -1,3 +1,3 @@
-module.exports ={
-  mongoDB= process.env.MONGO_DB
-}
+module.exports = {
+  mongoDB: process.env.MONGO_DB
+};
