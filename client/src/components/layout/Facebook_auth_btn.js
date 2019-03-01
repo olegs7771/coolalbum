@@ -31,8 +31,10 @@ class Facebook_auth_btn extends Component {
       fbContent = (
         <div className="card card-body my-3">
           <div className="row">
-            <div className="col-md-3">
+            <div className="col-md-4">
               <span className="h4">{name}</span>
+              <br />
+              <span className="h5">{email}</span>
             </div>
             <div className="col-md-1">
               <img src={picture} alt="" />
