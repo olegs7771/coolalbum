@@ -5,13 +5,13 @@ class Header extends Component {
     return (
       <div className="pos-f-t">
         <nav className="navbar navbar-dark bg-dark">
-          <a class="navbar-brand" href="#">
+          <a className="navbar-brand" href="/">
             CoolAlbum
           </a>
           <nav className="navbar navbar-dark bg-dark navbar-expand-lg ml-auto ">
-            <ul class="navbar-nav mt-2 mt-lg-0">
-              <li class="nav-item active">
-                <a class="nav-link" href="#">
+            <ul className="navbar-nav mt-2 mt-lg-0">
+              <li className="nav-item active">
+                <a className="nav-link" href="/">
                   Login
                 </a>
               </li>
@@ -33,17 +33,17 @@ class Header extends Component {
           <div className="bg-dark p-4">
             <ul className="nav justify-content-end">
               <li className="nav-item">
-                <a className="nav-link text-white" href="#">
+                <a className="nav-link text-white" href="/">
                   Active
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link text-white" href="#">
+                <a className="nav-link text-white" href="/">
                   Link
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link text-white" href="#">
+                <a className="nav-link text-white" href="/">
                   Link
                 </a>
               </li>
