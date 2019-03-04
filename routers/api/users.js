@@ -15,7 +15,16 @@ router.post("/register", (req, res) => {
     if (user) {
       res.status(400).json({ msg: "User Exists" });
     } else {
-      res.json({ msg: "Create user" });
+      const newUser = new User({
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password1
+      });
+
+      newUser
+        .save()
+        .then(user => res.json(user))
+        .catch(err => res.json(err));
     }
   });
 });
