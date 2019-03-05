@@ -45,20 +45,25 @@ router.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
 
-  User.findOne({ email })
-    .then(user => {
-      if (user) {
-        //user found! check for valid password
+  User.findOne({ email }).then(user => {
+    if (!user) {
+      //user not found
+      return res.status(400).json({ msg: "User Not Found" });
+    }
 
-        bcrypt.compare(password, user.password).then(isMatch => {
-          res.json(user.password);
-        });
+    bcrypt.compare(password, user.password).then(isMatch => {
+      console.log(isMatch);
+      console.log(password);
+      console.log(user.password);
+
+      if (isMatch) {
+        //password from form compared to password from db
+        res.json({ msg: "Success!" });
       } else {
-        //user not found
-        res.status(400).json({ msg: "User Not Found" });
+        return res.status(400).json({ msg: "passport wrong" });
       }
-    })
-    .catch(err => res.status(400).json(err));
+    });
+  });
 });
 
 module.exports = router;
