@@ -42,9 +42,21 @@ router.post("/register", (req, res) => {
 // // @access Public
 
 router.post("/login", (req, res) => {
-  User.findOne({ email: req.body.email })
+  const email = req.body.email;
+  const password = req.body.password;
+
+  User.findOne({ email })
     .then(user => {
-      res.status(200).json(user);
+      if (user) {
+        //user found! check for valid password
+
+        bcrypt.compare(password, user.password).then(isMatch => {
+          res.json(user.password);
+        });
+      } else {
+        //user not found
+        res.status(400).json({ msg: "User Not Found" });
+      }
     })
     .catch(err => res.status(400).json(err));
 });

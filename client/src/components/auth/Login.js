@@ -6,7 +6,7 @@ import { loginUser } from "../../actions/userActions";
 class Login extends Component {
   state = {
     email: "",
-    password1: ""
+    password: ""
   };
 
   onChange = e => {
@@ -20,7 +20,7 @@ class Login extends Component {
     console.log("submitted");
     const newUser = {
       email: this.state.email,
-      password1: this.state.password1
+      password: this.state.password
     };
 
     this.props.loginUser(newUser);
@@ -28,11 +28,11 @@ class Login extends Component {
   };
 
   render() {
-    const { email, password1 } = this.state;
+    const { email, password } = this.state;
     return (
       <div className="row my-3">
         <div className="col-md-12">
-          <div className="text-center h3">Register Here</div>
+          <div className="text-center h3">Login Here</div>
           <div className="card card-body">
             <div className="container">
               <form onSubmit={this.onSubmit}>
@@ -45,8 +45,8 @@ class Login extends Component {
                 />
                 <TextFormGroup
                   placeholder="Password..."
-                  value={password1}
-                  name="password1"
+                  value={password}
+                  name="password"
                   onChange={this.onChange}
                 />
 
