@@ -15,44 +15,28 @@ router.post("/register", (req, res) => {
     if (user) {
       res.status(400).json({ msg: "User Exists" });
     } else {
+      //user not exists , we can create new one
       const newUser = new User({
         name: req.body.name,
         email: req.body.email,
         password: req.body.password1
       });
-
-      newUser
-        .save()
-        .then(user => res.json(user))
-        .catch(err => res.json(err));
+      //create hash password with bcrypt
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(newUser.password, salt, (err, hash) => {
+          if (err) throw err;
+          newUser.password = hash;
+          newUser
+            .save()
+            .then(user => res.json(user))
+            .catch(err => res.json(err));
+        });
+      });
     }
+    //end of creating new user
   });
 });
 
-// router.post("/register", (req, res) => {
-//   User.findOne({ email: req.body.email }).then(user => {
-//     if (user) {
-//       res.status(400).json({ msg: "email already exists" });
-//     } else {
-//       const newUser = new User({
-//         email: req.body.email,
-//         name: req.body.name,
-//         password: req.body.password
-//       });
-//       //create hash password
-//       bcrypt.genSalt(10, (err, salt) => {
-//         bcrypt.hash(newUser.password, salt, (err, hash) => {
-//           if (err) throw err;
-//           newUser.password = hash;
-//           newUser
-//             .save()
-//             .then(user => res.status(200).json(user))
-//             .catch(err => res.status(400).console.log(err));
-//         });
-//       });
-//     }
-//   });
-// });
 // // @desc /Login User
 // // @route POST /api/users/register
 // // @access Public
