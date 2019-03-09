@@ -1,6 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const passport = require("passport");
+const passport_facebook = require("passport-facebook");
 const path = require("path");
 //routers
 const users = require("./routers/api/users");
@@ -14,6 +16,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // parse application/json
 app.use(bodyParser.json());
+
+//passport middleware
+app.use(passport.initialize());
+
+//Passport Config  JWT Strategy
+require("./config/passport")(passport);
+//Passport Config facebook Strategy
+require("./config/passport_facebook")(passport_facebook);
 
 //db config
 const db = require("./config/keys").mongoDB;

@@ -1,14 +1,23 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 import FacebookLogin from "react-facebook-login";
+import window from "global";
+
+import { connect } from "react-redux";
+
+import { registerUser } from "../../../actions/userActions";
 class Facebook_auth_btn extends Component {
   state = {
     fbValidated: false,
     email: "",
     name: "",
-    picture: ""
+    picture: "",
+    id: ""
   };
 
   handleLogout = () => {
+    console.log(window);
+
     this.setState({
       fbValidated: false
     });
@@ -20,26 +29,28 @@ class Facebook_auth_btn extends Component {
       fbValidated: true,
       email: response.email,
       name: response.name,
-      picture: response.picture.data.url
+      picture: response.picture.data.url,
+      id: response.id
     });
   };
 
   render() {
-    const { fbValidated, email, name, picture } = this.state;
+    const { fbValidated, email, name, picture, id } = this.state;
+
     let fbContent;
     if (fbValidated) {
       fbContent = (
         <div className="card card-body my-3">
           <div className="row">
-            <div className="col-md-4">
+            <div className="col-md-8">
               <span className="h4">{name}</span>
               <br />
               <span className="h5">{email}</span>
             </div>
-            <div className="col-md-1">
+            <div className="col-md-2">
               <img src={picture} alt="" />
             </div>
-            <div className="col-md-1">
+            <div className="col-md-2">
               <button className="btn btn-primary" onClick={this.handleLogout}>
                 Logout
               </button>
@@ -61,7 +72,17 @@ class Facebook_auth_btn extends Component {
       );
     }
 
-    return <div className="py-3">{fbContent}</div>;
+    return (
+      <div className="row">
+        <span className="text-center text-info h5 col-md-12 mb-3">
+          Don' have an account? Sign Up!
+        </span>
+        <div className="col-md-12">{fbContent}</div>
+      </div>
+    );
   }
 }
-export default Facebook_auth_btn;
+export default connect(
+  null,
+  { registerUser }
+)(withRouter(Facebook_auth_btn));

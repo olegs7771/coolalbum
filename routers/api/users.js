@@ -3,6 +3,9 @@ const router = express.Router();
 //Bring in Model (models/User.js)
 const User = require("../../models/User");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const keys = require("../../config/dev_keys").secredOrKey;
+const passport = require("passport");
 
 router.post("/test", (req, res) => res.json({ msg: "response from users" }));
 
@@ -52,18 +55,46 @@ router.post("/login", (req, res) => {
     }
 
     bcrypt.compare(password, user.password).then(isMatch => {
-      console.log(isMatch);
-      console.log(password);
-      console.log(user.password);
-
       if (isMatch) {
-        //password from form compared to password from db
-        res.json({ msg: "Success!" });
+        //password from form compared to password from db(user matched)
+        // user obtains jwt
+        //1. create JWT payload with user info
+        const payload = {
+          id: user._id,
+          name: user.name,
+          email: user.email
+        };
+        jwt.sign(payload, keys, { expiresIn: 3600 }, (err, token) => {
+          res.json({ success: true, token: "Bearer " + token });
+        });
       } else {
         return res.status(400).json({ msg: "passport wrong" });
       }
     });
   });
 });
+
+// // @desc /Shows current logged user
+// // @route POST /api/users/current
+// // @access Private
+
+router.post(
+  "/current",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    res.json({ msg: "Success!" });
+  }
+);
+// // @desc /Shows current logged user Facebook Strategy
+// // @route POST /api/users/current
+// // @access Private
+
+router.post(
+  "/currentfb",
+  passport.authenticate("facebook", { failureRedirect: "/login" }),
+  (req, res) => {
+    res.json({ msg: "Success!" });
+  }
+);
 
 module.exports = router;

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import TextFormGroup from "../textFormGroup/TextFormGroup";
+import TextFormGroup from "../../textFormGroup/TextFormGroup";
 import { connect } from "react-redux";
-import { registerUser } from "../../actions/userActions";
+import { registerUser } from "../../../actions/userActions";
 
 class Register extends Component {
   state = {
