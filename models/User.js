@@ -21,18 +21,11 @@ const UserSchema = new Schema({
     type: Date,
     default: Date.now()
   },
+
   facebook: {
-    email: {
-      type: String,
-      required: true
-    },
-    facebookProvider: {
-      type: {
-        id: String,
-        accessToken: String
-      },
-      select: false
-    }
+    id: String,
+    token: String,
+    email: String
   }
 });
 module.exports = User = mongoose.model("users", UserSchema);

@@ -10,6 +10,9 @@ class Login extends Component {
           <LoginForm />
         </div>
         <div className="col-md-6">
+          <span className="text-center text-info h5 col-md-12 mb-3">
+            Don' have an account? Sign Up!
+          </span>
           <Facebook_auth_btn />
         </div>
       </div>

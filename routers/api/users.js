@@ -7,8 +7,6 @@ const jwt = require("jsonwebtoken");
 const keys = require("../../config/dev_keys").secredOrKey;
 const passport = require("passport");
 
-router.post("/test", (req, res) => res.json({ msg: "response from users" }));
-
 // @desc /Register New User
 // @route POST /api/users/register
 // @access Public
@@ -16,13 +14,13 @@ router.post("/test", (req, res) => res.json({ msg: "response from users" }));
 router.post("/register", (req, res) => {
   User.findOne({ email: req.body.email }).then(user => {
     if (user) {
-      res.status(400).json({ msg: "User Exists" });
+      return res.status(400).json({ msg: "User Exists" });
     } else {
       //user not exists , we can create new one
       const newUser = new User({
         name: req.body.name,
         email: req.body.email,
-        password: req.body.password1
+        password: req.body.password
       });
       //create hash password with bcrypt
       bcrypt.genSalt(10, (err, salt) => {
@@ -38,6 +36,26 @@ router.post("/register", (req, res) => {
     }
     //end of creating new user
   });
+});
+
+// @desc /Register New User with Facebook
+// @route POST /api/users/registerFb
+// @access Public
+
+router.post("/registerFb", (req, res) => {
+  console.log(req.body.email);
+
+  User.findOne({ email: req.body.email })
+    .then(user => {
+      if (!user) {
+        return res.json({ msg: "success!" });
+      }
+      //create token from facebook
+      const newToken = new User({
+        facebookToken: req.body.facebookToken
+      });
+    })
+    .catch(err => console.log(err));
 });
 
 // // @desc /Login User

@@ -1,19 +1,27 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
+
 import FacebookLogin from "react-facebook-login";
 import window from "global";
 
 import { connect } from "react-redux";
 
-import { registerUser } from "../../../actions/userActions";
+import { registerUserFb } from "../../../actions/userActions";
 class Facebook_auth_btn extends Component {
   state = {
     fbValidated: false,
     email: "",
     name: "",
     picture: "",
-    id: ""
+    id: "",
+    accessToken: ""
   };
+
+  componentDidMount() {
+    const { history } = this.props;
+    console.log(history);
+    console.log(window);
+  }
 
   handleLogout = () => {
     console.log(window);
@@ -30,8 +38,17 @@ class Facebook_auth_btn extends Component {
       email: response.email,
       name: response.name,
       picture: response.picture.data.url,
-      id: response.id
+      id: response.id,
+      accessToken: response.accessToken
     });
+    if (this.state.id !== "") {
+      const newFbUser = {
+        id: this.state.id,
+        email: this.state.email,
+        accessToken: this.state.accessToken
+      };
+      this.props.registerUserFb(newFbUser);
+    }
   };
 
   render() {
@@ -74,9 +91,6 @@ class Facebook_auth_btn extends Component {
 
     return (
       <div className="row">
-        <span className="text-center text-info h5 col-md-12 mb-3">
-          Don' have an account? Sign Up!
-        </span>
         <div className="col-md-12">{fbContent}</div>
       </div>
     );
@@ -84,5 +98,5 @@ class Facebook_auth_btn extends Component {
 }
 export default connect(
   null,
-  { registerUser }
+  { registerUserFb }
 )(withRouter(Facebook_auth_btn));

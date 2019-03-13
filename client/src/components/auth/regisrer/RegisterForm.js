@@ -1,14 +1,23 @@
 import React, { Component } from "react";
 import TextFormGroup from "../../textFormGroup/TextFormGroup";
 import { connect } from "react-redux";
+// import FacebookLogin from "react-facebook-login";
+import Facebook_auth_btn from "../login/Facebook_auth_btn";
 import { registerUser } from "../../../actions/userActions";
 
 class RegisterForm extends Component {
   state = {
     username: "",
     email: "",
-    password1: "",
-    password2: ""
+    password: "",
+    showLoginBtnFaceBook: false
+  };
+
+  handleShowLoginBtnFaceBook = e => {
+    e.preventDefault();
+    this.setState({
+      showLoginBtnFaceBook: !this.state.showLoginBtnFaceBook
+    });
   };
 
   onChange = e => {
@@ -17,14 +26,24 @@ class RegisterForm extends Component {
     });
   };
 
+  responseFacebook = response => {
+    console.log(response);
+    // this.setState({
+    //   fbValidated: true,
+    //   email: response.email,
+    //   name: response.name,
+    //   picture: response.picture.data.url,
+    //   id: response.id
+    // });
+  };
+
   onSubmit = e => {
     e.preventDefault();
     console.log("submitted");
     const newUser = {
       name: this.state.username,
       email: this.state.email,
-      password1: this.state.password1,
-      password2: this.state.password2
+      password: this.state.password
     };
 
     this.props.registerUser(newUser);
@@ -32,7 +51,16 @@ class RegisterForm extends Component {
   };
 
   render() {
-    const { username, email, password1, password2 } = this.state;
+    let fbContent;
+    if (this.state.showLoginBtnFaceBook) {
+      fbContent = (
+        <div className="my-2">
+          <Facebook_auth_btn />
+        </div>
+      );
+    }
+
+    const { username, email, password } = this.state;
     return (
       <div className="col-md-6 my-3  mx-auto">
         <div className="text-center h3 ">Register Here</div>
@@ -55,14 +83,8 @@ class RegisterForm extends Component {
               />
               <TextFormGroup
                 placeholder="Password..."
-                value={password1}
-                name="password1"
-                onChange={this.onChange}
-              />
-              <TextFormGroup
-                placeholder="Confirm Password..."
-                value={password2}
-                name="password2"
+                value={password}
+                name="password"
                 onChange={this.onChange}
               />
 
@@ -80,6 +102,13 @@ class RegisterForm extends Component {
             <hr />
           </div>
         </div>
+        <button
+          className="btn-primary btn-block"
+          onClick={this.handleShowLoginBtnFaceBook}
+        >
+          Continue with Facebook
+        </button>
+        {this.state.showLoginBtnFaceBook ? <div>{fbContent}</div> : null}
       </div>
     );
   }

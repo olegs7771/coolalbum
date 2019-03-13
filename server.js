@@ -22,8 +22,9 @@ app.use(passport.initialize());
 
 //Passport Config  JWT Strategy
 require("./config/passport")(passport);
+
 //Passport Config facebook Strategy
-require("./config/passport_facebook")(passport_facebook);
+require("./config/passportFB")(passport);
 
 //db config
 const db = require("./config/keys").mongoDB;
