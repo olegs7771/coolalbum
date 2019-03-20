@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import LoginForm from "./LoginForm";
-import Facebook_auth_btn from "./Facebook_auth_btn";
 
 class Login extends Component {
   render() {
@@ -13,7 +12,6 @@ class Login extends Component {
           <span className="text-center text-info h5 col-md-12 mb-3">
             Don' have an account? Sign Up!
           </span>
-          <Facebook_auth_btn />
         </div>
       </div>
     );

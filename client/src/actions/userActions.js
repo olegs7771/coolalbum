@@ -51,3 +51,24 @@ export const getUser = userData => dispatch => {
       })
     );
 };
+//Get User
+export const getUserfb = userData => dispatch => {
+  console.log(userData);
+
+  axios
+    .post("api/users/currentfb", userData)
+    .then(res => console.log(res.data))
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};
+//Kickof whole facebook process
+export const authFacebook = () => dispatch => {
+  fetch("/api/users/auth/facebook", {
+    method: "HEAD",
+    mode: "no-cors"
+  });
+};

@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import TextFormGroup from "../../textFormGroup/TextFormGroup";
 import { connect } from "react-redux";
 // import FacebookLogin from "react-facebook-login";
-import Facebook_auth_btn from "../login/Facebook_auth_btn";
-import { registerUser } from "../../../actions/userActions";
+// import Facebook_auth_btn from "../login/Facebook_auth_btn";
+import { authFacebook, registerUser } from "../../../actions/userActions";
 
 class RegisterForm extends Component {
   state = {
@@ -13,28 +13,10 @@ class RegisterForm extends Component {
     showLoginBtnFaceBook: false
   };
 
-  handleShowLoginBtnFaceBook = e => {
-    e.preventDefault();
-    this.setState({
-      showLoginBtnFaceBook: !this.state.showLoginBtnFaceBook
-    });
-  };
-
   onChange = e => {
     this.setState({
       [e.target.name]: e.target.value
     });
-  };
-
-  responseFacebook = response => {
-    console.log(response);
-    // this.setState({
-    //   fbValidated: true,
-    //   email: response.email,
-    //   name: response.name,
-    //   picture: response.picture.data.url,
-    //   id: response.id
-    // });
   };
 
   onSubmit = e => {
@@ -50,16 +32,11 @@ class RegisterForm extends Component {
     console.log(newUser);
   };
 
-  render() {
-    let fbContent;
-    if (this.state.showLoginBtnFaceBook) {
-      fbContent = (
-        <div className="my-2">
-          <Facebook_auth_btn />
-        </div>
-      );
-    }
+  handleShowLoginBtnFaceBook = () => {
+    this.props.authFacebook();
+  };
 
+  render() {
     const { username, email, password } = this.state;
     return (
       <div className="col-md-6 my-3  mx-auto">
@@ -108,12 +85,11 @@ class RegisterForm extends Component {
         >
           Continue with Facebook
         </button>
-        {this.state.showLoginBtnFaceBook ? <div>{fbContent}</div> : null}
       </div>
     );
   }
 }
 export default connect(
   null,
-  { registerUser }
+  { authFacebook, registerUser }
 )(RegisterForm);

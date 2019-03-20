@@ -38,26 +38,6 @@ router.post("/register", (req, res) => {
   });
 });
 
-// @desc /Register New User with Facebook
-// @route POST /api/users/registerFb
-// @access Public
-
-router.post("/registerFb", (req, res) => {
-  console.log(req.body.email);
-
-  User.findOne({ email: req.body.email })
-    .then(user => {
-      if (!user) {
-        return res.json({ msg: "success!" });
-      }
-      //create token from facebook
-      const newToken = new User({
-        facebookToken: req.body.facebookToken
-      });
-    })
-    .catch(err => console.log(err));
-});
-
 // // @desc /Login User
 // // @route POST /api/users/register
 // // @access Public
@@ -96,22 +76,33 @@ router.post("/login", (req, res) => {
 // // @route POST /api/users/current
 // // @access Private
 
-router.post(
+router.get(
   "/current",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    res.json({ msg: "Success!" });
+    res.json({ msg: "ok" });
   }
 );
-// // @desc /Shows current logged user Facebook Strategy
-// // @route POST /api/users/current
-// // @access Private
 
-router.post(
-  "/currentfb",
+//auth with facebook
+
+router.get(
+  "/auth/facebook",
+
+  passport.authenticate("facebook", { scope: "email" }),
+  (req, res) => {
+    res.json({ msg: "Success" });
+  }
+);
+
+router.get(
+  "/auth/facebook/callback",
+
   passport.authenticate("facebook", { failureRedirect: "/login" }),
   (req, res) => {
-    res.json({ msg: "Success!" });
+    // Successful authentication, redirect home.
+    res.json({ msg: "success" });
+    res.redirect("/");
   }
 );
 
