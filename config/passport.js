@@ -37,7 +37,9 @@ module.exports = passport => {
         callbackURL
       },
       (accessToken, refreshToken, profile, cb) => {
-        console.log(profile);
+        console.log("profile", profile);
+        console.log("accessToken", accessToken);
+        console.log("refreshToken", refreshToken);
 
         User.findOne({ "facebook.id": profile.id })
           .then(user => {

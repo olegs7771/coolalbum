@@ -89,13 +89,10 @@ router.get(
 router.get(
   "/auth/facebook",
 
-  passport.authenticate("facebook", { scope: "email" }),
-  (req, res) => {
-    res.json({ msg: "Success" });
-  }
+  passport.authenticate("facebook", { scope: "email" })
 );
 
-router.get(
+router.post(
   "/auth/facebook/callback",
 
   passport.authenticate("facebook", { failureRedirect: "/login" }),
