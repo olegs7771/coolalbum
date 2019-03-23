@@ -5,58 +5,41 @@ import { setCurrentUser, logoutUser } from "../../actions/userActions";
 import { reactLocalStorage } from "reactjs-localstorage";
 import jwtDecode from "jwt-decode";
 class Header extends Component {
+  state = {
+    isAuthenticated: false
+  };
+
   //Logout
 
   handleLogout = e => {
     const { history } = this.props;
     console.log("loggedout");
     this.props.logoutUser(history);
+    history.push("/");
   };
 
   componentDidMount() {
-    //obtain token from localStorage
+    //obtain token from localStorage and
     const token = reactLocalStorage.get("jwtToken");
     if (token) {
       //decode token with jwt-decode
       const decodedToken = jwtDecode(token);
+      //  putting it into redux state
       this.props.setCurrentUser(decodedToken);
     }
     console.log(this.props);
   }
 
   render() {
-    const token = reactLocalStorage.get("jwtToken");
-    console.log(token);
+    const { user } = this.props.auth;
+    if (user) {
+      console.log(user);
+    }
 
     console.log(this.props.auth);
-    const { user } = this.props.auth;
-    let authContent;
-    if (Object.keys(user).length > 0) {
-      authContent = (
-        <ul className="nav justify-content-end">
-          <li className="nav-item active">
-            <span className="text-white">Welcome</span>{" "}
-            <span className="text-info">{user.name}</span>
-            <button
-              className="text-white btn ml-4 "
-              onClick={this.handleLogout}
-            >
-              Logout
-            </button>
-          </li>
-        </ul>
-      );
-    } else {
-      authContent = (
-        <ul className="nav justify-content-end">
-          <li className="nav-item active">
-            <Link to="/login" className="nav-link">
-              Login
-            </Link>
-          </li>
-        </ul>
-      );
-    }
+
+    console.log(Boolean(user));
+    console.log(Boolean(this.state.isAuthenticated));
 
     return (
       <div className="pos-f-t">
@@ -65,7 +48,28 @@ class Header extends Component {
             CoolAlbum
           </a>
           <nav className="navbar navbar-dark bg-dark navbar-expand-lg ml-auto ">
-            {authContent}
+            {Object.keys(user).length > 0 ? (
+              <ul className="nav justify-content-end">
+                <li className="nav-item active">
+                  <span className="text-white">Welcome</span>{" "}
+                  <span className="text-info">{user.name}</span>
+                  <button
+                    className="text-white btn ml-4 "
+                    onClick={this.handleLogout}
+                  >
+                    Logout
+                  </button>
+                </li>
+              </ul>
+            ) : (
+              <ul className="nav justify-content-end">
+                <li className="nav-item active">
+                  <Link to="/login" className="nav-link">
+                    <span className="text-white">Login</span>
+                  </Link>
+                </li>
+              </ul>
+            )}
           </nav>
           <button
             className="navbar-toggler"

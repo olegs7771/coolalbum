@@ -29,6 +29,7 @@ class Login extends Component {
 
   render() {
     const { email, password } = this.state;
+
     return (
       <div>
         <div className="text-center h3">Login Into Your Account</div>
