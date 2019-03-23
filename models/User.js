@@ -5,21 +5,24 @@ const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
   name: {
-    type: String,
-    required: true
+    type: String
   },
   email: {
-    type: String,
-    required: true
+    type: String
   },
   password: {
-    type: String,
-    required: true
+    type: String
   },
 
   date: {
     type: Date,
     default: Date.now()
+  },
+
+  facebook: {
+    id: String,
+    token: String,
+    email: String
   }
 });
 module.exports = User = mongoose.model("users", UserSchema);

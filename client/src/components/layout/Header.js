@@ -1,8 +1,46 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
-
+import { Link, withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import { setCurrentUser, logoutUser } from "../../actions/userActions";
+import { reactLocalStorage } from "reactjs-localstorage";
+import jwtDecode from "jwt-decode";
 class Header extends Component {
+  state = {
+    isAuthenticated: false
+  };
+
+  //Logout
+
+  handleLogout = e => {
+    const { history } = this.props;
+    console.log("loggedout");
+    this.props.logoutUser(history);
+    history.push("/");
+  };
+
+  componentDidMount() {
+    //obtain token from localStorage and
+    const token = reactLocalStorage.get("jwtToken");
+    if (token) {
+      //decode token with jwt-decode
+      const decodedToken = jwtDecode(token);
+      //  putting it into redux state
+      this.props.setCurrentUser(decodedToken);
+    }
+    console.log(this.props);
+  }
+
   render() {
+    const { user } = this.props.auth;
+    if (user) {
+      console.log(user);
+    }
+
+    console.log(this.props.auth);
+
+    console.log(Boolean(user));
+    console.log(Boolean(this.state.isAuthenticated));
+
     return (
       <div className="pos-f-t">
         <nav className="navbar navbar-dark bg-dark">
@@ -10,13 +48,28 @@ class Header extends Component {
             CoolAlbum
           </a>
           <nav className="navbar navbar-dark bg-dark navbar-expand-lg ml-auto ">
-            <ul className="navbar-nav mt-2 mt-lg-0">
-              <li className="nav-item active">
-                <Link to="/login" className="nav-link">
-                  Login
-                </Link>
-              </li>
-            </ul>
+            {Object.keys(user).length > 0 ? (
+              <ul className="nav justify-content-end">
+                <li className="nav-item active">
+                  <span className="text-white">Welcome</span>{" "}
+                  <span className="text-info">{user.name}</span>
+                  <button
+                    className="text-white btn ml-4 "
+                    onClick={this.handleLogout}
+                  >
+                    Logout
+                  </button>
+                </li>
+              </ul>
+            ) : (
+              <ul className="nav justify-content-end">
+                <li className="nav-item active">
+                  <Link to="/login" className="nav-link">
+                    <span className="text-white">Login</span>
+                  </Link>
+                </li>
+              </ul>
+            )}
           </nav>
           <button
             className="navbar-toggler"
@@ -55,4 +108,12 @@ class Header extends Component {
     );
   }
 }
-export default Header;
+
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default connect(
+  mapStateToProps,
+  { setCurrentUser, logoutUser }
+)(withRouter(Header));

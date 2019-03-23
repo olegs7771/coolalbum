@@ -5,6 +5,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "classnames": "^2.2.6",
+    "global": "^4.3.2",
     "jwt-decode": "^2.2.0",
     "memoize-one": "^5.0.0",
     "moment": "^2.24.0",
@@ -16,6 +17,7 @@
     "react-redux": "^6.0.0",
     "react-router-dom": "^4.3.1",
     "react-scripts": "^2.1.2",
+    "reactjs-localstorage": "0.0.7",
     "redux": "^4.0.1",
     "redux-auth-wrapper": "^2.0.3",
     "redux-thunk": "^2.3.0"

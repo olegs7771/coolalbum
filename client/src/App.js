@@ -5,9 +5,8 @@ import store from "./store";
 
 import Header from "./components/layout/Header";
 import Main from "./components/layout/main/Main";
-import Register from "./components/auth/Register";
-import Login from "./components/auth/Login";
-// import Facebook_auth_btn from "./components/layout/Facebook_auth_btn";
+import Register from "./components/auth/regisrer/Register";
+import Login from "./components/auth/login/Login";
 
 import "./App.css";
 

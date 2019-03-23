@@ -3,8 +3,9 @@ const router = express.Router();
 //Bring in Model (models/User.js)
 const User = require("../../models/User");
 const bcrypt = require("bcryptjs");
-
-router.post("/test", (req, res) => res.json({ msg: "response from users" }));
+const jwt = require("jsonwebtoken");
+const keys = require("../../config/dev_keys").secredOrKey;
+const passport = require("passport");
 
 // @desc /Register New User
 // @route POST /api/users/register
@@ -13,13 +14,13 @@ router.post("/test", (req, res) => res.json({ msg: "response from users" }));
 router.post("/register", (req, res) => {
   User.findOne({ email: req.body.email }).then(user => {
     if (user) {
-      res.status(400).json({ msg: "User Exists" });
+      return res.status(400).json({ msg: "User Exists" });
     } else {
       //user not exists , we can create new one
       const newUser = new User({
         name: req.body.name,
         email: req.body.email,
-        password: req.body.password1
+        password: req.body.password
       });
       //create hash password with bcrypt
       bcrypt.genSalt(10, (err, salt) => {
@@ -42,11 +43,64 @@ router.post("/register", (req, res) => {
 // // @access Public
 
 router.post("/login", (req, res) => {
-  User.findOne({ email: req.body.email })
-    .then(user => {
-      res.status(200).json(user);
-    })
-    .catch(err => res.status(400).json(err));
+  const email = req.body.email;
+  const password = req.body.password;
+
+  User.findOne({ email }).then(user => {
+    if (!user) {
+      //user not found
+      return res.status(400).json({ msg: "User Not Found" });
+    }
+
+    bcrypt.compare(password, user.password).then(isMatch => {
+      if (isMatch) {
+        //password from form compared to password from db(user matched)
+        // user obtains jwt
+        //1. create JWT payload with user info
+        const payload = {
+          id: user._id,
+          name: user.name,
+          email: user.email
+        };
+        jwt.sign(payload, keys, { expiresIn: 3600 }, (err, token) => {
+          res.json({ success: true, token: "Bearer " + token });
+        });
+      } else {
+        return res.status(400).json({ msg: "passport wrong" });
+      }
+    });
+  });
 });
+
+// // @desc /Shows current logged user
+// // @route POST /api/users/current
+// // @access Private
+
+router.get(
+  "/current",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    res.json({ msg: "ok" });
+  }
+);
+
+//auth with facebook
+
+router.get(
+  "/auth/facebook",
+
+  passport.authenticate("facebook", { scope: "email" })
+);
+
+router.post(
+  "/auth/facebook/callback",
+
+  passport.authenticate("facebook", { failureRedirect: "/login" }),
+  (req, res) => {
+    // Successful authentication, redirect home.
+    res.json({ msg: "success" });
+    res.redirect("/");
+  }
+);
 
 module.exports = router;
