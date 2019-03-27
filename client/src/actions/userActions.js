@@ -28,11 +28,10 @@ export const registerUserFb = userData => dispatch => {
     );
 };
 //Login
-export const loginUser = userData => dispatch => {
+export const loginUser = (userData, history) => dispatch => {
   axios
     .post("api/users/login", userData)
     .then(res => {
-      console.log(res.data.token);
       // Save to localStorage token
       const { token } = res.data;
       //Set token to localStorage
@@ -44,6 +43,7 @@ export const loginUser = userData => dispatch => {
 
       //set current user (we create separate function here)
       dispatch(setCurrentUser(decoded));
+      history.push("/");
     })
 
     .catch(err =>
@@ -91,7 +91,10 @@ export const getUserfb = userData => dispatch => {
 //Kickof whole facebook process
 export const authFacebook = () => dispatch => {
   fetch("/api/users/auth/facebook", {
-    method: "HEAD",
     mode: "no-cors"
-  });
+  })
+    .then(res => {
+      console.log("res: ", res);
+    })
+    .catch(err => console.log(err));
 };

@@ -1,7 +1,7 @@
 const keys = require("./dev_keys").secredOrKey;
 const mongoose = require("mongoose");
 const User = mongoose.model("users");
-const FacebookStrategy = require("passport-facebook");
+const FacebookStrategy = require("passport-facebook").Strategy;
 const JwtStrategy = require("passport-jwt").Strategy,
   ExtractJwt = require("passport-jwt").ExtractJwt;
 const opts = {};
@@ -12,6 +12,7 @@ module.exports = passport => {
   passport.use(
     new JwtStrategy(opts, (jwt_payload, done) => {
       console.log(jwt_payload);
+
       User.findById(jwt_payload.id)
         .then(user => {
           if (user) {
@@ -27,7 +28,7 @@ module.exports = passport => {
 
   const clientID = "991632717694701",
     clientSecret = "c27d128965b5b2a146d6c906d93da299",
-    callbackURL = "http://localhost:3000/auth/facebook/callback";
+    callbackURL = "http://localhost:3000/api/users/auth/facebook/callback";
 
   passport.use(
     new FacebookStrategy(
@@ -36,21 +37,22 @@ module.exports = passport => {
         clientSecret,
         callbackURL
       },
+
       (accessToken, refreshToken, profile, cb) => {
-        console.log("profile", profile);
+        console.log(profile);
         console.log("accessToken", accessToken);
         console.log("refreshToken", refreshToken);
-
-        User.findOne({ "facebook.id": profile.id })
-          .then(user => {
-            console.log(profile.id);
-
-            if (user) {
-              return cb(null, user);
-            }
-            return cb(null, false);
-          })
-          .catch(err => console.log(err));
+        console.log(profile);
+        User.findOne({ "facebook.id": profile.id }).then(user => {
+          console.log(profile.id);
+          console.log("working");
+          if (user) {
+            console.log("user");
+            return cb(null, user);
+          }
+          console.log("no user");
+          return cb(null, false);
+        });
       }
     )
   );

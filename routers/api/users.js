@@ -92,15 +92,13 @@ router.get(
   passport.authenticate("facebook", { scope: "email" })
 );
 
-router.post(
+router.get(
   "/auth/facebook/callback",
 
-  passport.authenticate("facebook", { failureRedirect: "/login" }),
-  (req, res) => {
-    // Successful authentication, redirect home.
-    res.json({ msg: "success" });
-    res.redirect("/");
-  }
+  passport.authenticate("facebook", {
+    failureRedirect: "/login",
+    successRedirect: "/"
+  })
 );
 
 module.exports = router;

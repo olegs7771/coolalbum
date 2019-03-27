@@ -4,24 +4,11 @@ const bodyParser = require("body-parser");
 const passport = require("passport");
 
 const path = require("path");
-const cors = require("cors");
+
 //routers
 const users = require("./routers/api/users");
 
 const app = express();
-//app.use(cors());
-
-// app.use(cors({ origin: "http://localhost:3000" }));
-
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "https://localhost:3000");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-
-  next();
-});
 
 //bodyParser MiddleWare
 
@@ -36,9 +23,6 @@ app.use(passport.initialize());
 
 //Passport Config  JWT Strategy
 require("./config/passport")(passport);
-
-//Passport Config facebook Strategy
-require("./config/passportFB")(passport);
 
 //db config
 const db = require("./config/keys").mongoDB;

@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import TextFormGroup from "../../textFormGroup/TextFormGroup";
 import { connect } from "react-redux";
 import { loginUser } from "../../../actions/userActions";
+import { Link, withRouter } from "react-router-dom";
 
-class Login extends Component {
+class LoginForm extends Component {
   state = {
     email: "",
     password: ""
@@ -16,6 +17,7 @@ class Login extends Component {
   };
 
   onSubmit = e => {
+    const { history } = this.props;
     e.preventDefault();
     console.log("submitted");
     const newUser = {
@@ -23,7 +25,7 @@ class Login extends Component {
       password: this.state.password
     };
 
-    this.props.loginUser(newUser);
+    this.props.loginUser(newUser, history);
     console.log(newUser);
   };
 
@@ -61,4 +63,4 @@ class Login extends Component {
 export default connect(
   null,
   { loginUser }
-)(Login);
+)(withRouter(LoginForm));
