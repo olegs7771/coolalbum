@@ -93,10 +93,17 @@ router.post(
 
     { session: false }
   ),
-  function(req, res) {
-    // do something with req.user
-
-    res.send(req.user);
+  (req, res) => {
+    //generate token
+    // create JWT with user info
+    const payload = {
+      id: req.user.id,
+      name: req.user.name,
+      email: req.user.email
+    };
+    jwt.sign(payload, keys, { expiresIn: 3600 }, (err, token) => {
+      res.json({ success: true, token: "Bearer " + token });
+    });
   }
 );
 

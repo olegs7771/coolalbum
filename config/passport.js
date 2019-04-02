@@ -11,7 +11,7 @@ opts.secretOrKey = keys;
 module.exports = passport => {
   passport.use(
     new JwtStrategy(opts, (jwt_payload, done) => {
-      console.log(jwt_payload);
+      console.log("jwt_payload", jwt_payload);
 
       User.findById(jwt_payload.id)
         .then(user => {
@@ -46,10 +46,10 @@ module.exports = passport => {
               return cb(null, user);
             } else {
               const newUser = new User();
-              newUser.facebook.id = profile.id;
-              newUser.facebook.name = profile.displayName;
-              newUser.facebook.email = profile._json.email;
-              newUser.facebook.token = accessToken;
+              newUser.id = profile.id;
+              newUser.name = profile.displayName;
+              newUser.email = profile.emails[0].value;
+
               newUser
                 .save()
                 .then(user => {

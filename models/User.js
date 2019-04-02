@@ -17,13 +17,6 @@ const UserSchema = new Schema({
   date: {
     type: Date,
     default: Date.now()
-  },
-
-  facebook: {
-    id: String,
-    name: String,
-    token: String,
-    email: String
   }
 });
 module.exports = User = mongoose.model("users", UserSchema);
