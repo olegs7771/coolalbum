@@ -86,34 +86,18 @@ router.get(
 
 //auth with facebook
 
-router.get(
+router.post(
   "/auth/facebook",
-
   passport.authenticate(
     "facebook-token",
-    { scope: "email[0].value" },
+
     { session: false }
   ),
-  (req, res, next) => {
-    console.log("testing route");
+  function(req, res) {
+    // do something with req.user
+
+    res.send(req.user);
   }
 );
-
-// router.get(
-//   "/auth/facebook/callback",
-
-//   passport.authenticate(
-//     "facebook",
-//     {
-//       failureRedirect: "/register"
-//     },
-//     { session: false }
-//   ),
-//   (req, res) => {
-//     res.json({ msg: "success" });
-//     // Successful authentication, redirect home.
-//     res.redirect("/");
-//   }
-// );
 
 module.exports = router;

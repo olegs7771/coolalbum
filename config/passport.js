@@ -40,18 +40,27 @@ module.exports = passport => {
       (accessToken, refreshToken, profile, cb) => {
         console.log(profile);
 
-        User.findOne({ "facebook.id": profile.id }),
-          (err, user) => {
-            if (err) {
-              return cb(err);
-            }
+        User.findOne({ "facebook.id": profile.id })
+          .then(user => {
             if (user) {
               return cb(null, user);
+            } else {
+              const newUser = new User();
+              newUser.facebook.id = profile.id;
+              newUser.facebook.name = profile.displayName;
+              newUser.facebook.email = profile._json.email;
+              newUser.facebook.token = accessToken;
+              newUser
+                .save()
+                .then(user => {
+                  if (user) {
+                    return cb(null, user);
+                  }
+                })
+                .catch(err => console.log(err));
             }
-            //no user then save newUser
-            const newUser = new User();
-            (newUser.facebook.id = profile.id), newUser.facebook;
-          };
+          })
+          .catch(err => console.log("err", err));
       }
     )
   );
