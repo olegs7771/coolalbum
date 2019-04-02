@@ -15,18 +15,7 @@ export const registerUser = userData => dispatch => {
       })
     );
 };
-//Register New User with Facebook
-export const registerUserFb = userData => dispatch => {
-  axios
-    .post("api/users/registerFb", userData)
-    .then(res => console.log(res.data))
-    .catch(err =>
-      dispatch({
-        type: GET_ERRORS,
-        payload: err.response.data
-      })
-    );
-};
+
 //Login
 export const loginUser = (userData, history) => dispatch => {
   axios

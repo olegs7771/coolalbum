@@ -89,16 +89,31 @@ router.get(
 router.get(
   "/auth/facebook",
 
-  passport.authenticate("facebook", { scope: "email" })
+  passport.authenticate(
+    "facebook-token",
+    { scope: "email[0].value" },
+    { session: false }
+  ),
+  (req, res, next) => {
+    console.log("testing route");
+  }
 );
 
-router.get(
-  "/auth/facebook/callback",
+// router.get(
+//   "/auth/facebook/callback",
 
-  passport.authenticate("facebook", {
-    failureRedirect: "/login",
-    successRedirect: "/"
-  })
-);
+//   passport.authenticate(
+//     "facebook",
+//     {
+//       failureRedirect: "/register"
+//     },
+//     { session: false }
+//   ),
+//   (req, res) => {
+//     res.json({ msg: "success" });
+//     // Successful authentication, redirect home.
+//     res.redirect("/");
+//   }
+// );
 
 module.exports = router;
