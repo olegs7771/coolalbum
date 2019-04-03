@@ -1,4 +1,4 @@
-import { GET_ERRORS, GET_USER, SET_CURRENT_USER, LOGOUT_USER } from "./types";
+import { GET_ERRORS, SET_CURRENT_USER, LOGOUT_USER } from "./types";
 import axios from "axios";
 import { setAuthToken } from "../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
@@ -63,27 +63,29 @@ export const setCurrentUser = decoded => {
   };
 };
 
-//Get User
-export const getUserfb = userData => dispatch => {
+//Register with password-facebook-token
+export const authFacebook = (userData, history) => dispatch => {
   console.log(userData);
 
   axios
-    .post("api/users/currentfb", userData)
-    .then(res => console.log(res.data))
-    .catch(err =>
+    .post("/api/users/auth/facebook", { access_token: userData })
+    .then(res => {
+      console.log(res.data.token);
+      const { token } = res.data;
+      //Save to localStorage recieved token
+      localStorage.setItem("jwtToken", token);
+      //Set token to Auth header (we crerate it in separate file)
+      setAuthToken(token);
+      // set the user (using user creds from token. but first we must to decode token with jwt-decode module)
+      const decoded = jwt_decode(token);
+      //set current user (we create separate function here)
+      dispatch(setCurrentUser(decoded));
+      history.push("/");
+    })
+    .catch(err => {
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
-      })
-    );
-};
-//Kickof whole facebook process
-export const authFacebook = () => dispatch => {
-  fetch("/api/users/auth/facebook", {
-    mode: "no-cors"
-  })
-    .then(res => {
-      console.log("res: ", res);
-    })
-    .catch(err => console.log(err));
+      });
+    });
 };

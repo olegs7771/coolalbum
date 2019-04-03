@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import TextFormGroup from "../../textFormGroup/TextFormGroup";
 import { connect } from "react-redux";
-// import FacebookLogin from "react-facebook-login";
-// import Facebook_auth_btn from "../login/Facebook_auth_btn";
-import { authFacebook, registerUser } from "../../../actions/userActions";
+import FaceBookBtn from "../../../utils/FaceBookBtn";
+import { registerUser } from "../../../actions/userActions";
 
 class RegisterForm extends Component {
   state = {
@@ -30,10 +29,6 @@ class RegisterForm extends Component {
 
     this.props.registerUser(newUser);
     console.log(newUser);
-  };
-
-  handleShowLoginBtnFaceBook = () => {
-    this.props.authFacebook();
   };
 
   render() {
@@ -78,18 +73,15 @@ class RegisterForm extends Component {
           <div className="col-md-5">
             <hr />
           </div>
+          <div className="mx-auto">
+            <FaceBookBtn />
+          </div>
         </div>
-        <button
-          className="btn-primary btn-block"
-          onClick={this.handleShowLoginBtnFaceBook}
-        >
-          Continue with Facebook
-        </button>
       </div>
     );
   }
 }
 export default connect(
   null,
-  { authFacebook, registerUser }
+  { registerUser }
 )(RegisterForm);

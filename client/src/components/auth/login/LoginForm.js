@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import TextFormGroup from "../../textFormGroup/TextFormGroup";
 import { connect } from "react-redux";
 import { loginUser } from "../../../actions/userActions";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 class LoginForm extends Component {
   state = {
