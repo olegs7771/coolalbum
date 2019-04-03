@@ -13,7 +13,7 @@ class Header extends Component {
 
   handleLogout = e => {
     const { history } = this.props;
-    console.log("loggedout");
+
     this.props.logoutUser(history);
     history.push("/");
   };
@@ -27,19 +27,12 @@ class Header extends Component {
       //  putting it into redux state
       this.props.setCurrentUser(decodedToken);
     }
-    console.log(this.props);
   }
 
   render() {
     const { user } = this.props.auth;
     if (user) {
-      console.log(user);
     }
-
-    console.log(this.props.auth);
-
-    console.log(Boolean(user));
-    console.log(Boolean(this.state.isAuthenticated));
 
     return (
       <div className="pos-f-t">

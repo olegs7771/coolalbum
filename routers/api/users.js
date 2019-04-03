@@ -86,20 +86,24 @@ router.get(
 
 //auth with facebook
 
-router.get(
-  "/auth/facebook",
-
-  passport.authenticate("facebook", { scope: "email" })
-);
-
 router.post(
-  "/auth/facebook/callback",
+  "/auth/facebook",
+  passport.authenticate(
+    "facebook-token",
 
-  passport.authenticate("facebook", { failureRedirect: "/login" }),
+    { session: false }
+  ),
   (req, res) => {
-    // Successful authentication, redirect home.
-    res.json({ msg: "success" });
-    res.redirect("/");
+    //generate token
+    // create JWT with user info
+    const payload = {
+      id: req.user.id,
+      name: req.user.name,
+      email: req.user.email
+    };
+    jwt.sign(payload, keys, { expiresIn: 3600 }, (err, token) => {
+      res.json({ success: true, token: "Bearer " + token });
+    });
   }
 );
 
