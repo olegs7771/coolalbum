@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { setCurrentUser, logoutUser } from "../../actions/userActions";
 import { reactLocalStorage } from "reactjs-localstorage";
 import jwtDecode from "jwt-decode";
+import { isEmpty } from "../../utils/isEmpty";
 class Header extends Component {
   state = {
     isAuthenticated: false
@@ -33,6 +34,7 @@ class Header extends Component {
     const { user } = this.props.auth;
     if (user) {
     }
+    console.log(user);
 
     return (
       <div className="pos-f-t">
@@ -40,12 +42,35 @@ class Header extends Component {
           <a className="navbar-brand" href="/">
             CoolAlbum
           </a>
+
           <nav className="navbar navbar-dark bg-dark navbar-expand-lg ml-auto ">
-            {Object.keys(user).length > 0 ? (
+            {!user.avatar === null ? (
               <ul className="nav justify-content-end">
                 <li className="nav-item active">
                   <span className="text-white">Welcome</span>{" "}
-                  <span className="text-info">{user.name}</span>
+                  <span className="text-info ml-2">{user.name}</span>
+                  {/* {if no avatar do not use white border on avatar} */}
+                  {isEmpty(user.avatar) ? (
+                    <img
+                      src={user.avatar}
+                      alt=""
+                      className="rounded-circle ml-2 "
+                      style={{ width: "50px", border: "2px solid white" }}
+                    />
+                  ) : (
+                    <img
+                      src={user.avatar}
+                      alt=""
+                      className="rounded-circle ml-2 "
+                      style={{ width: "50px" }}
+                    />
+                  )}
+                  <img
+                    src={user.avatar}
+                    alt=""
+                    className="rounded-circle ml-2 "
+                    style={{ width: "50px", border: "2px solid white" }}
+                  />
                   <button
                     className="text-white btn ml-4 "
                     onClick={this.handleLogout}

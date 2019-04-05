@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import LoginForm from "./LoginForm";
+import FaceBookBtn from "../../../utils/FaceBookBtn";
 
 class Login extends Component {
   render() {
@@ -12,6 +13,7 @@ class Login extends Component {
           <span className="text-center text-info h5 col-md-12 mb-3">
             Don' have an account? Sign Up!
           </span>
+          <FaceBookBtn />
         </div>
       </div>
     );

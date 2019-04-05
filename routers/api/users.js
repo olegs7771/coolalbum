@@ -99,7 +99,8 @@ router.post(
     const payload = {
       id: req.user.id,
       name: req.user.name,
-      email: req.user.email
+      email: req.user.email,
+      avatar: req.user.avatar
     };
     jwt.sign(payload, keys, { expiresIn: 3600 }, (err, token) => {
       res.json({ success: true, token: "Bearer " + token });
