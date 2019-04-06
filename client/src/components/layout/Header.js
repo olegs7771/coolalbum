@@ -34,7 +34,6 @@ class Header extends Component {
     const { user } = this.props.auth;
     if (user) {
     }
-    console.log(user);
 
     return (
       <div className="pos-f-t">
@@ -44,13 +43,13 @@ class Header extends Component {
           </a>
 
           <nav className="navbar navbar-dark bg-dark navbar-expand-lg ml-auto ">
-            {!user.avatar === null ? (
+            {!isEmpty(user) ? (
               <ul className="nav justify-content-end">
                 <li className="nav-item active">
                   <span className="text-white">Welcome</span>{" "}
                   <span className="text-info ml-2">{user.name}</span>
                   {/* {if no avatar do not use white border on avatar} */}
-                  {isEmpty(user.avatar) ? (
+                  {!isEmpty(user.avatar) ? (
                     <img
                       src={user.avatar}
                       alt=""
@@ -65,12 +64,6 @@ class Header extends Component {
                       style={{ width: "50px" }}
                     />
                   )}
-                  <img
-                    src={user.avatar}
-                    alt=""
-                    className="rounded-circle ml-2 "
-                    style={{ width: "50px", border: "2px solid white" }}
-                  />
                   <button
                     className="text-white btn ml-4 "
                     onClick={this.handleLogout}
@@ -84,6 +77,12 @@ class Header extends Component {
                 <li className="nav-item active">
                   <Link to="/login" className="nav-link">
                     <span className="text-white">Login</span>
+                  </Link>
+                </li>
+
+                <li className="nav-item active">
+                  <Link to="/register" className="nav-link">
+                    <span className="text-white">SignUp</span>
                   </Link>
                 </li>
               </ul>

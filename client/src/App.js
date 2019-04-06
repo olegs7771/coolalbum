@@ -7,6 +7,7 @@ import Header from "./components/layout/Header";
 import Main from "./components/layout/main/Main";
 import Register from "./components/auth/regisrer/Register";
 import Login from "./components/auth/login/Login";
+import SuccessRegMsg from "./utils/SuccessRegMsg";
 
 import "./App.css";
 
@@ -22,6 +23,7 @@ class App extends Component {
                 <Route exact path="/" component={Main} />
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/register" component={Register} />
+                <Route exact path="/success_msg" component={SuccessRegMsg} />
               </Switch>
             </div>
           </div>

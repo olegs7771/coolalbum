@@ -6,12 +6,23 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const keys = require("../../config/dev_keys").secredOrKey;
 const passport = require("passport");
+const validateRegisterInput = require("../validation/register");
 
 // @desc /Register New User
 // @route POST /api/users/register
 // @access Public
 
 router.post("/register", (req, res) => {
+  //First line of validation
+
+  const { errors, isValid } = validateRegisterInput(req.body);
+  if (!isValid) {
+    console.log(errors);
+
+    return res.status(400).json(errors);
+  }
+  console.log("passed first validation");
+
   User.findOne({ email: req.body.email }).then(user => {
     if (user) {
       return res.status(400).json({ msg: "User Exists" });

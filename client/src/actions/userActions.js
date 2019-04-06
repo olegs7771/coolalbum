@@ -4,10 +4,18 @@ import { setAuthToken } from "../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
 
 //Register New User
-export const registerUser = userData => dispatch => {
+export const registerUser = (userData, history) => dispatch => {
+  console.log(history);
+
   axios
     .post("api/users/register", userData)
-    .then(res => console.log(res.data))
+    .then(res => {
+      console.log(res.data);
+      if (res.data) {
+        return history.push("/success_msg");
+      }
+    })
+
     .catch(err =>
       dispatch({
         type: GET_ERRORS,
@@ -70,7 +78,6 @@ export const authFacebook = (userData, history) => dispatch => {
   axios
     .post("/api/users/auth/facebook", { access_token: userData })
     .then(res => {
-      console.log(res.data.token);
       const { token } = res.data;
       //Save to localStorage recieved token
       localStorage.setItem("jwtToken", token);

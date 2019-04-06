@@ -38,13 +38,9 @@ module.exports = passport => {
       },
 
       (accessToken, refreshToken, profile, cb) => {
-        console.log(profile);
-
         User.findOne({ email: profile.emails[0].value })
           .then(user => {
             if (user) {
-              console.log("user exists");
-
               return cb(null, user);
             } else {
               const newUser = new User();
