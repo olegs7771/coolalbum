@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import TextFormGroup from "../components/textFormGroup/TextFormGroup";
 import TextAreaFormGroup from "../components/textFormGroup/TextAreaFormGroup";
-import { GET_ERRORS } from "../actions/types";
 
 class Contact extends Component {
   state = {
