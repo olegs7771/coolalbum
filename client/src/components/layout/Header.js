@@ -104,8 +104,8 @@ class Header extends Component {
           <div className="bg-dark p-4">
             <ul className="nav justify-content-end">
               <li className="nav-item">
-                <Link className="nav-link text-white" to="/register">
-                  Sign Up
+                <Link className="nav-link text-white" to="/contact">
+                  Contact Us
                 </Link>
               </li>
               <li className="nav-item">

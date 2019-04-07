@@ -8,6 +8,7 @@ import Main from "./components/layout/main/Main";
 import Register from "./components/auth/regisrer/Register";
 import Login from "./components/auth/login/Login";
 import SuccessRegMsg from "./utils/SuccessRegMsg";
+import Contact from "./utils/Contact";
 
 import "./App.css";
 
@@ -24,6 +25,7 @@ class App extends Component {
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/register" component={Register} />
                 <Route exact path="/success_msg" component={SuccessRegMsg} />
+                <Route exact path="/contact" component={Contact} />
               </Switch>
             </div>
           </div>
