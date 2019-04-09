@@ -5,8 +5,6 @@ import jwt_decode from "jwt-decode";
 
 //Register New User
 export const registerUser = (userData, history) => dispatch => {
-  console.log(history);
-
   axios
     .post("api/users/register", userData)
     .then(res => {

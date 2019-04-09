@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import TextFormGroup from "../components/textFormGroup/TextFormGroup";
 import TextAreaFormGroup from "../components/textFormGroup/TextAreaFormGroup";
+import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import { sendEmailMessage } from "../actions/emailAction";
 
 class Contact extends Component {
   state = {
@@ -17,13 +20,32 @@ class Contact extends Component {
     });
   };
 
+  // after submit
+  componentDidUpdate(prevProps) {
+    if (prevProps.errors !== this.props.errors) {
+      this.setState({
+        errors: this.props.errors
+      });
+    }
+  }
+
   onSubmit = e => {
+    const { name, company, email, message } = this.state;
+    const { history } = this.props;
     e.preventDefault();
-    console.log("submitted");
+    const newEmailMessage = {
+      name,
+      company,
+      email,
+      message
+    };
+    this.props.sendEmailMessage(newEmailMessage, history);
   };
 
   render() {
     const { name, company, email, phone, message, errors } = this.state;
+    console.log(this.state.errors);
+
     return (
       <div>
         <div className="card card-body my-4 bg-light ">
@@ -79,10 +101,9 @@ class Contact extends Component {
                   <div className="col my-2">
                     <div className="form-group">
                       <TextFormGroup
-                        label="Phone Number"
+                        label="Phone - Optional"
                         value={phone}
                         onChange={this.onChange}
-                        error={errors.name}
                       />
                     </div>
                   </div>
@@ -92,6 +113,7 @@ class Contact extends Component {
                   name="message"
                   value={message}
                   onChange={this.onChange}
+                  error={errors.message}
                 />
 
                 <div className="mx-auto">
@@ -107,4 +129,12 @@ class Contact extends Component {
     );
   }
 }
-export default Contact;
+
+const mapStateToProps = state => ({
+  errors: state.errors.errors
+});
+
+export default connect(
+  mapStateToProps,
+  { sendEmailMessage }
+)(withRouter(Contact));
