@@ -26,7 +26,7 @@ module.exports = function validationEmailFormInput(data) {
   if (isEmpty(data.message)) {
     errors.message = "Please write something..";
   } else {
-    if (!(validator.isLength(data.message), { min: 10, max: 500 })) {
+    if (!validator.isLength(data.message, { min: 10, max: 500 })) {
       errors.message = "Message too short..";
     }
   }

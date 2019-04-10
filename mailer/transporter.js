@@ -1,8 +1,7 @@
 const nodemailer = require("nodemailer");
 const mailPass = require("../config/dev_keys").mailPass;
 
-module.exports = function sendMail(data) {
-  let message = {};
+module.exports = function sendMail(data, cb) {
   //create htmlBody
   const htmlBody = `<b>From</b>
    <ul className='list-group'>
@@ -39,12 +38,11 @@ module.exports = function sendMail(data) {
         console.log(err);
       }
       if (info) {
-        console.log("info", info);
-        if (info.messageId) console.log("Message sent: %s", info.messageId);
-        message = info.messageId;
-        return console.log("messageInReturn", message);
+        if (info.messageId) {
+          console.log("Message sent: %s", info.messageId);
+          return cb(info);
+        }
       }
     }
   );
-  return { message };
 };

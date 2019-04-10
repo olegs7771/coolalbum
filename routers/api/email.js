@@ -18,11 +18,12 @@ router.post(
     if (!isValid) {
       return res.status(400).json(errors);
     }
-
-    const { message } = sendMail(req.body);
-    console.log("message", message);
-
-    //sending req.body to data  /transporter module
+    sendMail(req.body, response => {
+      console.log(response.messageId);
+      if (response.messageId) {
+        res.json({ msg: "Thank You. Your message has been sent." });
+      }
+    });
   }
 );
 module.exports = router;

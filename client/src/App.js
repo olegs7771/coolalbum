@@ -9,8 +9,31 @@ import Register from "./components/auth/regisrer/Register";
 import Login from "./components/auth/login/Login";
 import SuccessRegMsg from "./utils/SuccessRegMsg";
 import Contact from "./utils/Contact";
+import jwt_decode from "jwt-decode";
+import { logoutUser } from "./actions/userActions";
 
 import "./App.css";
+
+//Check for expired token
+
+if (localStorage.jwtToken) {
+  const decoded = jwt_decode(localStorage.jwtToken);
+  console.log(decoded);
+  const currentTime = Date.now() / 1000;
+  console.log(currentTime);
+  console.log(decoded.exp);
+
+  if (decoded.exp - currentTime < 300) {
+    window.alert("token will expire in 5 min");
+  }
+
+  if (currentTime > decoded.exp) {
+    ///Logout user
+    store.dispatch(logoutUser());
+    //redirect to login
+    window.location.href = "/login";
+  }
+}
 
 class App extends Component {
   render() {
