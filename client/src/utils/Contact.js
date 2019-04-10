@@ -44,7 +44,6 @@ class Contact extends Component {
 
   render() {
     const { name, company, email, phone, message, errors } = this.state;
-    console.log(this.state.errors);
 
     return (
       <div>

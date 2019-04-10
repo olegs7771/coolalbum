@@ -8,7 +8,7 @@ export const sendEmailMessage = (emailData, history) => dispatch => {
   axios
     .post("api/email/sendEmail", emailData)
     .then(res => {
-      console.log(res.data);
+      console.log("res.data", res.data);
     })
     .catch(err => {
       dispatch({
