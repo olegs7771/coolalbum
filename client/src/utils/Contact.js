@@ -4,14 +4,19 @@ import TextAreaFormGroup from "../components/textFormGroup/TextAreaFormGroup";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { sendEmailMessage } from "../actions/emailAction";
+import Spinner from "../utils/Spinner";
 
 class Contact extends Component {
   state = {
     name: "",
     company: "",
     email: "",
-    message: "",
-    errors: {}
+    text: "",
+    errors: {},
+    mailSent: {
+      message: "",
+      loading: false
+    }
   };
 
   onChange = e => {
@@ -22,28 +27,37 @@ class Contact extends Component {
 
   // after submit
   componentDidUpdate(prevProps) {
-    if (prevProps.errors !== this.props.errors) {
+    if (prevProps !== this.props) {
       this.setState({
-        errors: this.props.errors
+        errors: this.props.errors,
+        mailSent: this.props.mail
       });
     }
   }
 
   onSubmit = e => {
-    const { name, company, email, message } = this.state;
+    const { name, company, email, text } = this.state;
     const { history } = this.props;
     e.preventDefault();
     const newEmailMessage = {
       name,
       company,
       email,
-      message
+      text
     };
     this.props.sendEmailMessage(newEmailMessage, history);
   };
 
   render() {
-    const { name, company, email, phone, message, errors } = this.state;
+    const { name, company, email, phone, text, errors, mailSent } = this.state;
+    const { message, loading } = mailSent;
+
+    let mailMessageContent;
+    if (message === null || loading) {
+      mailMessageContent = <Spinner />;
+    } else {
+      mailMessageContent = <div>{message}</div>;
+    }
 
     return (
       <div>
@@ -109,10 +123,10 @@ class Contact extends Component {
                 </div>
                 <TextAreaFormGroup
                   label="Message"
-                  name="message"
-                  value={message}
+                  name="text"
+                  value={text}
                   onChange={this.onChange}
-                  error={errors.message}
+                  error={errors.text}
                 />
 
                 <div className="mx-auto">
@@ -122,6 +136,7 @@ class Contact extends Component {
                 </div>
               </form>
             </div>
+            {mailMessageContent}
           </div>
         </div>
       </div>
@@ -130,7 +145,8 @@ class Contact extends Component {
 }
 
 const mapStateToProps = state => ({
-  errors: state.errors.errors
+  errors: state.errors.errors,
+  mail: state.mail
 });
 
 export default connect(

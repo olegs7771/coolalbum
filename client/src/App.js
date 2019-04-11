@@ -18,10 +18,8 @@ import "./App.css";
 
 if (localStorage.jwtToken) {
   const decoded = jwt_decode(localStorage.jwtToken);
-  console.log(decoded);
+
   const currentTime = Date.now() / 1000;
-  console.log(currentTime);
-  console.log(decoded.exp);
 
   if (decoded.exp - currentTime < 300) {
     window.alert("token will expire in 5 min");

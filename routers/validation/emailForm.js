@@ -23,11 +23,11 @@ module.exports = function validationEmailFormInput(data) {
     }
   }
 
-  if (isEmpty(data.message)) {
-    errors.message = "Please write something..";
+  if (isEmpty(data.text)) {
+    errors.text = "Please write something..";
   } else {
-    if (!validator.isLength(data.message, { min: 10, max: 500 })) {
-      errors.message = "Message too short..";
+    if (!validator.isLength(data.text, { min: 10, max: 500 })) {
+      errors.text = "Message too short..";
     }
   }
 
