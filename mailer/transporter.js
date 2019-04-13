@@ -2,6 +2,8 @@ const nodemailer = require("nodemailer");
 const mailPass = require("../config/dev_keys").mailPass;
 
 module.exports = function sendMail(data, cb) {
+  console.log("data", data);
+
   //create htmlBody
   const htmlBody = `<b>From</b>
    <ul className='list-group'>
@@ -10,7 +12,21 @@ module.exports = function sendMail(data, cb) {
      <li>Company :${data.company}</li>
      <li>Email :${data.email}</li>
      </ul>
-     <p>${data.message}</p>`;
+     <p>${data.text}</p>`;
+
+  //create htmlBody for registration confirmation
+  const htmlRegBody = `Dear ${data.name} 
+  <p>We have received  a request to authorize this email on CoolAlbum website</p>
+  <p>Please go to the following URL to complete your registration
+   
+  `;
+  let html;
+
+  if (data.token) {
+    html = htmlRegBody;
+  } else {
+    html = htmlBody;
+  }
 
   let transporter = nodemailer.createTransport({
     host: "185.197.74.181",
@@ -31,7 +47,7 @@ module.exports = function sendMail(data, cb) {
       to: "olegs777@bezeqint.net", // list of receivers
       subject: "Greate Opportunity", // Subject line
       text: "Hello world?", // plain text body
-      html: htmlBody // html body
+      html // html body
     },
     (err, info) => {
       if (err) {

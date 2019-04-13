@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 const keys = require("../../config/dev_keys").secredOrKey;
 const passport = require("passport");
 const validateRegisterInput = require("../validation/register");
+const sendMail = require("../../mailer/transporter");
 
 // @desc /Register New User
 // @route POST /api/users/register
@@ -29,19 +30,51 @@ router.post("/register", (req, res) => {
       const newUser = new User({
         name: req.body.name,
         email: req.body.email,
-        password: req.body.password
+        password: req.body.password,
+        confirmed: false
       });
       //create hash password with bcrypt
-      bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(newUser.password, salt, (err, hash) => {
-          if (err) throw err;
-          newUser.password = hash;
-          newUser
-            .save()
-            .then(user => res.json(user))
-            .catch(err => res.json(err));
-        });
-      });
+      // bcrypt.genSalt(10, (err, salt) => {
+      //   bcrypt.hash(newUser.password, salt, (err, hash) => {
+      //     if (err) throw err;
+      //     newUser.password = hash;
+      newUser
+        .save()
+        .then(user => {
+          //Create Token to send to newTempUser email
+          const payload = {
+            name: user.name,
+            email: user.email,
+            password: user.password
+          };
+          console.log("payload", payload);
+
+          jwt.sign(payload, keys, { expiresIn: 3600 }, (err, token) => {
+            res.json({ success: true, token: "token = " + token });
+            // here we got tempToken ready to send to new user
+            //create data object for mailer trasporter
+
+            console.log("user", user);
+            const text =
+              "Please confirm your registration by click on following URL";
+            const data = {
+              token,
+              name: user.name,
+              email: user.email,
+              text
+            };
+
+            sendMail(data, response => {
+              console.log(response.messageId);
+              if (response.messageId) {
+                res.console.log("mail been sent");
+              }
+            });
+          });
+        })
+        .catch(err => res.json(err));
+      //   });
+      // });
     }
     //end of creating new user
   });

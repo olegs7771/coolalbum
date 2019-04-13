@@ -13,6 +13,11 @@ const UserSchema = new Schema({
   password: {
     type: String
   },
+
+  confirmed: {
+    type: Boolean,
+    default: false
+  },
   avatar: {
     type: String
   },
