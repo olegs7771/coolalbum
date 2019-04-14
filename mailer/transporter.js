@@ -15,10 +15,9 @@ module.exports = function sendMail(data, cb) {
      <p>${data.text}</p>`;
 
   //create htmlBody for registration confirmation
-  const htmlRegBody = `Dear ${data.name} 
-  <p>We have received  a request to authorize this email on CoolAlbum website</p>
-  <p>Please go to the following URL to complete your registration
-   
+  const htmlRegBody = `Dear ${data.name} </br>
+  We have received  a request to authorize this email on CoolAlbum website
+  Please  <a href=${data.URL}>confirm</a>   to complete your registration
   `;
   let html;
 

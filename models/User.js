@@ -21,6 +21,9 @@ const UserSchema = new Schema({
   avatar: {
     type: String
   },
+  token: {
+    type: String
+  },
 
   date: {
     type: Date,

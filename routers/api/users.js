@@ -27,56 +27,60 @@ router.post("/register", (req, res) => {
       return res.status(400).json({ msg: "User Exists" });
     } else {
       //user not exists , we can create new one
-      const newUser = new User({
+
+      //Create Token to send to newTempUser email
+      const payload = {
         name: req.body.name,
         email: req.body.email,
-        password: req.body.password,
-        confirmed: false
-      });
-      //create hash password with bcrypt
-      // bcrypt.genSalt(10, (err, salt) => {
-      //   bcrypt.hash(newUser.password, salt, (err, hash) => {
-      //     if (err) throw err;
-      //     newUser.password = hash;
-      newUser
-        .save()
-        .then(user => {
-          //Create Token to send to newTempUser email
-          const payload = {
+        password: req.body.password
+      };
+      console.log("payload", payload);
+
+      jwt.sign(payload, keys, { expiresIn: 3600 }, (err, token) => {
+        res.json({ success: true, token: "token = " + token });
+        // here we got tempToken ready to send to new user
+        //create data object for mailer trasporter
+        const newUser = new User({
+          name: req.body.name,
+          email: req.body.email,
+          password: req.body.password,
+          token
+        });
+
+        newUser.save().then(user => {
+          console.log("user", user);
+          const text =
+            "Please confirm your registration by click on following URL";
+          const urlConfirm = `http//localhost:3000/api/users/confirm_registration/${
+            user.token
+          }`;
+          const data = {
+            token: user.token,
             name: user.name,
             email: user.email,
-            password: user.password
+            text,
+            URL: urlConfirm
           };
-          console.log("payload", payload);
 
-          jwt.sign(payload, keys, { expiresIn: 3600 }, (err, token) => {
-            res.json({ success: true, token: "token = " + token });
-            // here we got tempToken ready to send to new user
-            //create data object for mailer trasporter
-
-            console.log("user", user);
-            const text =
-              "Please confirm your registration by click on following URL";
-            const data = {
-              token,
-              name: user.name,
-              email: user.email,
-              text
-            };
-
-            sendMail(data, response => {
-              console.log(response.messageId);
-              if (response.messageId) {
-                res.console.log("mail been sent");
-              }
-            });
+          sendMail(data, response => {
+            console.log(response.messageId);
+            if (response.messageId) {
+              res.console.log("mail been sent");
+            }
           });
-        })
-        .catch(err => res.json(err));
-      //   });
-      // });
+        });
+      });
     }
     //end of creating new user
+  });
+});
+
+//route for confirmed user
+router.post("/confirm_registration", (req, res) => {
+  User.findOne({ token: req.body.token }).then(user => {
+    if (user) {
+      res.status(200).json({ user });
+    }
   });
 });
 
