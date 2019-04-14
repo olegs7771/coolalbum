@@ -34,9 +34,14 @@ router.post("/register", (req, res) => {
         email: req.body.email,
         password: req.body.password
       };
+      console.log("payload", payload);
 
-      jwt.sign(payload, keys, { expiresIn: 3600 }, (err, token) => {
-        res.console.log(token);
+      jwt.sign(payload, keys, { expiresIn: 43200 }, (err, token) => {
+        if (err) {
+          throw err;
+        }
+
+        console.log("token", token);
 
         // here we got tempToken ready to send to new user
         //create data object for mailer trasporter
@@ -47,33 +52,26 @@ router.post("/register", (req, res) => {
           token
         });
 
-        newUser
-          .save()
-          .then(user => {
-            const text =
-              "Please confirm your registration by click on following URL";
-            const urlConfirm = `http//localhost:3000/api/users/confirm_registration/${
-              user.token
-            }`;
-            const data = {
-              token: user.token,
-              name: user.name,
-              email: user.email,
-              text,
-              URL: urlConfirm
-            };
-
-            sendMail(data, response => {
-              console.log(response.messageId);
-              if (response.messageId) {
-                res.console.log("mail been sent");
-              }
-            });
-          })
-          .then(user => {
-            res.status(200).json(user);
-          })
-          .catch(err => console.log(err));
+        newUser.save().then(user => {
+          const text =
+            "Please confirm your registration in 12 hours period from now by click on following URL";
+          const urlConfirm = `http//localhost:3000/api/users/confirm_registration/${
+            user.token
+          }`;
+          const data = {
+            token: user.token,
+            name: user.name,
+            email: user.email,
+            text,
+            URL: urlConfirm
+          };
+          sendMail(data, response => {
+            console.log(response.messageId);
+            if (response.messageId) {
+              res.console.log("mail been sent");
+            }
+          });
+        });
       });
     }
     //end of creating new user
@@ -83,9 +81,34 @@ router.post("/register", (req, res) => {
 //route for confirmed user
 router.post("/confirm_registration", (req, res) => {
   User.findOne({ token: req.body.token }).then(user => {
-    if (user) {
-      res.status(200).json({ user });
+    if (!user) {
+      res.status(400).json({ msg: " Opps..Something wrong" });
     }
+    console.log("user", user);
+
+    //user been found. hashing password and creating confirmed user in db
+    const saltRounds = 10;
+    bcrypt.genSalt(saltRounds, (err, salt) => {
+      bcrypt.hash(user.password, salt, (err, hash) => {
+        const password = hash;
+        const isAuthenticateUser = new User({
+          name: user.name,
+          email: user.email,
+          confirmed: true,
+          password
+        });
+        //here isAuthenticateUser ready
+
+        isAuthenticateUser.save().then(user => {
+          if (user) {
+            User.findOneAndRemove({ confirmed: false }).then(res => {
+              console.log(res);
+            });
+          }
+          res.json(user);
+        });
+      });
+    });
   });
 });
 
