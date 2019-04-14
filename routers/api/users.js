@@ -34,10 +34,10 @@ router.post("/register", (req, res) => {
         email: req.body.email,
         password: req.body.password
       };
-      console.log("payload", payload);
 
       jwt.sign(payload, keys, { expiresIn: 3600 }, (err, token) => {
-        res.json({ success: true, token: "token = " + token });
+        res.console.log(token);
+
         // here we got tempToken ready to send to new user
         //create data object for mailer trasporter
         const newUser = new User({
@@ -47,28 +47,33 @@ router.post("/register", (req, res) => {
           token
         });
 
-        newUser.save().then(user => {
-          console.log("user", user);
-          const text =
-            "Please confirm your registration by click on following URL";
-          const urlConfirm = `http//localhost:3000/api/users/confirm_registration/${
-            user.token
-          }`;
-          const data = {
-            token: user.token,
-            name: user.name,
-            email: user.email,
-            text,
-            URL: urlConfirm
-          };
+        newUser
+          .save()
+          .then(user => {
+            const text =
+              "Please confirm your registration by click on following URL";
+            const urlConfirm = `http//localhost:3000/api/users/confirm_registration/${
+              user.token
+            }`;
+            const data = {
+              token: user.token,
+              name: user.name,
+              email: user.email,
+              text,
+              URL: urlConfirm
+            };
 
-          sendMail(data, response => {
-            console.log(response.messageId);
-            if (response.messageId) {
-              res.console.log("mail been sent");
-            }
-          });
-        });
+            sendMail(data, response => {
+              console.log(response.messageId);
+              if (response.messageId) {
+                res.console.log("mail been sent");
+              }
+            });
+          })
+          .then(user => {
+            res.status(200).json(user);
+          })
+          .catch(err => console.log(err));
       });
     }
     //end of creating new user

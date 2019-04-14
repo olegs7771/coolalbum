@@ -2,8 +2,6 @@ const nodemailer = require("nodemailer");
 const mailPass = require("../config/dev_keys").mailPass;
 
 module.exports = function sendMail(data, cb) {
-  console.log("data", data);
-
   //create htmlBody
   const htmlBody = `<b>From</b>
    <ul className='list-group'>
