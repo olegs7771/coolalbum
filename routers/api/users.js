@@ -36,8 +36,13 @@ router.post("/register", (req, res) => {
       };
       console.log("payload", payload);
 
-      jwt.sign(payload, keys, { expiresIn: 3600 }, (err, token) => {
-        res.json({ success: true, token: "token = " + token });
+      jwt.sign(payload, keys, { expiresIn: 43200 }, (err, token) => {
+        if (err) {
+          throw err;
+        }
+
+        console.log("token", token);
+
         // here we got tempToken ready to send to new user
         //create data object for mailer trasporter
         const newUser = new User({
@@ -48,9 +53,8 @@ router.post("/register", (req, res) => {
         });
 
         newUser.save().then(user => {
-          console.log("user", user);
           const text =
-            "Please confirm your registration by click on following URL";
+            "Please confirm your registration in 12 hours period from now by click on following URL";
           const urlConfirm = `http//localhost:3000/api/users/confirm_registration/${
             user.token
           }`;
@@ -61,7 +65,6 @@ router.post("/register", (req, res) => {
             text,
             URL: urlConfirm
           };
-
           sendMail(data, response => {
             console.log(response.messageId);
             if (response.messageId) {
@@ -78,9 +81,34 @@ router.post("/register", (req, res) => {
 //route for confirmed user
 router.post("/confirm_registration", (req, res) => {
   User.findOne({ token: req.body.token }).then(user => {
-    if (user) {
-      res.status(200).json({ user });
+    if (!user) {
+      res.status(400).json({ msg: " Opps..Something wrong" });
     }
+    console.log("user", user);
+
+    //user been found. hashing password and creating confirmed user in db
+    const saltRounds = 10;
+    bcrypt.genSalt(saltRounds, (err, salt) => {
+      bcrypt.hash(user.password, salt, (err, hash) => {
+        const password = hash;
+        const isAuthenticateUser = new User({
+          name: user.name,
+          email: user.email,
+          confirmed: true,
+          password
+        });
+        //here isAuthenticateUser ready
+
+        isAuthenticateUser.save().then(user => {
+          if (user) {
+            User.findOneAndRemove({ confirmed: false }).then(res => {
+              console.log(res);
+            });
+          }
+          res.json(user);
+        });
+      });
+    });
   });
 });
 
