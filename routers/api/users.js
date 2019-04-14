@@ -6,35 +6,81 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const keys = require("../../config/dev_keys").secredOrKey;
 const passport = require("passport");
+const validateRegisterInput = require("../validation/register");
+const sendMail = require("../../mailer/transporter");
 
 // @desc /Register New User
 // @route POST /api/users/register
 // @access Public
 
 router.post("/register", (req, res) => {
+  //First line of validation
+
+  const { errors, isValid } = validateRegisterInput(req.body);
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+  console.log("passed first validation");
+
   User.findOne({ email: req.body.email }).then(user => {
     if (user) {
       return res.status(400).json({ msg: "User Exists" });
     } else {
       //user not exists , we can create new one
-      const newUser = new User({
+
+      //Create Token to send to newTempUser email
+      const payload = {
         name: req.body.name,
         email: req.body.email,
         password: req.body.password
-      });
-      //create hash password with bcrypt
-      bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(newUser.password, salt, (err, hash) => {
-          if (err) throw err;
-          newUser.password = hash;
-          newUser
-            .save()
-            .then(user => res.json(user))
-            .catch(err => res.json(err));
+      };
+      console.log("payload", payload);
+
+      jwt.sign(payload, keys, { expiresIn: 3600 }, (err, token) => {
+        res.json({ success: true, token: "token = " + token });
+        // here we got tempToken ready to send to new user
+        //create data object for mailer trasporter
+        const newUser = new User({
+          name: req.body.name,
+          email: req.body.email,
+          password: req.body.password,
+          token
+        });
+
+        newUser.save().then(user => {
+          console.log("user", user);
+          const text =
+            "Please confirm your registration by click on following URL";
+          const urlConfirm = `http//localhost:3000/api/users/confirm_registration/${
+            user.token
+          }`;
+          const data = {
+            token: user.token,
+            name: user.name,
+            email: user.email,
+            text,
+            URL: urlConfirm
+          };
+
+          sendMail(data, response => {
+            console.log(response.messageId);
+            if (response.messageId) {
+              res.console.log("mail been sent");
+            }
+          });
         });
       });
     }
     //end of creating new user
+  });
+});
+
+//route for confirmed user
+router.post("/confirm_registration", (req, res) => {
+  User.findOne({ token: req.body.token }).then(user => {
+    if (user) {
+      res.status(200).json({ user });
+    }
   });
 });
 
@@ -99,7 +145,8 @@ router.post(
     const payload = {
       id: req.user.id,
       name: req.user.name,
-      email: req.user.email
+      email: req.user.email,
+      avatar: req.user.avatar
     };
     jwt.sign(payload, keys, { expiresIn: 3600 }, (err, token) => {
       res.json({ success: true, token: "Bearer " + token });

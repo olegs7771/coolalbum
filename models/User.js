@@ -14,6 +14,17 @@ const UserSchema = new Schema({
     type: String
   },
 
+  confirmed: {
+    type: Boolean,
+    default: false
+  },
+  avatar: {
+    type: String
+  },
+  token: {
+    type: String
+  },
+
   date: {
     type: Date,
     default: Date.now()

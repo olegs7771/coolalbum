@@ -11,8 +11,6 @@ opts.secretOrKey = keys;
 module.exports = passport => {
   passport.use(
     new JwtStrategy(opts, (jwt_payload, done) => {
-      console.log("jwt_payload", jwt_payload);
-
       User.findById(jwt_payload.id)
         .then(user => {
           if (user) {
@@ -28,7 +26,6 @@ module.exports = passport => {
 
   const clientID = "991632717694701",
     clientSecret = "c27d128965b5b2a146d6c906d93da299";
-  // callbackURL = "http://localhost:3000/api/users/auth/facebook/callback";
 
   passport.use(
     new FacebookTokenStrategy(
@@ -38,19 +35,16 @@ module.exports = passport => {
       },
 
       (accessToken, refreshToken, profile, cb) => {
-        console.log(profile);
-
         User.findOne({ email: profile.emails[0].value })
           .then(user => {
             if (user) {
-              console.log("user exists");
-
               return cb(null, user);
             } else {
               const newUser = new User();
               newUser.id = profile.id;
               newUser.name = profile.displayName;
               newUser.email = profile.emails[0].value;
+              newUser.avatar = profile.photos[0].value;
 
               newUser
                 .save()

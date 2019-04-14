@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { setCurrentUser, logoutUser } from "../../actions/userActions";
 import { reactLocalStorage } from "reactjs-localstorage";
 import jwtDecode from "jwt-decode";
+import { isEmpty } from "../../utils/isEmpty";
 class Header extends Component {
   state = {
     isAuthenticated: false
@@ -40,12 +41,29 @@ class Header extends Component {
           <a className="navbar-brand" href="/">
             CoolAlbum
           </a>
+
           <nav className="navbar navbar-dark bg-dark navbar-expand-lg ml-auto ">
-            {Object.keys(user).length > 0 ? (
+            {!isEmpty(user) ? (
               <ul className="nav justify-content-end">
                 <li className="nav-item active">
                   <span className="text-white">Welcome</span>{" "}
-                  <span className="text-info">{user.name}</span>
+                  <span className="text-info ml-2">{user.name}</span>
+                  {/* {if no avatar do not use white border on avatar} */}
+                  {!isEmpty(user.avatar) ? (
+                    <img
+                      src={user.avatar}
+                      alt=""
+                      className="rounded-circle ml-2 "
+                      style={{ width: "50px", border: "2px solid white" }}
+                    />
+                  ) : (
+                    <img
+                      src={user.avatar}
+                      alt=""
+                      className="rounded-circle ml-2 "
+                      style={{ width: "50px" }}
+                    />
+                  )}
                   <button
                     className="text-white btn ml-4 "
                     onClick={this.handleLogout}
@@ -59,6 +77,12 @@ class Header extends Component {
                 <li className="nav-item active">
                   <Link to="/login" className="nav-link">
                     <span className="text-white">Login</span>
+                  </Link>
+                </li>
+
+                <li className="nav-item active">
+                  <Link to="/register" className="nav-link">
+                    <span className="text-white">SignUp</span>
                   </Link>
                 </li>
               </ul>
@@ -80,8 +104,8 @@ class Header extends Component {
           <div className="bg-dark p-4">
             <ul className="nav justify-content-end">
               <li className="nav-item">
-                <Link className="nav-link text-white" to="/register">
-                  Sign Up
+                <Link className="nav-link text-white" to="/contact">
+                  Contact Us
                 </Link>
               </li>
               <li className="nav-item">

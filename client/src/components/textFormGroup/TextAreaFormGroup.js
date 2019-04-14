@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import classnames from "classnames";
 
-const TextFormGroup = ({
+const TextAreaFormGroup = ({
   label,
   placeholder,
   type,
@@ -15,27 +15,25 @@ const TextFormGroup = ({
   return (
     <div className="form-group">
       <label htmlFor={name}>{label}</label>
-      <input
-        className={classnames("form-control", { "is-invalid": error })}
-        placeholder={placeholder}
-        type={type}
-        value={value}
+      <textarea
         name={name}
+        value={value}
+        cols="20"
+        rows="5"
         onChange={onChange}
+        className={classnames("form-control", { "is-invalid": error })}
       />
       {error && <div className="invalid-feedback">{error}</div>}
-
-      <small className="text-muted"> {info}</small>
     </div>
   );
 };
 
-TextFormGroup.defaultProps = {
+TextAreaFormGroup.defaultProps = {
   type: "text"
 };
 
-TextFormGroup.propTypes = {
+TextAreaFormGroup.propTypes = {
   placeholder: PropTypes.string
 };
 
-export default TextFormGroup;
+export default TextAreaFormGroup;

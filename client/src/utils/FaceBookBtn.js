@@ -12,17 +12,13 @@ class FaceBookBtn extends Component {
 
   responseFacebook = response => {
     const { history } = this.props;
-    console.log(response);
+
     this.setState({
       accessToken: response.accessToken,
       showLoginBtn: false
     });
     this.props.authFacebook(this.state.accessToken, history);
     console.log(this.state);
-  };
-
-  componentClicked = e => {
-    console.log("clicked");
   };
 
   //Logout
