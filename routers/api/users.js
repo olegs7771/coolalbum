@@ -71,6 +71,7 @@ router.post("/register", (req, res) => {
               res.console.log("mail been sent");
             }
           });
+          res.status(200).json({ msg: "Success! Please check your Email" });
         });
       });
     }
@@ -84,7 +85,6 @@ router.post("/confirm_registration", (req, res) => {
     if (!user) {
       res.status(400).json({ msg: " Opps..Something wrong" });
     }
-    console.log("user", user);
 
     //user been found. hashing password and creating confirmed user in db
     const saltRounds = 10;
@@ -105,7 +105,7 @@ router.post("/confirm_registration", (req, res) => {
               console.log(res);
             });
           }
-          res.json(user);
+          res.json({ msg: "Thank you for Registration!" });
         });
       });
     });

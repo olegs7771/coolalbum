@@ -8,7 +8,9 @@ class SuccessRegMsg extends Component {
           <div className="mx-auto">
             <div className="col-md-12 my-4">
               <div className="h3 text-center ">
-                You Have Been Successfully Registered!
+                Thank You for Registering on CoolAlbum Site. In order to
+                complete your Registration, please check your Email and follow
+                the instraction. Hope to See You Soon...
               </div>
             </div>
           </div>
