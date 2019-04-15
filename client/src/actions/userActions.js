@@ -10,6 +10,9 @@ export const registerUser = (userData, history) => dispatch => {
     .then(res => {
       console.log("res.data", res.data);
     })
+    .then(() => {
+      history.push("/success_msg");
+    })
 
     .catch(err =>
       dispatch({
