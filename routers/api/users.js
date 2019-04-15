@@ -8,6 +8,7 @@ const keys = require("../../config/dev_keys").secredOrKey;
 const passport = require("passport");
 const validateRegisterInput = require("../validation/register");
 const sendMail = require("../../mailer/transporter");
+const isEmpty = require("../validation/isEmpty");
 
 // @desc /Register New User
 // @route POST /api/users/register
@@ -128,6 +129,10 @@ router.post("/login", (req, res) => {
       return res.status(400).json({ msg: "User Not Found" });
     }
     if (user.confirmed !== true) {
+      return res.status(400).json({ msg: "User Not Found" });
+    }
+
+    if (!isEmpty(password)) {
       return res.status(400).json({ msg: "User Not Found" });
     }
 

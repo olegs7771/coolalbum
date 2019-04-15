@@ -8,7 +8,8 @@ import { withRouter } from "react-router-dom";
 class LoginForm extends Component {
   state = {
     email: "",
-    password: ""
+    password: "",
+    errors: {}
   };
 
   onChange = e => {
@@ -61,7 +62,11 @@ class LoginForm extends Component {
     );
   }
 }
+const mapStateToProps = state => ({
+  errors: state.errors.errors
+});
+
 export default connect(
-  null,
+  mapStateToProps,
   { loginUser }
 )(withRouter(LoginForm));
