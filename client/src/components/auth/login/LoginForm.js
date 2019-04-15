@@ -12,6 +12,14 @@ class LoginForm extends Component {
     errors: {}
   };
 
+  componentDidUpdate(prevProps) {
+    if (prevProps !== this.props) {
+      this.setState({
+        errors: this.props.errors
+      });
+    }
+  }
+
   onChange = e => {
     this.setState({
       [e.target.name]: e.target.value
@@ -32,7 +40,9 @@ class LoginForm extends Component {
   };
 
   render() {
-    const { email, password } = this.state;
+    console.log(this.state);
+
+    const { email, password, errors } = this.state;
 
     return (
       <div>
@@ -46,12 +56,14 @@ class LoginForm extends Component {
                 value={email}
                 name="email"
                 onChange={this.onChange}
+                error={errors.email}
               />
               <TextFormGroup
                 placeholder="Password..."
                 value={password}
                 name="password"
                 onChange={this.onChange}
+                error={errors.password}
               />
 
               <button className="btn btn-dark">Login</button>

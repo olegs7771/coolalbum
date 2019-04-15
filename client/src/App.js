@@ -8,6 +8,8 @@ import Main from "./components/layout/main/Main";
 import Register from "./components/auth/regisrer/Register";
 import Login from "./components/auth/login/Login";
 import SuccessRegMsg from "./utils/SuccessRegMsg";
+//here comes confirmation for registartion
+import ConfirmRegister from "./utils/ConfirmRegister";
 import Contact from "./utils/Contact";
 import jwt_decode from "jwt-decode";
 import { logoutUser } from "./actions/userActions";
@@ -46,6 +48,11 @@ class App extends Component {
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/register" component={Register} />
                 <Route exact path="/success_msg" component={SuccessRegMsg} />
+                <Route
+                  exact
+                  path="/confirm_registration/:token"
+                  component={ConfirmRegister}
+                />
                 <Route exact path="/contact" component={Contact} />
               </Switch>
             </div>
