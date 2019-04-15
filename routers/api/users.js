@@ -7,7 +7,9 @@ const jwt = require("jsonwebtoken");
 const keys = require("../../config/dev_keys").secredOrKey;
 const passport = require("passport");
 const validateRegisterInput = require("../validation/register");
+const validateLoginInput = require("../validation/login");
 const sendMail = require("../../mailer/transporter");
+const isEmpty = require("../validation/isEmpty");
 
 // @desc /Register New User
 // @route POST /api/users/register
@@ -80,10 +82,14 @@ router.post("/register", (req, res) => {
 });
 
 //route for confirmed user
-router.post("/confirm_registration", (req, res) => {
-  User.findOne({ token: req.body.token }).then(user => {
+router.post("/confirm_registration/:token", (req, res) => {
+  console.log("req.body.token", req.params.token);
+
+  User.findOne({ token: req.params.token }).then(user => {
     if (!user) {
-      res.status(400).json({ msg: " Opps..Something wrong" });
+      return res.status(400).json({
+        msg: " Registration has expired. Please try to register again"
+      });
     }
 
     //user been found. hashing password and creating confirmed user in db
@@ -117,18 +123,31 @@ router.post("/confirm_registration", (req, res) => {
 // // @access Public
 
 router.post("/login", (req, res) => {
+  //First line of validation
+
+  const { errors, isValid } = validateLoginInput(req.body);
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+  console.log("passed first validation");
+
   //check if user confirmed:true
 
   const email = req.body.email;
   const password = req.body.password;
 
   User.findOne({ email }).then(user => {
+    const errors = {};
     if (!user) {
       //user not found
-      return res.status(400).json({ msg: "User Not Found" });
+      return res.status(400).json({ email: "User Not Found" });
     }
     if (user.confirmed !== true) {
-      return res.status(400).json({ msg: "User Not Found" });
+      return res.status(400).json({ email: "User Not Found" });
+    }
+
+    if (!isEmpty(password)) {
+      return res.status(400).json({ email: "User Not Found" });
     }
 
     bcrypt.compare(password, user.password).then(isMatch => {
@@ -145,7 +164,7 @@ router.post("/login", (req, res) => {
           res.json({ success: true, token: "Bearer " + token });
         });
       } else {
-        return res.status(400).json({ msg: "passport wrong" });
+        return res.status(400).json({ password: "passport wrong" });
       }
     });
   });
