@@ -55,7 +55,7 @@ router.post("/register", (req, res) => {
         newUser.save().then(user => {
           const text =
             "Please confirm your registration in 12 hours period from now by click on following URL";
-          const urlConfirm = `http//localhost:3000/api/users/confirm_registration/${
+          const urlConfirm = `https://polar-savannah-70702.herokuapp.com/confirm_registration/${
             user.token
           }`;
           const data = {
