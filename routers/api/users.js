@@ -117,12 +117,17 @@ router.post("/confirm_registration", (req, res) => {
 // // @access Public
 
 router.post("/login", (req, res) => {
+  //check if user confirmed:true
+
   const email = req.body.email;
   const password = req.body.password;
 
   User.findOne({ email }).then(user => {
     if (!user) {
       //user not found
+      return res.status(400).json({ msg: "User Not Found" });
+    }
+    if (user.confirmed !== true) {
       return res.status(400).json({ msg: "User Not Found" });
     }
 
