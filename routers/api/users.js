@@ -82,7 +82,7 @@ router.post("/register", (req, res) => {
 });
 
 //route for confirmed user
-router.post("/confirm_registration/:token", (req, res) => {
+router.get("/confirm_registration/:token", (req, res) => {
   console.log("req.body.token", req.params.token);
 
   User.findOne({ token: req.params.token }).then(user => {

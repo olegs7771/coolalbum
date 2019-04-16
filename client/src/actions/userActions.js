@@ -21,6 +21,21 @@ export const registerUser = (userData, history) => dispatch => {
       })
     );
 };
+//Register New User
+export const confirmRegister = userData => dispatch => {
+  axios
+    .post("api/users/confirm_registration", userData)
+    .then(res => {
+      res.status(200).json({ msg: "success!" });
+    })
+
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};
 
 //Login
 export const loginUser = (userData, history) => dispatch => {
