@@ -85,7 +85,7 @@ router.post("/register", (req, res) => {
 router.post("/confirm_registration/:token", (req, res) => {
   console.log("req.body.token", req.params.token);
 
-  User.findOne({ token: req.params.token }).then(user => {
+  User.findOneAndUpdate({ token: req.params.token }).then(user => {
     if (!user) {
       return res.status(400).json({
         msg: " Registration has expired. Please try to register again"
@@ -107,11 +107,8 @@ router.post("/confirm_registration/:token", (req, res) => {
 
         isAuthenticateUser.save().then(user => {
           if (user) {
-            User.findOneAndRemove({ confirmed: false }).then(res => {
-              console.log(res);
-            });
+            res.json({ msg: "Thank you for Registration!" });
           }
-          res.json({ msg: "Thank you for Registration!" });
         });
       });
     });
