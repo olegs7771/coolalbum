@@ -14,7 +14,7 @@ class ConfirmRegister extends Component {
     };
 
     this.props.confirmRegister(data);
-    history.push("/");
+    history.push("/success_msg");
   }
 
   render() {

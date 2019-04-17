@@ -2,11 +2,30 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 class SuccessRegMsg extends Component {
-  render() {
-    console.log(this.props);
+  state = {
+    errors: {}
+  };
 
-    return (
-      <div>
+  componentDidUpdate(prevProps) {
+    if (prevProps !== this.props) {
+      this.setState({
+        errors: this.props.errors
+      });
+    }
+  }
+
+  render() {
+    console.log(this.state.errors);
+    const { errors } = this.state;
+    let errorContent;
+    if (errors.error) {
+      errorContent = (
+        <div className="mx-auto my-4">
+          <div className="text-danger">{errors.error}</div>
+        </div>
+      );
+    } else {
+      errorContent = (
         <div className="row ">
           <div className="mx-auto">
             <div className="col-md-12 my-4">
@@ -18,6 +37,12 @@ class SuccessRegMsg extends Component {
             </div>
           </div>
         </div>
+      );
+    }
+
+    return (
+      <div>
+        {errorContent}
         <a href="/">Go Back To Main</a>
       </div>
     );
