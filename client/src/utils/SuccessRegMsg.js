@@ -1,7 +1,10 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 
 class SuccessRegMsg extends Component {
   render() {
+    console.log(this.props);
+
     return (
       <div>
         <div className="row ">
@@ -20,4 +23,10 @@ class SuccessRegMsg extends Component {
     );
   }
 }
-export default SuccessRegMsg;
+const mapStateToProps = state => ({
+  errors: state.errors.errors
+});
+export default connect(
+  mapStateToProps,
+  {}
+)(SuccessRegMsg);

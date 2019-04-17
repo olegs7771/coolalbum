@@ -1,10 +1,20 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
+
 import { confirmRegister } from "../actions/userActions";
 
 class ConfirmRegister extends Component {
   componentDidMount() {
-    this.props.confirmRegister(this.props.match.params.token);
+    console.log("confirmRegister shooted to userAction");
+    const { history } = this.props;
+
+    const data = {
+      token: this.props.match.params.token
+    };
+
+    this.props.confirmRegister(data);
+    history.push("/");
   }
 
   render() {
@@ -18,4 +28,4 @@ class ConfirmRegister extends Component {
 export default connect(
   null,
   { confirmRegister }
-)(ConfirmRegister);
+)(withRouter(ConfirmRegister));

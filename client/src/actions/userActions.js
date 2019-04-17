@@ -23,12 +23,13 @@ export const registerUser = (userData, history) => dispatch => {
 };
 //Register New User
 export const confirmRegister = userData => dispatch => {
-  axios
-    .post("api/users/confirm_registration", userData)
-    .then(res => {
-      res.status(200).json({ msg: "success!" });
-    })
+  console.log("userData", userData);
 
+  axios
+    .post("api/users/confirmRegistration", userData)
+    .then(res => {
+      res.status(200).json(res.data);
+    })
     .catch(err =>
       dispatch({
         type: GET_ERRORS,

@@ -55,8 +55,9 @@ router.post("/register", (req, res) => {
         });
 
         newUser.save().then(user => {
-          const text =
-            "Please confirm your registration in 12 hours period from now by click on following URL";
+          const text = ` Dear ${
+            req.body.name
+          } Please confirm your registration in 12 hours period from now by click on following URL`;
           const urlConfirm = `https://polar-savannah-70702.herokuapp.com/confirm_registration/${
             user.token
           }`;
@@ -81,15 +82,15 @@ router.post("/register", (req, res) => {
   });
 });
 
-//route for confirmed user
-router.get("/confirm_registration/:token", (req, res) => {
-  console.log("req.body.token", req.params.token);
+// @desc /Confirmation of New User
+// @route POST /api/users/confirm_registration/:token
+// @access Public
+router.post("/confirmRegistration", (req, res) => {
+  console.log("req.body", req.body.token);
 
-  User.findOneAndUpdate({ token: req.params.token }).then(user => {
+  User.findOne({ token: req.body.token }).then(user => {
     if (!user) {
-      return res.status(400).json({
-        msg: " Registration has expired. Please try to register again"
-      });
+      return res.status(400).json({ error: "Registration has expired" });
     }
 
     //user been found. hashing password and creating confirmed user in db
@@ -107,7 +108,11 @@ router.get("/confirm_registration/:token", (req, res) => {
 
         isAuthenticateUser.save().then(user => {
           if (user) {
-            res.json({ msg: "Thank you for Registration!" });
+            User.findOneAndRemove({ confirmed: false }).then(() => {
+              console.log("false been removed");
+
+              res.json({ msg: "Thank you for Registration!" });
+            });
           }
         });
       });
@@ -134,17 +139,12 @@ router.post("/login", (req, res) => {
   const password = req.body.password;
 
   User.findOne({ email }).then(user => {
-    const errors = {};
     if (!user) {
       //user not found
       return res.status(400).json({ email: "User Not Found" });
     }
     if (user.confirmed !== true) {
-      return res.status(400).json({ email: "User Not Found" });
-    }
-
-    if (!isEmpty(password)) {
-      return res.status(400).json({ email: "User Not Found" });
+      return res.status(400).json({ email: "something wrong.." });
     }
 
     bcrypt.compare(password, user.password).then(isMatch => {
