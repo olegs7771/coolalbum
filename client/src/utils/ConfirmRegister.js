@@ -13,7 +13,7 @@ class ConfirmRegister extends Component {
       token: this.props.match.params.token
     };
 
-    this.props.confirmRegister(data);
+    this.props.confirmRegister(data, history);
     history.push("/success_msg");
   }
 

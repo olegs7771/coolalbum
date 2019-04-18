@@ -22,20 +22,31 @@ export const registerUser = (userData, history) => dispatch => {
     );
 };
 //Register New User
-export const confirmRegister = userData => dispatch => {
+export const confirmRegister = (userData, history) => dispatch => {
   console.log("userData", userData);
 
   axios
     .post("api/users/confirmRegistration", userData)
     .then(res => {
-      res.status(200).json(res.data);
+      // Save to localStorage token
+      const { token } = res.data;
+      //Set token to localStorage
+      localStorage.setItem("jwtToken", token);
+      //Set token to Auth header (we crerate it in separate file)
+      setAuthToken(token);
+      // set the user (using user creds from token. but first we must to decode token with jwt-decode module)
+      const decoded = jwt_decode(token);
+
+      //set current user (we create separate function here)
+      dispatch(setCurrentUser(decoded));
+      history.push("/");
     })
-    .catch(err =>
+    .catch(err => {
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
-      })
-    );
+      });
+    });
 };
 
 //Login

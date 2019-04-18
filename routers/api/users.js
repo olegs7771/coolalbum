@@ -88,36 +88,41 @@ router.post("/register", (req, res) => {
 router.post("/confirmRegistration", (req, res) => {
   console.log("req.body", req.body.token);
 
-  User.findOne({ token: req.body.token }).then(user => {
-    if (!user) {
-      return res.status(400).json({ error: "Registration has expired" });
-    }
+  User.findOne({ token: req.body.token })
+    .then(user => {
+      if (!user) {
+        return res.status(400).json({ error: "Registration has expired" });
+      }
 
-    //user been found. hashing password and creating confirmed user in db
-    const saltRounds = 10;
-    bcrypt.genSalt(saltRounds, (err, salt) => {
-      bcrypt.hash(user.password, salt, (err, hash) => {
-        const password = hash;
-        const isAuthenticateUser = new User({
-          name: user.name,
-          email: user.email,
-          confirmed: true,
-          password
-        });
-        //here isAuthenticateUser ready
+      //user been found. hashing password and creating confirmed user in db
+      const saltRounds = 10;
+      bcrypt.genSalt(saltRounds, (err, salt) => {
+        bcrypt.hash(user.password, salt, (err, hash) => {
+          const password = hash;
+          const isAuthenticateUser = new User({
+            name: user.name,
+            email: user.email,
+            confirmed: true,
+            password
+          });
+          //here isAuthenticateUser ready
 
-        isAuthenticateUser.save().then(user => {
-          if (user) {
-            User.findOneAndRemove({ confirmed: false }).then(() => {
-              console.log("false been removed");
+          isAuthenticateUser.save().then(user => {
+            if (user) {
+              User.findOneAndRemove({ confirmed: false }).then(() => {
+                console.log("false been removed");
 
-              res.json({ msg: "Thank you for Registration!" });
-            });
-          }
+                console.log(" false has been removed");
+              });
+            }
+          });
         });
       });
+      res.status(200).json(user);
+    })
+    .catch(err => {
+      res.status(400).json({ error: "Token has expired" });
     });
-  });
 });
 
 // // @desc /Login User
