@@ -57,9 +57,9 @@ router.post("/register", (req, res) => {
           const text = ` Dear ${
             req.body.name
           } Please confirm your registration in 12 hours period from now by click on following URL`;
-          const urlConfirm = `https://polar-savannah-70702.herokuapp.com/confirm_registration/${
+          const urlConfirm = `https://localhost:3000/confirm_registration/${
             user.token
-          }`;
+          }/${user._id}`;
           const data = {
             token: user.token,
             name: user.name,

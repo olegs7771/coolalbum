@@ -50,7 +50,7 @@ class App extends Component {
                 <Route exact path="/success_msg" component={SuccessRegMsg} />
                 <Route
                   exact
-                  path="/confirm_registration/:token"
+                  path="/confirm_registration/:token/:_id"
                   component={ConfirmRegister}
                 />
                 <Route exact path="/contact" component={Contact} />
