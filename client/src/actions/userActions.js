@@ -51,7 +51,7 @@ export const confirmRegister = (userData, history) => dispatch => {
     );
 };
 
-//Login
+//Login1
 export const loginUser = (userData, history) => dispatch => {
   axios
     .post("api/users/login", userData)
