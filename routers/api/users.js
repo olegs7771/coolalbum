@@ -212,13 +212,16 @@ router.post(
     { session: false }
   ),
   (req, res) => {
+    console.log("req.user", req.user);
+
     //generate token
     // create JWT with user info
     const payload = {
       id: req.user.id,
       name: req.user.name,
       email: req.user.email,
-      avatar: req.user.avatar
+      avatar: req.user.avatar,
+      date: req.user.date
     };
     jwt.sign(payload, keys, { expiresIn: 3600 }, (err, token) => {
       res.json({ success: true, token: "Bearer " + token });
