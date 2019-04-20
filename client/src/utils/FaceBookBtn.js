@@ -18,7 +18,6 @@ class FaceBookBtn extends Component {
       showLoginBtn: false
     });
     this.props.authFacebook(this.state.accessToken, history);
-    console.log(this.state);
   };
 
   //Logout

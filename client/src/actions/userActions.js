@@ -116,6 +116,8 @@ export const authFacebook = (userData, history) => dispatch => {
       setAuthToken(token);
       // set the user (using user creds from token. but first we must to decode token with jwt-decode module)
       const decoded = jwt_decode(token);
+      console.log("decoded", decoded);
+
       //set current user (we create separate function here)
       dispatch(setCurrentUser(decoded));
       history.push("/");
