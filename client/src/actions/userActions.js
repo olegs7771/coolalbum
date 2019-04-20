@@ -28,6 +28,8 @@ export const confirmRegister = (userData, history) => dispatch => {
   axios
     .post("api/users/confirmRegistration", userData)
     .then(res => {
+      console.log("res.data", res.data);
+
       const { token, _id } = res.data;
       //Set token to localStorage
       localStorage.setItem("jwtToken", token);

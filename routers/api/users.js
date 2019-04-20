@@ -3,6 +3,7 @@ const router = express.Router();
 //Bring in Model (models/User.js)
 const User = require("../../models/User");
 const bcrypt = require("bcryptjs");
+const gravatar = require("gravatar");
 const jwt = require("jsonwebtoken");
 const keys = require("../../config/dev_keys").secredOrKey;
 const passport = require("passport");
@@ -96,24 +97,44 @@ router.post("/confirmRegistration", (req, res) => {
       bcrypt.genSalt(saltRounds, (err, salt) => {
         bcrypt.hash(user.password, salt, (err, hash) => {
           const password = hash;
-          const isAuthenticateUser = new User({
+          //gravatar
+          const avatar = gravatar.url(req.body.email, {
+            s: "200",
+            r: "pg",
+            d: "mm"
+          });
+          // create token with id
+          const payload = {
             name: user.name,
             email: user.email,
-            confirmed: true,
-            password
-          });
-          //here isAuthenticateUser ready
+            password: user.password,
+            avatar,
+            password,
+            id: user._id
+          };
 
-          isAuthenticateUser.save().then(user => {
-            if (user) {
-              User.findOneAndRemove({ confirmed: false }).then(() => {
-                console.log("false been removed");
-              });
-            }
+          jwt.sign(payload, keys, { expiresIn: 43200 }, (err, token) => {
+            const isAuthenticateUser = new User({
+              name: user.name,
+              email: user.email,
+              confirmed: true,
+              avatar,
+              password,
+              token
+            });
+            //here isAuthenticateUser ready
+
+            isAuthenticateUser.save().then(user => {
+              if (user) {
+                User.findOneAndRemove({ confirmed: false }).then(() => {
+                  console.log("false been removed");
+                });
+              }
+              return res.status(200).json(user);
+            });
           });
         });
       });
-      res.status(200).json(user);
     })
     .catch(err => {
       res.status(400).json(err);
