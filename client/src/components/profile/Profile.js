@@ -12,17 +12,20 @@ class Profile extends Component {
     const { user } = this.props;
     console.log("user", user);
 
-    // if (user) {
-    //   return user.map(items => (
-    //     <ProfileItems
-    //       key={items.id}
-    //       avatar={items.avatar}
-    //       email={items.email}
-    //       name={items.name}
-    //     />
-    //   ));
-    // }
-    return <div />;
+    if (user) {
+      return (
+        <div className="row">
+          <div className="col-md-6">
+            <ProfileItems
+              name={user.name}
+              email={user.email}
+              avatar={user.avatar}
+              date={user.date}
+            />
+          </div>
+        </div>
+      );
+    }
   }
 }
 

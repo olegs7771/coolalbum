@@ -110,6 +110,7 @@ router.post("/confirmRegistration", (req, res) => {
             password: user.password,
             avatar,
             password,
+            date: user.date,
             id: user._id
           };
 
@@ -120,6 +121,7 @@ router.post("/confirmRegistration", (req, res) => {
               confirmed: true,
               avatar,
               password,
+
               token
             });
             //here isAuthenticateUser ready
