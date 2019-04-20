@@ -11,6 +11,7 @@ import SuccessRegMsg from "./utils/SuccessRegMsg";
 //here comes confirmation for registartion
 import ConfirmRegister from "./utils/ConfirmRegister";
 import Contact from "./utils/Contact";
+import Profile from "./components/profile/Profile";
 import jwt_decode from "jwt-decode";
 import { logoutUser } from "./actions/userActions";
 
@@ -54,6 +55,7 @@ class App extends Component {
                   component={ConfirmRegister}
                 />
                 <Route exact path="/contact" component={Contact} />
+                <Route exact path="/profile/:id" component={Profile} />
               </Switch>
             </div>
           </div>
