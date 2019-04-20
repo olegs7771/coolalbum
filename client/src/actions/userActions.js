@@ -28,28 +28,34 @@ export const confirmRegister = (userData, history) => dispatch => {
   axios
     .post("api/users/confirmRegistration", userData)
     .then(res => {
-      // Save to localStorage token
-      const { token } = res.data;
+      console.log("res.data", res.data);
+
+      const { token, _id } = res.data;
       //Set token to localStorage
       localStorage.setItem("jwtToken", token);
       //Set token to Auth header (we crerate it in separate file)
       setAuthToken(token);
       // set the user (using user creds from token. but first we must to decode token with jwt-decode module)
       const decoded = jwt_decode(token);
+      console.log("decoded", decoded);
+      const headData = {
+        ...decoded,
+        _id
+      };
 
       //set current user (we create separate function here)
-      dispatch(setCurrentUser(decoded));
+      dispatch(setCurrentUser(headData));
       history.push("/");
     })
-    .catch(err => {
+    .catch(err =>
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
-      });
-    });
+      })
+    );
 };
 
-//Login
+//Login1
 export const loginUser = (userData, history) => dispatch => {
   axios
     .post("api/users/login", userData)

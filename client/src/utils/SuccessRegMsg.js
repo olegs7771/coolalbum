@@ -11,7 +11,6 @@ class SuccessRegMsg extends Component {
       this.setState({
         errors: this.props.errors
       });
-      console.log("this.props", this.props);
     }
   }
 

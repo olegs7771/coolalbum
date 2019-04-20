@@ -3,6 +3,7 @@ const router = express.Router();
 //Bring in Model (models/User.js)
 const User = require("../../models/User");
 const bcrypt = require("bcryptjs");
+const gravatar = require("gravatar");
 const jwt = require("jsonwebtoken");
 const keys = require("../../config/dev_keys").secredOrKey;
 const passport = require("passport");
@@ -36,7 +37,6 @@ router.post("/register", (req, res) => {
         email: req.body.email,
         password: req.body.password
       };
-      console.log("payload", payload);
 
       jwt.sign(payload, keys, { expiresIn: 43200 }, (err, token) => {
         if (err) {
@@ -58,9 +58,9 @@ router.post("/register", (req, res) => {
           const text = ` Dear ${
             req.body.name
           } Please confirm your registration in 12 hours period from now by click on following URL`;
-          const urlConfirm = `https://polar-savannah-70702.herokuapp.com/confirm_registration/${
+          const urlConfirm = `https://localhost:3000/confirm_registration/${
             user.token
-          }`;
+          }/${user._id}`;
           const data = {
             token: user.token,
             name: user.name,
@@ -86,8 +86,6 @@ router.post("/register", (req, res) => {
 // @route POST /api/users/confirm_registration/:token
 // @access Public
 router.post("/confirmRegistration", (req, res) => {
-  console.log("req.body", req.body.token);
-
   User.findOne({ token: req.body.token })
     .then(user => {
       if (!user) {
@@ -99,29 +97,49 @@ router.post("/confirmRegistration", (req, res) => {
       bcrypt.genSalt(saltRounds, (err, salt) => {
         bcrypt.hash(user.password, salt, (err, hash) => {
           const password = hash;
-          const isAuthenticateUser = new User({
+          //gravatar
+          const avatar = gravatar.url(req.body.email, {
+            s: "200",
+            r: "pg",
+            d: "mm"
+          });
+          // create token with id
+          const payload = {
             name: user.name,
             email: user.email,
-            confirmed: true,
-            password
-          });
-          //here isAuthenticateUser ready
+            password: user.password,
+            avatar,
+            password,
+            date: user.date,
+            id: user._id
+          };
 
-          isAuthenticateUser.save().then(user => {
-            if (user) {
-              User.findOneAndRemove({ confirmed: false }).then(() => {
-                console.log("false been removed");
+          jwt.sign(payload, keys, { expiresIn: 43200 }, (err, token) => {
+            const isAuthenticateUser = new User({
+              name: user.name,
+              email: user.email,
+              confirmed: true,
+              avatar,
+              password,
 
-                console.log(" false has been removed");
-              });
-            }
+              token
+            });
+            //here isAuthenticateUser ready
+
+            isAuthenticateUser.save().then(user => {
+              if (user) {
+                User.findOneAndRemove({ confirmed: false }).then(() => {
+                  console.log("false been removed");
+                });
+              }
+              return res.status(200).json(user);
+            });
           });
         });
       });
-      res.status(200).json(user);
     })
     .catch(err => {
-      res.status(400).json({ error: "Token has expired" });
+      res.status(400).json(err);
     });
 });
 
