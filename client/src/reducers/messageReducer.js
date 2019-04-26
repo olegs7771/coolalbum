@@ -1,17 +1,15 @@
-import { GET_PROFILE } from "../actions/types";
+import { GET_MESSAGE } from "../actions/types";
 // import { isEmpty } from "../utils/isEmpty";
 
 const initialState = {
-  profiles: null,
-  profile: null,
-  loading: false
+  message: null
 };
 export default function(state = initialState, action) {
   switch (action.type) {
-    case GET_PROFILE:
+    case GET_MESSAGE:
       return {
         ...state,
-        profile: action.payload
+        message: action.payload
       };
     default:
       return state;

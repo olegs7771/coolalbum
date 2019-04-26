@@ -7,6 +7,7 @@ const path = require("path");
 
 //routers
 const users = require("./routers/api/users");
+const profiles = require("./routers/api/profiles");
 const email = require("./routers/api/email");
 
 const app = express();
@@ -36,6 +37,7 @@ mongoose
 
 //Use routes
 app.use("/api/users", users);
+app.use("/api/profiles", profiles);
 app.use("/api/email", email);
 
 // Server Static Assets while in production

@@ -40,8 +40,6 @@ class LoginForm extends Component {
   };
 
   render() {
-    console.log(this.state);
-
     const { email, password, errors } = this.state;
 
     return (

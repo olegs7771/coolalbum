@@ -11,13 +11,30 @@ import SuccessRegMsg from "./utils/SuccessRegMsg";
 //here comes confirmation for registartion
 import ConfirmRegister from "./utils/ConfirmRegister";
 import Contact from "./utils/Contact";
-import Profile from "./components/profile/Profile";
+import UserCard from "./components/auth/userCard/UserCard";
+import ProfileCreate from "./components/profile/ProfileCreate";
+import ProfileEdit from "./components/profile/ProfileEdit";
+import ProfileAvatar from "./components/profile/ProfileAvatar";
 import jwt_decode from "jwt-decode";
 import { logoutUser } from "./actions/userActions";
+//Avatar
 
 import "./App.css";
+import setAuthToken from "./utils/setAuthToken";
+import { setCurrentUser } from "./actions/userActions";
 
-//Check for expired token
+//check for token
+if (localStorage.jwtToken) {
+  //Set auth token to header
+  setAuthToken(localStorage.jwtToken);
+
+  // //decode token and get user info and exp
+  const decoded = jwt_decode(localStorage.jwtToken);
+  // // //set currentUser to auth.user in redux state and  Authenticate
+  store.dispatch(setCurrentUser(decoded));
+}
+
+// //Check for expired token
 
 if (localStorage.jwtToken) {
   const decoded = jwt_decode(localStorage.jwtToken);
@@ -55,7 +72,18 @@ class App extends Component {
                   component={ConfirmRegister}
                 />
                 <Route exact path="/contact" component={Contact} />
-                <Route exact path="/profile/:id" component={Profile} />
+                <Route exact path="/userCard/:id" component={UserCard} />
+                <Route
+                  exact
+                  path="/profile_create/:id"
+                  component={ProfileCreate}
+                />
+                <Route exact path="/profile_edit/:id" component={ProfileEdit} />
+                <Route
+                  exact
+                  path="/profile_avatar/:id"
+                  component={ProfileAvatar}
+                />
               </Switch>
             </div>
           </div>

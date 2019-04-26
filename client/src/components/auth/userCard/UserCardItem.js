@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import moment from "moment";
 
-class ProfileItems extends Component {
+class UserCardItem extends Component {
   render() {
     const { name, email, avatar, date } = this.props;
     return (
@@ -22,10 +22,15 @@ class ProfileItems extends Component {
           </ul>
         </div>
         <div className="col-md-4">
-          <img src={avatar} className="my-3 rounded-circle border" />
+          <img
+            src={avatar}
+            className="my-3 rounded-circle border"
+            style={{ width: "100px" }}
+            alt=""
+          />
         </div>
       </div>
     );
   }
 }
-export default ProfileItems;
+export default UserCardItem;

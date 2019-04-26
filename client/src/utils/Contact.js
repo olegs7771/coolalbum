@@ -51,12 +51,20 @@ class Contact extends Component {
   render() {
     const { name, company, email, phone, text, errors, mailSent } = this.state;
     const { message, loading } = mailSent;
+    console.log("errors", errors);
 
     let mailMessageContent;
-    if (message === null || loading) {
-      mailMessageContent = <Spinner />;
-    } else {
-      mailMessageContent = <div>{message}</div>;
+
+    if (Object.keys(errors).length === 0) {
+      if (message === null || loading) {
+        mailMessageContent = <Spinner />;
+      } else {
+        mailMessageContent = (
+          <div>
+            <div className="text-success my-2">{message}</div>
+          </div>
+        );
+      }
     }
 
     return (
@@ -135,8 +143,8 @@ class Contact extends Component {
                   </button>
                 </div>
               </form>
+              {mailMessageContent}
             </div>
-            {mailMessageContent}
           </div>
         </div>
       </div>
