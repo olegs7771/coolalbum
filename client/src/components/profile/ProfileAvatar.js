@@ -1,19 +1,44 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getProfile } from "../../actions/profileAction";
+import Avatar from "react-avatar-edit";
 
 class ProfileAvatar extends Component {
   constructor(props) {
     super(props);
-
+    console.log("props", props);
+    const src = props.user.avatar;
     this.state = {
       name: "",
-      avatar: "",
-
+      src,
       errors: {},
-      message: {}
+      message: {},
+      preview: null
     };
+    this.onCrop = this.onCrop.bind(this);
+    this.onClose = this.onClose.bind(this);
+    this.onBeforeFileLoad = this.onBeforeFileLoad.bind(this);
   }
+
+  //react-avatar-edit
+  onClose = () => {
+    this.setState({ preview: null });
+  };
+
+  onCrop = preview => {
+    console.log("onCrop", preview);
+
+    this.setState({ preview });
+  };
+
+  onBeforeFileLoad = elem => {
+    if (elem.target.files[0].size > 71680) {
+      alert("File is too big!");
+      elem.target.value = "";
+    }
+  };
+  // end react-avatar-edit
+
   componentDidMount() {
     //trigger getProfile();
     const id = {
@@ -22,7 +47,7 @@ class ProfileAvatar extends Component {
     this.props.getProfile(id);
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (this.props !== prevProps) {
       this.setState({
         errors: this.props.errors,
@@ -36,8 +61,7 @@ class ProfileAvatar extends Component {
           name: profile.name,
           email: profile.email,
           status: profile.status,
-          location: profile.location,
-          avatar: profile.avatar
+          location: profile.location
         });
       }
     }
@@ -49,7 +73,15 @@ class ProfileAvatar extends Component {
     return (
       <div className="row my-4">
         <div className="col-md-12 mx-auto">
-          <img src={this.state.avatar} alt={this.state.name} />
+          <Avatar
+            width={330}
+            height={295}
+            onCrop={this.onCrop}
+            onClose={this.onClose}
+            onBeforeFileLoad={this.onBeforeFileLoad}
+            src={this.state.src}
+          />
+          <img src={this.state.preview} alt="Preview" className="my-3" />
         </div>
       </div>
     );
