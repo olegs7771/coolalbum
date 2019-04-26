@@ -46,7 +46,7 @@ class Header extends Component {
                 <ul className="nav justify-content-end">
                   <li className="nav-item active">
                     <span className="text-white">Welcome</span>{" "}
-                    <Link to={`/profile/${user.id}`}>
+                    <Link to={`/userCard/${user.id}`}>
                       <span className="text-info ml-2 h5">{user.name}</span>
                     </Link>
                     {/* {if no avatar do not use white border on avatar} */}

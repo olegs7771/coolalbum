@@ -2,8 +2,6 @@ const validator = require("validator");
 const isEmpty = require("./isEmpty");
 
 module.exports = function validateLoginInput(data) {
-  console.log("data", data);
-
   let errors = {};
 
   //check for empty fields

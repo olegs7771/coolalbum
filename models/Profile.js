@@ -8,23 +8,23 @@ const ProfileSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "users"
   },
-  handle: {
-    type: String
-  },
-  password: {
+  name: {
     type: String,
     required: true,
     max: 30
   },
-
-  confirmed: {
-    type: Boolean,
-    default: false
-  },
   avatar: {
+    type: String,
+    required: true
+  },
+  email: {
+    type: String,
+    required: true
+  },
+  location: {
     type: String
   },
-  token: {
+  status: {
     type: String
   },
 
@@ -33,4 +33,4 @@ const ProfileSchema = new Schema({
     default: Date.now()
   }
 });
-module.exports = User = mongoose.model("users", UserSchema);
+module.exports = Profile = mongoose.model("profiles", ProfileSchema);

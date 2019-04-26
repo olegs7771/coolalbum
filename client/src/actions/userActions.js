@@ -1,6 +1,6 @@
 import { GET_ERRORS, SET_CURRENT_USER, LOGOUT_USER } from "./types";
 import axios from "axios";
-import { setAuthToken } from "../utils/setAuthToken";
+import setAuthToken from "../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
 
 //Register New User
@@ -55,7 +55,7 @@ export const confirmRegister = (userData, history) => dispatch => {
     );
 };
 
-//Login1
+//Login
 export const loginUser = (userData, history) => dispatch => {
   axios
     .post("api/users/login", userData)

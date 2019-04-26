@@ -178,10 +178,12 @@ router.post("/login", (req, res) => {
         const payload = {
           id: user._id,
           name: user.name,
-          email: user.email
+          email: user.email,
+          avatar: user.avatar,
+          date: user.date
         };
         jwt.sign(payload, keys, { expiresIn: 3600 }, (err, token) => {
-          res.json({ success: true, token: "Bearer " + token });
+          res.json({ success: true, token: "bearer  " + token });
         });
       } else {
         return res.status(400).json({ password: "passport wrong" });
@@ -224,7 +226,7 @@ router.post(
       date: req.user.date
     };
     jwt.sign(payload, keys, { expiresIn: 3600 }, (err, token) => {
-      res.json({ success: true, token: "Bearer " + token });
+      res.json({ success: true, token: "bearer" + token });
     });
   }
 );

@@ -2,13 +2,13 @@
 // it will on every http request to api put token from localStorage to the header
 import axios from "axios";
 
-export const setAuthToken = token => {
+const setAuthToken = token => {
   if (token) {
     // Apply to every request
-
     axios.defaults.headers.common["Authorization"] = token;
   } else {
-    // Delete auth header
+    //if token not out there than we want to delete token
     delete axios.defaults.headers.common["Authorization"];
   }
 };
+export default setAuthToken;
