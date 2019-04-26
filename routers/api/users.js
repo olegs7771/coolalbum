@@ -115,14 +115,14 @@ router.post("/confirmRegistration", (req, res) => {
           };
 
           jwt.sign(payload, keys, { expiresIn: 43200 }, (err, token) => {
+            const tokenHeader = { token: "bearer " + token };
             const isAuthenticateUser = new User({
               name: user.name,
               email: user.email,
               confirmed: true,
               avatar,
               password,
-
-              token
+              token: tokenHeader
             });
             //here isAuthenticateUser ready
 
