@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+
 import TextFormGroup from "../textFormGroup/TextFormGroup";
+import ProfileEditAvatar from "./ProfileEditAvatar";
 import {
   createProfile,
   getProfile,
@@ -11,6 +13,7 @@ import { withRouter, Link } from "react-router-dom";
 class ProfileEdit extends Component {
   constructor(props) {
     super(props);
+    console.log("props", props);
 
     this.state = {
       name: "",
@@ -20,7 +23,6 @@ class ProfileEdit extends Component {
       location: "",
       errors: {},
       message: {},
-
       isConfirmDelete: false
     };
   }
@@ -33,7 +35,7 @@ class ProfileEdit extends Component {
     this.props.getProfile(id);
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (this.props !== prevProps) {
       this.setState({
         errors: this.props.errors,
@@ -47,8 +49,14 @@ class ProfileEdit extends Component {
           name: profile.name,
           email: profile.email,
           status: profile.status,
-          location: profile.location,
-          avatar: profile.avatar
+          location: profile.location
+        });
+      }
+
+      // { Here we obtain Avatar string from User}
+      if (this.props.user) {
+        this.setState({
+          avatar: this.props.user.avatar
         });
       }
     }
@@ -61,16 +69,14 @@ class ProfileEdit extends Component {
   };
 
   handleEditProfile = e => {
-    const { name, email, avatar, status, location } = this.state;
+    const { name, email, status, location } = this.state;
     e.preventDefault();
 
     const newProfileData = {
       name,
       email,
-      avatar,
       status,
       location,
-
       user: this.props.match.params.id
     };
     this.props.createProfile(newProfileData);
@@ -93,13 +99,14 @@ class ProfileEdit extends Component {
     const {
       name,
       email,
-      avatar,
       status,
       location,
       errors,
       isConfirmDelete,
-      message
+      message,
+      avatar
     } = this.state;
+    console.log("this.state", this.state);
 
     //content showen to confirm delete profile (isConfirmDelete: true)
 
@@ -207,21 +214,11 @@ class ProfileEdit extends Component {
               </form>
             </div>
           </div>
-          <div className="col-md-4">
-            <img
-              src={avatar}
-              className="rounded-circle"
-              style={{ width: "150px" }}
-              alt=""
-            />
-            <br />
-
-            <a
-              href={`/profile_avatar/${this.props.match.params.id}`}
-              className="btn btn-sm btn-info my-3"
-            >
-              Edit Avatar
-            </a>
+          <div
+            className=" card card-body col-md-4 mt-4 "
+            style={{ height: "432px" }}
+          >
+            {name ? <ProfileEditAvatar avatar={avatar} /> : null}
           </div>
         </div>
       </div>

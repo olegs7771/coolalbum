@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 //Bring in Model (models/User.js)
 const User = require("../../models/User");
+
 const bcrypt = require("bcryptjs");
 const gravatar = require("gravatar");
 const jwt = require("jsonwebtoken");
@@ -23,7 +24,6 @@ router.post("/register", (req, res) => {
   if (!isValid) {
     return res.status(400).json(errors);
   }
-  console.log("passed first validation");
 
   User.findOne({ email: req.body.email }).then(user => {
     if (user) {
@@ -42,8 +42,6 @@ router.post("/register", (req, res) => {
         if (err) {
           throw err;
         }
-
-        console.log("token", token);
 
         // here we got tempToken ready to send to new user
         //create data object for mailer trasporter
@@ -115,14 +113,13 @@ router.post("/confirmRegistration", (req, res) => {
           };
 
           jwt.sign(payload, keys, { expiresIn: 43200 }, (err, token) => {
-            const tokenHeader = { token: "bearer " + token };
             const isAuthenticateUser = new User({
               name: user.name,
               email: user.email,
               confirmed: true,
               avatar,
               password,
-              token: tokenHeader
+              token
             });
             //here isAuthenticateUser ready
 
@@ -169,25 +166,27 @@ router.post("/login", (req, res) => {
     if (user.confirmed !== true) {
       return res.status(400).json({ email: "something wrong.." });
     }
-
-    bcrypt.compare(password, user.password).then(isMatch => {
-      if (isMatch) {
-        //password from form compared to password from db(user matched)
-        // user obtains jwt
-        //1. create JWT payload with user info
-        const payload = {
-          id: user._id,
-          name: user.name,
-          email: user.email,
-          avatar: user.avatar,
-          date: user.date
-        };
-        jwt.sign(payload, keys, { expiresIn: 3600 }, (err, token) => {
-          res.json({ success: true, token: "bearer  " + token });
-        });
-      } else {
-        return res.status(400).json({ password: "passport wrong" });
-      }
+    //user found , we can delete tempToken form db
+    User.update({ email }, { $unset: { token: "" } }).then(() => {
+      bcrypt.compare(password, user.password).then(isMatch => {
+        if (isMatch) {
+          //password from form compared to password from db(user matched)
+          // user obtains jwt
+          //1. create JWT payload with user info
+          const payload = {
+            id: user._id,
+            name: user.name,
+            email: user.email,
+            avatar: user.avatar,
+            date: user.date
+          };
+          jwt.sign(payload, keys, { expiresIn: 3600 }, (err, token) => {
+            res.json({ success: true, token: "bearer  " + token });
+          });
+        } else {
+          return res.status(400).json({ password: "passport wrong" });
+        }
+      });
     });
   });
 });
@@ -214,8 +213,6 @@ router.post(
     { session: false }
   ),
   (req, res) => {
-    console.log("req.user", req.user);
-
     //generate token
     // create JWT with user info
     const payload = {
@@ -226,7 +223,7 @@ router.post(
       date: req.user.date
     };
     jwt.sign(payload, keys, { expiresIn: 3600 }, (err, token) => {
-      res.json({ success: true, token: "bearer" + token });
+      res.json({ success: true, token: "bearer  " + token });
     });
   }
 );

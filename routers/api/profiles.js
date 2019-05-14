@@ -3,13 +3,9 @@ const router = express.Router();
 //Bring in Model (models/User.js)
 const User = require("../../models/User");
 const Profile = require("../../models/Profile");
-const jwt = require("jsonwebtoken");
-const keys = require("../../config/dev_keys").secredOrKey;
+
 const passport = require("passport");
 const validateCreateProfileInput = require("../validation/profileCreate");
-
-const validateRegisterInput = require("../validation/register");
-const validateLoginInput = require("../validation/login");
 
 const isEmpty = require("../validation/isEmpty");
 
@@ -18,7 +14,7 @@ router.get("/test", (req, res) => {
   res.status(200).json({ msg: "Test Success" });
 });
 
-//post or update Profile
+//post create or update Profile
 
 router.post(
   "/update",
@@ -88,6 +84,51 @@ router.post(
       });
   }
 );
+//edit avatar
+
+router.post(
+  "/update_avatar",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    console.log("req.body", req.body);
+
+    Profile.findOne({ user: req.user.id })
+      .then(profile => {
+        if (profile) {
+          //profile exists
+          // we can update current values
+          const avatar = req.body.avatar;
+          Profile.update(
+            { user: req.user.id },
+            {
+              $set: {
+                avatar
+              }
+            },
+
+            { new: true }
+          )
+            .then(profile => {
+              if (profile) {
+                res.status(200).json({
+                  profile,
+                  msg: "Avatar has been seccefully updated"
+                });
+              }
+            })
+            .catch(err => {
+              res.status(400).json(err);
+            });
+        } else {
+          res.status(401).json({ msg: "No profile for this user" });
+        }
+      })
+      //end check if profile exists
+      .catch(err => {
+        console.log(err);
+      });
+  }
+);
 
 //get current profile
 router.post(
@@ -103,6 +144,23 @@ router.post(
       });
   }
 );
+//get current Avatar from /public/uploads
+router.post(
+  "/current_avatar",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.body.id })
+      .then(profile => {
+        //gives us profile of current user
+        const avatar = profile.avatar.replace("public\\uploads\\", "");
+        res.status(200).json({ path: avatar });
+      })
+      .catch(err => {
+        res.status(400).json(err);
+      });
+  }
+);
+
 //Delete current profile
 router.delete(
   "/delete",

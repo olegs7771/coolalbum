@@ -7,7 +7,7 @@ import {
 } from "./types";
 import axios from "axios";
 
-// Create new Profile
+// Create new Profile or Update profile
 export const createProfile = data => dispatch => {
   console.log("data", data);
 
@@ -15,15 +15,37 @@ export const createProfile = data => dispatch => {
     .post("/api/profiles/update", data)
     .then(res => {
       console.log("res.data", res.data);
-      // dispatch({
-      //   type: GET_PROFILE,
-      //   payload: res.data
-      // });
+
       dispatch({
         type: GET_MESSAGE,
         payload: res.data.msg
       });
     })
+    .catch(err => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
+    });
+};
+// Create new or Update Profile Avatar
+export const updateAvatar = (fd, history) => dispatch => {
+  console.log("fd", fd);
+
+  axios
+    .post("/api/uploads/update", fd)
+    .then(res => {
+      console.log("res.data", res.data);
+
+      dispatch({
+        type: GET_MESSAGE,
+        payload: res.data.msg
+      });
+    })
+    .then(() => {
+      history.push("/");
+    })
+
     .catch(err => {
       dispatch({
         type: GET_ERRORS,
@@ -49,6 +71,7 @@ export const getProfile = id => dispatch => {
       });
     });
 };
+
 // Delete Current Profile
 export const deleteProfile = () => dispatch => {
   axios

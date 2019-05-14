@@ -14,7 +14,7 @@ import Contact from "./utils/Contact";
 import UserCard from "./components/auth/userCard/UserCard";
 import ProfileCreate from "./components/profile/ProfileCreate";
 import ProfileEdit from "./components/profile/ProfileEdit";
-import ProfileAvatar from "./components/profile/ProfileAvatar";
+
 import jwt_decode from "jwt-decode";
 import { logoutUser } from "./actions/userActions";
 //Avatar
@@ -79,11 +79,6 @@ class App extends Component {
                   component={ProfileCreate}
                 />
                 <Route exact path="/profile_edit/:id" component={ProfileEdit} />
-                <Route
-                  exact
-                  path="/profile_avatar/:id"
-                  component={ProfileAvatar}
-                />
               </Switch>
             </div>
           </div>
