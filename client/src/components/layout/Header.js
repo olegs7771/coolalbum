@@ -34,6 +34,8 @@ class Header extends Component {
     const { user } = this.props.auth;
 
     if (user) {
+      console.log("user.avatar", user.avatar);
+
       return (
         <div className="pos-f-t">
           <nav className="navbar navbar-dark bg-dark">

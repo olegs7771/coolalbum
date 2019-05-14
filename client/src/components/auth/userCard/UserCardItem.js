@@ -4,6 +4,8 @@ import moment from "moment";
 class UserCardItem extends Component {
   render() {
     const { name, email, avatar, date } = this.props;
+    console.log("avatar", avatar);
+
     return (
       <div className="row">
         <div className="col-md-8">

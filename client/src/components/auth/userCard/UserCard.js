@@ -10,7 +10,8 @@ class UserCard extends Component {
     super(props);
 
     this.state = {
-      profileExists: false
+      profileExists: false,
+      avatar: ""
     };
 
     const id = {
@@ -19,7 +20,7 @@ class UserCard extends Component {
     props.getProfile(id);
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (prevProps.profile !== this.props.profile) {
       this.setState({
         profileExist: true

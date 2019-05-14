@@ -13,10 +13,7 @@ const ProfileSchema = new Schema({
     required: true,
     max: 30
   },
-  avatar: {
-    type: String,
-    required: true
-  },
+
   email: {
     type: String,
     required: true

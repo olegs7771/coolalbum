@@ -71,11 +71,33 @@ router.post(
         console.log("req.file", req.file);
 
         if (req.file.filename) {
-          console.log("req.file.path", req.file.path);
+          //Delete previous Avatar in /public/uploads
+          User.findOne({ _id: req.user.id }).then(user => {
+            const avatar = user.avatar;
+            const file = `.public/${avatar}`;
+            console.log("file", typeof file);
+            //check if there file in public/uploads
+            fse
+              .ensureFile(file)
+              .then(() => {
+                console.log("file in ensureFile", file);
+
+                fse.unlink(file, err => {
+                  if (err) {
+                    throw err;
+                  }
+                  console.log(file + " success file been deleted!");
+                });
+              })
+              .catch(err => {
+                console.error(err);
+              });
+          });
+
           const avatar = req.file.path.replace("public", "");
 
-          Profile.update(
-            { user: req.user._id },
+          User.update(
+            { _id: req.user._id },
             {
               $set: {
                 avatar
@@ -88,15 +110,6 @@ router.post(
         }
       }
     });
-  }
-);
-
-//Route to fetch image from /public/uploads/image_name
-router.post(
-  "/",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    res.json(res);
   }
 );
 
