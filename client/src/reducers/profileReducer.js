@@ -4,7 +4,7 @@ import { GET_PROFILE } from "../actions/types";
 const initialState = {
   profiles: null,
   profile: null,
-  loading: false
+  loading: true
 };
 export default function(state = initialState, action) {
   switch (action.type) {
