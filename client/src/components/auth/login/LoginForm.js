@@ -29,14 +29,13 @@ class LoginForm extends Component {
   onSubmit = e => {
     const { history } = this.props;
     e.preventDefault();
-    console.log("submitted");
+
     const newUser = {
       email: this.state.email,
       password: this.state.password
     };
 
     this.props.loginUser(newUser, history);
-    console.log(newUser);
   };
 
   render() {
