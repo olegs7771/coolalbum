@@ -6,7 +6,7 @@ import {
   deleteProfile,
   updateAvatar
 } from "../../actions/profileAction";
-import { withRouter, Link } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 class ProfileEditAvatar extends Component {
   constructor(props) {
@@ -38,8 +38,6 @@ class ProfileEditAvatar extends Component {
         errors: this.props.errors,
         message: this.props.message
       });
-
-      const profile = this.props.profile;
     }
   }
 
@@ -71,47 +69,47 @@ class ProfileEditAvatar extends Component {
   };
 
   render() {
-    const { selectedImage, uploadImage, errors } = this.state;
+    const { selectedImage } = this.state;
 
     //content showen to confirm delete profile (isConfirmDelete: true)
 
     return (
       <div>
-        <div className="row">
-          <div className="col-md-4">
-            <img
-              src={selectedImage}
-              className="rounded-circle"
-              style={{ width: "150px" }}
-              alt=""
-            />
-            <br />
+        <div className="">
+          <img
+            src={selectedImage}
+            className="rounded-circle"
+            style={{ width: "150px" }}
+            alt=""
+          />
+          <br />
 
-            <form onSubmit={this.fileUploadHandler}>
+          <form onSubmit={this.fileUploadHandler}>
+            <div className="custom-file my-2">
               <input
                 type="file"
                 name="myImage"
                 onChange={this.fileSelectedHandler}
-                className="btn btn-sm btn-info mt-3"
+                className=" custom-file-input my-2"
               />
-              <br />
-              <div className="my-1 text-muted">max size 100k</div>
-              <div className="row">
-                <div className="col">
-                  <button type="submit" className="btn btn-sm btn-info my-3">
-                    Upload
-                  </button>
+              <label className="custom-file-label">Choose file...</label>
+            </div>
+            <br />
+            <div className="my-1 text-muted">max size 100k</div>
+
+            <div className="">
+              <button type="submit" className="btn btn-sm btn-info my-3">
+                Upload
+              </button>
+            </div>
+            <div className="">
+              {this.state.errors.error ? (
+                <div className="my-3 text-danger">
+                  {this.state.errors.error}
                 </div>
-                <div className="col">
-                  {this.state.errors.error ? (
-                    <div className="my-3 text-danger">
-                      {this.state.errors.error}
-                    </div>
-                  ) : null}
-                </div>
-              </div>
-            </form>
-          </div>
+              ) : null}
+            </div>
+          </form>
         </div>
       </div>
     );

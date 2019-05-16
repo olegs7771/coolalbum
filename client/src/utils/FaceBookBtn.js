@@ -3,6 +3,7 @@ import FacebookLogin from "react-facebook-login";
 import { connect } from "react-redux";
 import { authFacebook } from "../actions/userActions";
 import { withRouter } from "react-router-dom";
+import Spinner from "./Spinner";
 
 class FaceBookBtn extends Component {
   state = {
@@ -48,11 +49,9 @@ class FaceBookBtn extends Component {
     }
 
     return (
-      <div>
+      <div className="my-4">
         {loginContent}
-        <button className="btn btn-warning" onClick={this.handleLogoutBtn}>
-          Logout
-        </button>
+        <Spinner />
       </div>
     );
   }

@@ -74,24 +74,18 @@ router.post(
           //Delete previous Avatar in /public/uploads
           User.findOne({ _id: req.user.id }).then(user => {
             const avatar = user.avatar;
-            const file = `.public/${avatar}`;
-            console.log("file", typeof file);
+            const file = `./public${avatar}`;
+            console.log("file", file); //path to file to be deleted
             //check if there file in public/uploads
-            fse
-              .ensureFile(file)
-              .then(() => {
-                console.log("file in ensureFile", file);
-
-                fse.unlink(file, err => {
-                  if (err) {
-                    throw err;
-                  }
-                  console.log(file + " success file been deleted!");
-                });
-              })
-              .catch(err => {
-                console.error(err);
+            if (fse.ensureFile(file)) {
+              console.log("true");
+              fse.unlink(file, err => {
+                if (err) {
+                  throw err;
+                }
+                console.log(file + " success file been deleted!");
               });
+            }
           });
 
           const avatar = req.file.path.replace("public", "");
@@ -105,7 +99,11 @@ router.post(
             },
             { new: true }
           ).then(() => {
-            console.log("updated");
+            res
+              .status(200)
+              .json({
+                msg: "Avatar has been successfully updated.Please Login again."
+              });
           });
         }
       }
