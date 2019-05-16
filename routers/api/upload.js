@@ -99,7 +99,11 @@ router.post(
             },
             { new: true }
           ).then(() => {
-            console.log("updated");
+            res
+              .status(200)
+              .json({
+                msg: "Avatar has been successfully updated.Please Login again."
+              });
           });
         }
       }

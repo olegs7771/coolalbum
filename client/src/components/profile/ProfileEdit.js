@@ -141,6 +141,15 @@ class ProfileEdit extends Component {
 
           <span className="h3"> here you can edit your profile</span>
         </div>
+        {/* {Message} */}
+        <div className="my-2">
+          {message.message ? (
+            <div className="text-success">
+              <i className="fas fa-thumbs-up mr-2" />
+              {message.message} <br />
+            </div>
+          ) : null}
+        </div>
 
         <div className="row">
           <div className="col-md-8">
@@ -196,20 +205,7 @@ class ProfileEdit extends Component {
                     Delete Profile
                   </button>
                 </div>
-                {/* {Message} */}
 
-                <div className="my-2">
-                  {message.message ? (
-                    <div className="text-success">
-                      <i className="fas fa-thumbs-up mr-2" />
-                      {message.message} <br />
-                      <Link to="/" className="my-2 btn btn-info">
-                        <i className="fas fa-arrow-left mr-2" />
-                        Home
-                      </Link>
-                    </div>
-                  ) : null}
-                </div>
                 {isConfirmDelete ? <div>{confirmDelete}</div> : null}
               </form>
             </div>

@@ -6,6 +6,8 @@ import {
   // GET_PROFILES
 } from "./types";
 import axios from "axios";
+import store from "../store";
+import { logoutUser } from "./userActions";
 
 // Create new Profile or Update profile
 export const createProfile = data => dispatch => {
@@ -43,7 +45,10 @@ export const updateAvatar = (fd, history) => dispatch => {
       });
     })
     .then(() => {
-      history.push("/");
+      setTimeout(() => {
+        store.dispatch(logoutUser());
+        history.push("/login");
+      }, 4000);
     })
 
     .catch(err => {
