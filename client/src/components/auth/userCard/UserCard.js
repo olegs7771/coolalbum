@@ -8,6 +8,7 @@ import { getProfile } from "../../../actions/profileAction";
 class UserCard extends Component {
   constructor(props) {
     super(props);
+    console.log("props", props);
 
     this.state = {
       profileExists: false,
@@ -69,6 +70,8 @@ class UserCard extends Component {
           </div>
         </div>
       );
+    } else {
+      return <div>Loading..</div>;
     }
   }
 }

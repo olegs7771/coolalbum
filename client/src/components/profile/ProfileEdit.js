@@ -8,7 +8,7 @@ import {
   getProfile,
   deleteProfile
 } from "../../actions/profileAction";
-import { withRouter, Link } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 class ProfileEdit extends Component {
   constructor(props) {
