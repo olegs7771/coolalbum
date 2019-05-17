@@ -1,4 +1,4 @@
-import { GET_MESSAGE } from "../actions/types";
+import { GET_MESSAGE, CLEAR_MESSAGE } from "../actions/types";
 // import { isEmpty } from "../utils/isEmpty";
 
 const initialState = {
@@ -10,6 +10,11 @@ export default function(state = initialState, action) {
       return {
         ...state,
         message: action.payload
+      };
+    case CLEAR_MESSAGE:
+      return {
+        ...state,
+        message: null
       };
     default:
       return state;

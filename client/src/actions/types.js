@@ -13,3 +13,4 @@ export const MESSAGE_MAIL_LOADING = "MESSAGE_MAIL_LOADING ";
 export const MESSAGE_MAIL_SENT = "MESSAGE_MAIL_SENT";
 //Messages
 export const GET_MESSAGE = "GET_MESSAGE";
+export const CLEAR_MESSAGE = "CLEAR_MESSAGE";

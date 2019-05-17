@@ -137,6 +137,11 @@ router.post(
   (req, res) => {
     Profile.findOne({ user: req.body.id })
       .then(profile => {
+        if (!profile) {
+          return res
+            .status(401)
+            .json({ msg: "There is no profile for this user" });
+        }
         res.status(200).json(profile);
       })
       .catch(err => {

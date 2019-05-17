@@ -99,7 +99,7 @@ class ProfileEditAvatar extends Component {
 
             <div className="">
               <button type="submit" className="btn btn-sm btn-info my-3">
-                Upload
+                Change Avatar
               </button>
             </div>
             <div className="">

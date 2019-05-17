@@ -1,8 +1,9 @@
 import {
   GET_ERRORS,
-  // LOADING_PROFILE,
+  LOADING_PROFILE,
   GET_PROFILE,
-  GET_MESSAGE
+  GET_MESSAGE,
+  CLEAR_MESSAGE
   // GET_PROFILES
 } from "./types";
 import axios from "axios";
@@ -46,9 +47,10 @@ export const updateAvatar = (fd, history) => dispatch => {
     })
     .then(() => {
       setTimeout(() => {
+        dispatch(clearMessages());
         store.dispatch(logoutUser());
         history.push("/login");
-      }, 4000);
+      }, 6000);
     })
 
     .catch(err => {
@@ -61,6 +63,7 @@ export const updateAvatar = (fd, history) => dispatch => {
 
 // Get Current Profile
 export const getProfile = id => dispatch => {
+  dispatch(setProfileLoading());
   axios
     .post("/api/profiles/current", id)
     .then(res => {
@@ -93,4 +96,16 @@ export const deleteProfile = () => dispatch => {
         payload: err.response.data
       });
     });
+};
+//Profile Loading
+export const setProfileLoading = () => {
+  return {
+    type: LOADING_PROFILE
+  };
+};
+//Clear Messages
+export const clearMessages = () => {
+  return {
+    type: CLEAR_MESSAGE
+  };
 };
