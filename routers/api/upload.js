@@ -77,33 +77,54 @@ router.post(
             const file = `./public${avatar}`;
             console.log("file", file); //path to file to be deleted
             //check if there file in public/uploads
-            if (fse.ensureFile(file)) {
-              console.log("true");
-              fse.unlink(file, err => {
-                if (err) {
-                  throw err;
-                }
-                console.log(file + " success file been deleted!");
-              });
-            }
-          });
+            fse.pathExists(file).then(exists => {
+              if (!exists) {
+                console.log("!exists");
 
-          const avatar = req.file.path.replace("public", "");
+                //There is no such file in /public/uploads
+                const avatar = req.file.path.replace("public", "");
 
-          User.update(
-            { _id: req.user._id },
-            {
-              $set: {
-                avatar
+                User.update(
+                  { _id: req.user.id },
+                  {
+                    $set: {
+                      avatar
+                    }
+                  },
+                  { new: true }
+                ).then(() => {
+                  res.status(200).json({
+                    msg:
+                      "Avatar has been successfully updated.Please Login again."
+                  });
+                });
+              } else {
+                const avatar = req.file.path.replace("public", "");
+                User.update(
+                  { _id: req.user.id },
+                  {
+                    $set: {
+                      avatar
+                    }
+                  },
+                  { new: true }
+                )
+                  .then(() => {
+                    res.status(200).json({
+                      msg:
+                        "Avatar has been successfully updated.Please Login again."
+                    });
+                  })
+                  .catch(err => {
+                    console.log(err);
+                  });
+
+                fse.unlink(file, err => {
+                  if (err) throw err;
+                  console.log("file deleted");
+                });
               }
-            },
-            { new: true }
-          ).then(() => {
-            res
-              .status(200)
-              .json({
-                msg: "Avatar has been successfully updated.Please Login again."
-              });
+            });
           });
         }
       }

@@ -3,19 +3,28 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 const path = require("path");
-const ejs = require("ejs");
+const Nexmo = require("nexmo");
+const socketio = require("socket.io");
+
+// init nexmo sms sending
+
+const nexmo = new Nexmo(
+  {
+    apiKey: "5b8b4a3e",
+    apiSecret: "dCstfbHMktqY7LIC"
+  },
+  { debug: true }
+);
 
 //routers
 const users = require("./routers/api/users");
 const profiles = require("./routers/api/profiles");
 const email = require("./routers/api/email");
 const upload = require("./routers/api/upload");
+const phone = require("./routers/api/phone");
 //set storage engine
 
 const app = express();
-
-// Set View Engine EJS
-app.set("view engine", "ejs");
 
 // Public folder
 app.use(express.static(path.join(__dirname, "public")));
@@ -48,6 +57,7 @@ app.use("/api/users", users);
 app.use("/api/profiles", profiles);
 app.use("/api/email", email);
 app.use("/api/uploads", upload);
+app.use("/api/phone", phone);
 
 // Server Static Assets while in production
 if (process.env.NODE_ENV === "production") {
