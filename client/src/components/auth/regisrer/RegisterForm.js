@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import TextFormGroup from "../../textFormGroup/TextFormGroup";
 import { connect } from "react-redux";
 import FaceBookBtn from "../../../utils/FaceBookBtn";
+import Intl_tel_input from "./Intl_tel_input";
+
 import { registerUser } from "../../../actions/userActions";
 import { withRouter } from "react-router-dom";
 
@@ -71,15 +73,22 @@ class RegisterForm extends Component {
                 error={errors.email}
                 info="We will never share your email with anyone else"
               />
-              <TextFormGroup
+              {/* <TextFormGroup
                 placeholder="Phone..."
                 type="tel"
                 value={phone}
                 name="phone"
                 onChange={this.onChange}
                 error={errors.phone}
-                info="Your number need for login with SMS"
-              />
+                info="Your number needed for login with SMS"
+              /> */}
+
+              <div className="mx-auto">
+                <Intl_tel_input /> <br />
+                <div className="my-2">
+                  Your number needed for login with SMS (Optinal)
+                </div>
+              </div>
               <TextFormGroup
                 placeholder="Password..."
                 value={password}
@@ -87,7 +96,6 @@ class RegisterForm extends Component {
                 onChange={this.onChange}
                 error={errors.password}
               />
-
               <button className="btn btn-dark">Join Now</button>
             </form>
           </div>
