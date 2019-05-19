@@ -1,22 +1,23 @@
 import React, { Component } from "react";
-import IntlTelInput from "react-intl-tel-input";
-import "react-intl-tel-input/dist/main.css";
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
 
 class Intl_tel_input extends Component {
-  onChange = () => {
-    console.log("phone change");
+  state = {
+    phone: ""
   };
-
-  onBlur = () => {
-    console.log("blured");
+  onChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
   };
 
   render() {
     return (
-      <IntlTelInput
-        preferredCountries={["tw"]}
-        onPhoneNumberChange={this.onChange}
-        onPhoneNumberBlur={this.onBlur}
+      <PhoneInput
+        placeholder="Enter phone number"
+        value={this.state.phone}
+        onChange={phone => this.setState({ phone })}
       />
     );
   }
