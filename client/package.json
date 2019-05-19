@@ -13,6 +13,7 @@
     "react-avatar-edit": "^0.8.2",
     "react-dom": "^16.7.0",
     "react-facebook-login": "^4.1.1",
+    "react-intl-tel-input": "^7.0.1",
     "react-moment": "^0.8.4",
     "react-redux": "^6.0.1",
     "react-router-dom": "^4.3.1",

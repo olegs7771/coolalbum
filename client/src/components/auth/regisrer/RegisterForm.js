@@ -10,6 +10,7 @@ class RegisterForm extends Component {
     username: "",
     email: "",
     password: "",
+    phone: "",
     showLoginBtnFaceBook: false,
     errors: {}
   };
@@ -35,6 +36,7 @@ class RegisterForm extends Component {
     const newUser = {
       name: this.state.username,
       email: this.state.email,
+      phone: this.state.phone,
       password: this.state.password
     };
     console.log(this.props);
@@ -45,7 +47,7 @@ class RegisterForm extends Component {
   };
 
   render() {
-    const { username, email, password, errors } = this.state;
+    const { username, email, phone, password, errors } = this.state;
 
     return (
       <div className="col-md-6 my-3  mx-auto">
@@ -68,6 +70,15 @@ class RegisterForm extends Component {
                 onChange={this.onChange}
                 error={errors.email}
                 info="We will never share your email with anyone else"
+              />
+              <TextFormGroup
+                placeholder="Phone..."
+                type="tel"
+                value={phone}
+                name="phone"
+                onChange={this.onChange}
+                error={errors.phone}
+                info="Your number need for login with SMS"
               />
               <TextFormGroup
                 placeholder="Password..."
