@@ -13,6 +13,7 @@ class Intl_tel_input extends Component {
   };
 
   render() {
+    console.log(this.state);
     return (
       <PhoneInput
         placeholder="Enter phone number"

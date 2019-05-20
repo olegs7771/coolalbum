@@ -85,7 +85,7 @@ class RegisterForm extends Component {
 
               <div className="mx-auto">
                 <Intl_tel_input /> <br />
-                <div className="my-2">
+                <div className="">
                   Your number needed for login with SMS (Optinal)
                 </div>
               </div>
