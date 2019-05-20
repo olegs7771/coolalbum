@@ -1,9 +1,16 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import TextFormGroup from "../textFormGroup/TextFormGroup";
-import { createProfile, getProfile } from "../../actions/profileAction";
-import { withRouter, Link } from "react-router-dom";
+import {
+  createProfile,
+  getProfile,
+  clearErrors
+} from "../../actions/profileAction";
+import { withRouter } from "react-router-dom";
 import ProfileEditAvatar from "./ProfileEditAvatar";
+//intl_phone_input
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
 
 class ProfileCreate extends Component {
   constructor(props) {
@@ -15,6 +22,7 @@ class ProfileCreate extends Component {
       avatar: "",
       status: "",
       location: "",
+      phone: "",
       errors: {},
       message: {}
     };
@@ -24,10 +32,11 @@ class ProfileCreate extends Component {
     this.setState({
       [e.target.name]: e.target.value
     });
+    this.props.clearErrors();
   };
 
   onSubmitCreateProfile = e => {
-    const { name, email, avatar, status, location } = this.state;
+    const { name, email, avatar, status, location, phone } = this.state;
     e.preventDefault();
 
     const newProfileData = {
@@ -36,9 +45,10 @@ class ProfileCreate extends Component {
       avatar,
       status,
       location,
+      phone,
       user: this.props.match.params.id
     };
-    this.props.createProfile(newProfileData);
+    this.props.createProfile(newProfileData, this.props.history);
     console.log("newProfileData :", newProfileData);
   };
 
@@ -46,7 +56,8 @@ class ProfileCreate extends Component {
     if (prevProps !== this.props) {
       this.setState({
         message: this.props.message,
-        avatar: this.props.user.avatar
+        avatar: this.props.user.avatar,
+        errors: this.props.errors
       });
     }
   }
@@ -55,9 +66,10 @@ class ProfileCreate extends Component {
     const {
       name,
       email,
-      avatar,
+      // avatar,
       status,
       location,
+      phone,
       errors,
       message
     } = this.state;
@@ -70,6 +82,14 @@ class ProfileCreate extends Component {
           <span className="h5">here you can create your profile</span>
         </div>
         <div className="card card-body">
+          <div className="my-2">
+            {message.message ? (
+              <div className="text-success">
+                <i className="fas fa-thumbs-up mr-2" />
+                {message.message} <br />
+              </div>
+            ) : null}
+          </div>
           <div className="row">
             <div className="col-md-8">
               <span className="h5 d-block ">Fill All Fields</span>
@@ -103,21 +123,21 @@ class ProfileCreate extends Component {
                     onChange={this.onChange}
                     error={errors.location}
                   />
+                  <div className="mx-auto">
+                    <PhoneInput
+                      placeholder="Enter phone number"
+                      value={phone}
+                      onChange={phone => this.setState({ phone })}
+                    />{" "}
+                    <br />
+                    <div className="my-2">
+                      Your number needed for login with SMS (Optinal)
+                    </div>
+                  </div>
+
                   <button type="submit" className="btn btn-info">
                     Create
                   </button>
-                  <div className="my-2">
-                    {message.message ? (
-                      <div className="text-success">
-                        <i className="fas fa-thumbs-up mr-2" />
-                        {message.message} <br />
-                        <Link to="/" className="my-2 btn btn-info">
-                          <i className="fas fa-arrow-left mr-2" />
-                          Home
-                        </Link>
-                      </div>
-                    ) : null}
-                  </div>
                 </form>
               </div>
             </div>
@@ -143,5 +163,5 @@ const mapStateToProps = state => ({
 });
 export default connect(
   mapStateToProps,
-  { createProfile, getProfile }
+  { createProfile, getProfile, clearErrors }
 )(withRouter(ProfileCreate));

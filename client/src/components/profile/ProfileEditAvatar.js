@@ -4,7 +4,8 @@ import { connect } from "react-redux";
 import {
   getProfile,
   deleteProfile,
-  updateAvatar
+  updateAvatar,
+  clearErrors
 } from "../../actions/profileAction";
 import { withRouter } from "react-router-dom";
 
@@ -55,6 +56,7 @@ class ProfileEditAvatar extends Component {
       selectedImage: URL.createObjectURL(e.target.files[0]),
       uploadImage: e.target.files[0]
     });
+    this.props.clearErrors();
   };
 
   //Upload Avatar from browser to db
@@ -124,5 +126,5 @@ const mapStateToProps = state => ({
 });
 export default connect(
   mapStateToProps,
-  { getProfile, deleteProfile, updateAvatar }
+  { getProfile, deleteProfile, updateAvatar, clearErrors }
 )(withRouter(ProfileEditAvatar));

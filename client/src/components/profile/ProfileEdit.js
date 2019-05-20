@@ -92,7 +92,7 @@ class ProfileEdit extends Component {
   handleDeleteProfile = e => {
     e.preventDefault();
 
-    this.props.deleteProfile();
+    this.props.deleteProfile(this.props.history);
   };
 
   render() {
