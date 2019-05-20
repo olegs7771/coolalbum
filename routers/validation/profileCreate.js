@@ -18,8 +18,8 @@ module.exports = function validateCreateProfileInput(data) {
     errors.location = "Location can not be empty";
   }
   //Name Field
-  if (!validator.isLength(data.name, { min: 2, max: 12 })) {
-    errors.name = "Name must contain between 2 and 12 characters";
+  if (!validator.isLength(data.name, { min: 2, max: 30 })) {
+    errors.name = "Name must contain between 2 and 30 characters";
   }
   //Email Field
   if (!validator.isEmail(data.email)) {

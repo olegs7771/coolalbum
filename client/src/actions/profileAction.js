@@ -1,5 +1,6 @@
 import {
   GET_ERRORS,
+  CLEAR_ERRORS,
   LOADING_PROFILE,
   GET_PROFILE,
   GET_MESSAGE,
@@ -11,7 +12,7 @@ import store from "../store";
 import { logoutUser } from "./userActions";
 
 // Create new Profile or Update profile
-export const createProfile = data => dispatch => {
+export const createProfile = (data, history) => dispatch => {
   console.log("data", data);
 
   axios
@@ -23,6 +24,13 @@ export const createProfile = data => dispatch => {
         type: GET_MESSAGE,
         payload: res.data.msg
       });
+    })
+    .then(() => {
+      setTimeout(() => {
+        dispatch(clearMessages());
+        store.dispatch(logoutUser());
+        history.push("/login");
+      }, 6000);
     })
     .catch(err => {
       dispatch({
@@ -81,14 +89,20 @@ export const getProfile = id => dispatch => {
 };
 
 // Delete Current Profile
-export const deleteProfile = () => dispatch => {
+export const deleteProfile = history => dispatch => {
   axios
     .delete("/api/profiles/delete")
     .then(res => {
       dispatch({
-        type: GET_PROFILE,
-        payload: res.data
+        type: GET_MESSAGE,
+        payload: res.data.msg
       });
+    })
+    .then(() => {
+      setTimeout(() => {
+        dispatch(clearMessages());
+        history.push("/");
+      }, 6000);
     })
     .catch(err => {
       dispatch({
@@ -107,5 +121,11 @@ export const setProfileLoading = () => {
 export const clearMessages = () => {
   return {
     type: CLEAR_MESSAGE
+  };
+};
+//Clear Errors
+export const clearErrors = () => {
+  return {
+    type: CLEAR_ERRORS
   };
 };

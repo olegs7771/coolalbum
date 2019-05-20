@@ -138,9 +138,7 @@ router.post(
     Profile.findOne({ user: req.body.id })
       .then(profile => {
         if (!profile) {
-          return res
-            .status(401)
-            .json({ msg: "There is no profile for this user" });
+          return res.status(200).json({});
         }
         res.status(200).json(profile);
       })
