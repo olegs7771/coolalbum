@@ -2,10 +2,12 @@ import React, { Component } from "react";
 import TextFormGroup from "../../textFormGroup/TextFormGroup";
 import { connect } from "react-redux";
 import FaceBookBtn from "../../../utils/FaceBookBtn";
-import Intl_tel_input from "./Intl_tel_input";
 
 import { registerUser } from "../../../actions/userActions";
 import { withRouter } from "react-router-dom";
+//intl_phone_input
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
 
 class RegisterForm extends Component {
   state = {
@@ -73,18 +75,14 @@ class RegisterForm extends Component {
                 error={errors.email}
                 info="We will never share your email with anyone else"
               />
-              {/* <TextFormGroup
-                placeholder="Phone..."
-                type="tel"
-                value={phone}
-                name="phone"
-                onChange={this.onChange}
-                error={errors.phone}
-                info="Your number needed for login with SMS"
-              /> */}
 
               <div className="mx-auto">
-                <Intl_tel_input /> <br />
+                <PhoneInput
+                  placeholder="Enter phone number"
+                  value={phone}
+                  onChange={phone => this.setState({ phone })}
+                />{" "}
+                <br />
                 <div className="my-2">
                   Your number needed for login with SMS (Optinal)
                 </div>
