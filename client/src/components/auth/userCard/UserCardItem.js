@@ -3,17 +3,21 @@ import moment from "moment";
 
 class UserCardItem extends Component {
   render() {
-    const { name, email, avatar, date } = this.props;
+    const { name, email, avatar, phone, date } = this.props;
+    console.log("this.props", this.props);
 
     return (
       <div className="row">
         <div className="col-md-8">
-          <ul className="list-group-flush my-4 text-left">
+          <ul className="list-group-flush my-4 text-left ">
             <li className="list-group-item ">
               <span className="text-info">Name </span> {name}
             </li>
             <li className="list-group-item ">
               <span className="text-info">Email</span> {email}
+            </li>
+            <li className="list-group-item ">
+              <span className="text-info">Phone</span> {phone}
             </li>
             <li className="list-group-item ">
               <span className="text-info">Registered at </span>

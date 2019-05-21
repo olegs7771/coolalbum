@@ -7,6 +7,7 @@
     "classnames": "^2.2.6",
     "global": "^4.3.2",
     "jwt-decode": "^2.2.0",
+    "materialize-css": "^1.0.0-rc.2",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.23",
     "react": "^16.7.0",
