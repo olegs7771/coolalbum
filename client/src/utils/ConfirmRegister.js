@@ -11,12 +11,12 @@ class ConfirmRegister extends Component {
     console.log("confirmRegister shooted to userAction");
     const { history } = this.props;
 
-    const data = {
+    const userData = {
       token: this.props.match.params.token,
       id: this.props.match.params._id
     };
 
-    this.props.confirmRegister(data, history);
+    this.props.confirmRegister(userData, history);
     history.push("/success_msg");
   }
 
