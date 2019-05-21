@@ -31,10 +31,11 @@ router.post("/register", (req, res) => {
     } else {
       //user not exists , we can create new one
 
-      //Create Token to send to newTempUser email
+      //Create Token to send to newTempUser email .expiration in 12h
       const payload = {
         name: req.body.name,
         email: req.body.email,
+        phone: req.body.phone,
         password: req.body.password
       };
 
@@ -43,16 +44,19 @@ router.post("/register", (req, res) => {
           throw err;
         }
 
-        // here we got tempToken ready to send to new user
-        //create data object for mailer trasporter
+        // here we got tempToken  exp in 12h ,ready to send to new user
+        //creating still not confirmed user
         const newUser = new User({
           name: req.body.name,
           email: req.body.email,
+          phone: req.body.phone,
           password: req.body.password,
           token
         });
 
         newUser.save().then(user => {
+          //create data object for mailer trasporter
+
           const text = ` Dear ${
             req.body.name
           } Please confirm your registration in 12 hours period from now by click on following URL`;
@@ -105,6 +109,7 @@ router.post("/confirmRegistration", (req, res) => {
           const payload = {
             name: user.name,
             email: user.email,
+            phone: user.phone,
             password: user.password,
             avatar,
             password,
@@ -113,13 +118,15 @@ router.post("/confirmRegistration", (req, res) => {
           };
 
           jwt.sign(payload, keys, { expiresIn: 43200 }, (err, token) => {
+            const newToken = "bearer " + token;
             const isAuthenticateUser = new User({
               name: user.name,
               email: user.email,
+              phone: user.phone,
               confirmed: true,
               avatar,
               password,
-              token
+              token: newToken
             });
             //here isAuthenticateUser ready
 
@@ -177,10 +184,12 @@ router.post("/login", (req, res) => {
             id: user._id,
             name: user.name,
             email: user.email,
+            phone: user.phone,
             avatar: user.avatar,
             date: user.date
           };
-          jwt.sign(payload, keys, { expiresIn: 3600 }, (err, token) => {
+          //creating token for exp 10h
+          jwt.sign(payload, keys, { expiresIn: 36000 }, (err, token) => {
             res.json({ success: true, token: "bearer  " + token });
           });
         } else {

@@ -18,7 +18,6 @@ class UserCardItem extends Component {
             <li className="list-group-item ">
               <span className="text-info">Registered at </span>
               {moment(date).format("DD/MM/YYYY")}
-              {date}
             </li>
           </ul>
         </div>
