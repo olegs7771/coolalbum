@@ -25,6 +25,8 @@ class Header extends Component {
     if (token) {
       //decode token with jwt-decode
       const decodedToken = jwtDecode(token);
+      console.log("decodedToken", decodedToken);
+
       //  putting it into redux state
       this.props.setCurrentUser(decodedToken);
     }

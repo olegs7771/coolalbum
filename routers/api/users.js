@@ -88,6 +88,9 @@ router.post("/register", (req, res) => {
 // @route POST /api/users/confirm_registration/:token
 // @access Public
 router.post("/confirmRegistration", (req, res) => {
+  //req.body.token
+  //req.body.id
+
   User.findOne({ token: req.body.token })
     .then(user => {
       if (!user) {
@@ -105,38 +108,36 @@ router.post("/confirmRegistration", (req, res) => {
             r: "pg",
             d: "mm"
           });
-          // create token with id
+          // create token with pre-confirmed user id!
           const payload = {
+            id: user._id,
             name: user.name,
             email: user.email,
             phone: user.phone,
-            password: user.password,
+            password, //hashed
             avatar,
             password,
-            date: user.date,
-            id: user._id
+            date: user.date
           };
 
           jwt.sign(payload, keys, { expiresIn: 43200 }, (err, token) => {
-            const newToken = "bearer " + token;
-            const isAuthenticateUser = new User({
-              name: user.name,
-              email: user.email,
-              phone: user.phone,
-              confirmed: true,
-              avatar,
-              password,
-              token: newToken
-            });
-            //here isAuthenticateUser ready
+            const newToken = "bearer  " + token;
+            const resData = {
+              token: newToken,
+              id: user._id
+            };
 
-            isAuthenticateUser.save().then(user => {
-              if (user) {
-                User.findOneAndRemove({ confirmed: false }).then(() => {
-                  console.log("false been removed");
-                });
+            User.updateMany(
+              { email: user.email },
+              {
+                $set: {
+                  confirmed: true,
+                  password,
+                  avatar
+                }
               }
-              return res.status(200).json(user);
+            ).then(update => {
+              res.status(200).json(resData);
             });
           });
         });
