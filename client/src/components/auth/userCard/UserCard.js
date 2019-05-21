@@ -85,7 +85,7 @@ class UserCard extends Component {
               </div>
               <Link
                 to={`/profile_create/${user.id}`}
-                className="btn btn-sm btn-info mb-2"
+                className="btn btn-sm btn-dark mb-2"
               >
                 {" "}
                 <i className="fas fa-user mr-1" />
@@ -97,7 +97,7 @@ class UserCard extends Component {
       }
     }
 
-    return <div className=" ">{profileContent}</div>;
+    return <div className=" bg-light">{profileContent}</div>;
   }
 }
 

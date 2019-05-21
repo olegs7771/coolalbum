@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import LoginForm from "./LoginForm";
+import SmsLogin from "./SmsLogin";
 import FaceBookBtn from "../../../utils/FaceBookBtn";
 
 class Login extends Component {
@@ -14,6 +15,8 @@ class Login extends Component {
             Don' have an account? Sign Up!
           </span>
           <FaceBookBtn />
+
+          <SmsLogin />
         </div>
       </div>
     );

@@ -5,7 +5,7 @@ import store from "./store";
 
 import Header from "./components/layout/Header";
 import Main from "./components/layout/main/Main";
-import Register from "./components/auth/regisrer/Register";
+import Register from "./components/auth/register/Register";
 import Login from "./components/auth/login/Login";
 import SuccessRegMsg from "./utils/SuccessRegMsg";
 //here comes confirmation for registartion

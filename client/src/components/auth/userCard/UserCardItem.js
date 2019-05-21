@@ -7,21 +7,27 @@ class UserCardItem extends Component {
     console.log("this.props", this.props);
 
     return (
-      <div className="row">
-        <div className="col-md-8">
-          <ul className="list-group-flush my-4 text-left ">
-            <li className="list-group-item ">
-              <span className="text-info">Name </span> {name}
+      <div className="row ">
+        <div className="col-md-8 ">
+          <ul className="list-group-flush my-4 text-left  ">
+            <li className="list-group-item  bg-dark">
+              <span className="text-info">Name </span>
+              {""} <span className="text-white h6 ml-4">{name}</span>
             </li>
-            <li className="list-group-item ">
-              <span className="text-info">Email</span> {email}
+            <li className="list-group-item  bg-dark">
+              <span className="text-info">Email </span>
+              {""} <span className="text-white h6 ml-4 ">{email}</span>
             </li>
-            <li className="list-group-item ">
-              <span className="text-info">Phone</span> {phone}
+            <li className="list-group-item  bg-dark">
+              <span className="text-info">Phone</span>
+              {""} <span className="text-white h6 ml-4 ">{phone}</span>
             </li>
-            <li className="list-group-item ">
+            <li className="list-group-item  bg-dark">
               <span className="text-info">Registered at </span>
-              {moment(date).format("DD/MM/YYYY")}
+              {""}{" "}
+              <span className="text-white h6 ml-4">
+                {moment(date).format("DD/MM/YYYY")}
+              </span>
             </li>
           </ul>
         </div>
