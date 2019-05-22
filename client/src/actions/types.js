@@ -15,3 +15,5 @@ export const MESSAGE_MAIL_SENT = "MESSAGE_MAIL_SENT";
 //Messages
 export const GET_MESSAGE = "GET_MESSAGE";
 export const CLEAR_MESSAGE = "CLEAR_MESSAGE";
+//SMS
+export const SEND_SMS = "SEND_SMS";

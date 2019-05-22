@@ -69,5 +69,18 @@ if (process.env.NODE_ENV === "production") {
 }
 
 const port = process.env.PORT || 5000;
-app.listen(port, () => console.log(`Server running on port${port}`));
-//test
+const server = app.listen(port, () =>
+  console.log(`Server running on port${port}`)
+);
+
+// Connect to socket.io
+const io = socketio(server);
+
+//attach io to app
+app.io = io;
+io.on("connection", socket => {
+  console.log("connected");
+  io.on("disconnect", () => {
+    console.log("disconnected");
+  });
+});
