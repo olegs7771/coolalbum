@@ -23,14 +23,11 @@ export const registerUser = (userData, history) => dispatch => {
 };
 //Register New User
 export const confirmRegister = (userData, history) => dispatch => {
-  console.log("userData", userData);
   //userData --> {token,id} from url params mail
   axios
     .post("api/users/confirmRegistration", userData)
 
     .then(res => {
-      console.log("res.data", res.data);
-
       const { token, _id } = res.data;
       //Set token to localStorage
       localStorage.setItem("jwtToken", token);
@@ -38,7 +35,7 @@ export const confirmRegister = (userData, history) => dispatch => {
       setAuthToken(token);
       // set the user (using user creds from token. but first we must to decode token with jwt-decode module)
       const decoded = jwt_decode(token);
-      console.log("decoded", decoded);
+
       const headData = {
         ...decoded,
         _id
@@ -106,8 +103,6 @@ export const setCurrentUser = decoded => {
 
 //Register with password-facebook-token
 export const authFacebook = (userData, history) => dispatch => {
-  console.log(userData);
-
   axios
     .post("/api/users/auth/facebook", { access_token: userData })
     .then(res => {
@@ -118,7 +113,6 @@ export const authFacebook = (userData, history) => dispatch => {
       setAuthToken(token);
       // set the user (using user creds from token. but first we must to decode token with jwt-decode module)
       const decoded = jwt_decode(token);
-      console.log("decoded", decoded);
 
       //set current user (we create separate function here)
       dispatch(setCurrentUser(decoded));

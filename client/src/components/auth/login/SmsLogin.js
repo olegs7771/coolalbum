@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
+import { sendSmsCode } from "../../../actions/phoneAction";
 //intl_phone_input
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
@@ -11,12 +14,19 @@ class SmsLogin extends Component {
   onSubmit = e => {
     e.preventDefault();
     console.log("phone", this.state.phone);
+    const text = "some text for message";
+    const phoneNumber = this.state.phone;
+    const data = {
+      text,
+      phoneNumber
+    };
+    this.props.sendSmsCode(data, this.props.history);
   };
 
   render() {
     const { phone } = this.state;
     return (
-      <div className="col-md-12 my-5">
+      <div className="col-md-12 my-5 border">
         <div className="h3 text-center text-info">Login with SMS</div>
         <div className="container">
           <form onSubmit={this.onSubmit}>
@@ -39,4 +49,8 @@ class SmsLogin extends Component {
     );
   }
 }
-export default SmsLogin;
+
+export default connect(
+  null,
+  { sendSmsCode }
+)(withRouter(SmsLogin));
