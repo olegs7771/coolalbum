@@ -4,7 +4,6 @@ const bodyParser = require("body-parser");
 const passport = require("passport");
 const path = require("path");
 const Nexmo = require("nexmo");
-const socketio = require("socket.io");
 
 // init nexmo sms sending
 
@@ -74,13 +73,17 @@ const server = app.listen(port, () =>
 );
 
 // Connect to socket.io
-const io = socketio(server);
-
-//attach io to app
+const io = require("socket.io")(server);
 app.io = io;
+
 io.on("connection", socket => {
-  console.log("connected");
+  console.log("connected to server socket", socket.id);
   io.on("disconnect", () => {
     console.log("disconnected");
   });
+});
+
+app.use((req, res, next) => {
+  res.locals["socketio"] = io;
+  next();
 });
