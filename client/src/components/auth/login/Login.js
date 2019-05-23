@@ -15,7 +15,6 @@ class Login extends Component {
             Don' have an account? Sign Up!
           </span>
           <FaceBookBtn />
-
           <SmsLogin />
         </div>
       </div>
