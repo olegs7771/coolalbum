@@ -3,17 +3,6 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 const path = require("path");
-const Nexmo = require("nexmo");
-
-// init nexmo sms sending
-
-const nexmo = new Nexmo(
-  {
-    apiKey: "5b8b4a3e",
-    apiSecret: "dCstfbHMktqY7LIC"
-  },
-  { debug: true }
-);
 
 //routers
 const users = require("./routers/api/users");
@@ -73,13 +62,8 @@ const server = app.listen(port, () =>
 );
 
 // Connect to socket.io
-<<<<<<< HEAD
-const io = socketio(server);
-app.set("io", io);
-=======
 const io = require("socket.io")(server);
 app.io = io;
->>>>>>> ca88cddba95ae61ba89eff2b8e4be187b3c2e6a6
 
 io.on("connection", socket => {
   console.log("connected to server socket", socket.id);
