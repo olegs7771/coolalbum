@@ -4,53 +4,141 @@ import { withRouter } from "react-router-dom";
 import { sendSmsCode } from "../../../actions/phoneAction";
 //intl_phone_input
 import PhoneInput from "react-phone-number-input";
+import TextFormGroup from "../../textFormGroup/TextFormGroup";
 import "react-phone-number-input/style.css";
+//Socket.io client
+import io from "socket.io-client";
+const socket = io("http://localhost:5000");
 
 class SmsLogin extends Component {
   state = {
-    phone: ""
+    phone: "",
+    email: "",
+    text: "",
+    number: null,
+    code: "",
+    errors: {}
   };
 
-  onSubmit = e => {
+  //User on submit sends Email and Phone Number.
+  // We check if there is Email and Phone number exists in db
+  onSubmitCodeRequest = e => {
     e.preventDefault();
-    console.log("phone", this.state.phone);
-    const text = "some text for message";
-    const phoneNumber = this.state.phone;
+
+    const text = "Your code will be  valid for 5 min";
+
+    const { phone, email } = this.state;
     const data = {
-      text,
-      phoneNumber
+      phone,
+      email,
+      text
     };
+    //sending phone number from form to phoneAction
     this.props.sendSmsCode(data, this.props.history);
+    socket.on("smsStatus", data => {
+      console.log("data from api", data);
+      this.setState({
+        number: data.number
+      });
+    });
   };
+  //On Submitting Next code beed sent to userAction
+  onSubmitCode = e => {
+    e.preventDefault();
+    console.log("code", this.state.code);
+  };
+
+  //after recieving sms code user inters in state
+  onChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  };
+  componentDidUpdate(prevProps) {
+    if (prevProps !== this.props) {
+      this.setState({
+        errors: this.props.errors
+      });
+    }
+  }
 
   render() {
-    const { phone } = this.state;
-    return (
-      <div className="col-md-12 my-5 border">
-        <div className="h3 text-center text-info">Login with SMS</div>
-        <div className="container">
-          <form onSubmit={this.onSubmit}>
-            <span className="text-left h5">Enter your phone number</span>
+    const { phone, number, code, email, errors } = this.state;
 
-            <div className="form-group my-3 ">
-              <PhoneInput
-                placeholder="Enter phone number"
-                value={phone}
-                onChange={phone => this.setState({ phone })}
-                className="form-control form-control-lg "
+    if (!number) {
+      //SMS form after sended by user
+
+      return (
+        <div className="col-md-12 my-5 border">
+          <div className="h3 text-center text-info">Login with SMS</div>
+          <div className="container">
+            <form onSubmit={this.onSubmitCodeRequest}>
+              <TextFormGroup
+                placeholder="Email"
+                type="email"
+                value={email}
+                name="email"
+                onChange={this.onChange}
+                error={errors.email}
               />
-              <button type="submit" className="btn btn-block btn-primary mt-1">
-                Send cofirmation code{" "}
-              </button>
-            </div>
-          </form>
+
+              <span className="text-left h5">Enter your phone number</span>
+              <div className="form-group my-3 ">
+                <PhoneInput
+                  placeholder="Enter phone number"
+                  value={phone}
+                  onChange={phone => this.setState({ phone })}
+                  className="form-control form-control-lg "
+                />
+                <button
+                  type="submit"
+                  className="btn btn-block btn-primary mt-1"
+                >
+                  Send cofirmation code{" "}
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      // SMS form before Send by user
+      return (
+        <div className='"col-md-12 my-5 border'>
+          <div className="container">
+            <form onSubmit={this.onSubmitCode}>
+              <span className="text-left h5">Enter 6 Digits Code</span>
+
+              <div className="form-group my-3 ">
+                <input
+                  type="number"
+                  max="6"
+                  min="6"
+                  className="form-control form-control-lg"
+                  name="code"
+                  value={code}
+                  onChange={this.onChange}
+                  className="form-control form-control-lg "
+                />
+                <button
+                  type="submit"
+                  className="btn btn-block btn-primary mt-1"
+                >
+                  Next
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      );
+    }
   }
 }
+const mapStateToProps = state => ({
+  errors: state.errors.errors
+});
 
 export default connect(
-  null,
+  mapStateToProps,
   { sendSmsCode }
 )(withRouter(SmsLogin));
