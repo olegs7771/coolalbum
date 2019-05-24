@@ -1,4 +1,5 @@
 const express = require("express");
+const app = express();
 const router = express.Router();
 const passport = require("passport");
 //Bring in Model (models/User.js)
@@ -14,6 +15,7 @@ const nexmo = new Nexmo(
   },
   { debug: true }
 );
+
 //testing route
 router.get("/test", (req, res) => {
   res.app.io.emit("txt", { key: "value" });
@@ -24,7 +26,6 @@ router.post(
   "/send",
 
   (req, res) => {
-    console.log("req.body", req.body);
     const text = req.body.text,
       phoneNumber = req.body.phoneNumber;
 

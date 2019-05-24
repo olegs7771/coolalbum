@@ -75,9 +75,8 @@ const server = app.listen(port, () =>
 
 // Connect to socket.io
 const io = socketio(server);
+app.set("io", io);
 
-//attach io to app
-app.io = io;
 io.on("connection", socket => {
   console.log("connected");
   io.on("disconnect", () => {
