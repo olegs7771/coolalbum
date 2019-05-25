@@ -4,17 +4,19 @@ import { connect } from "react-redux";
 import {
   getProfile,
   deleteProfile,
-  updateAvatar
+  updateAvatar,
+  clearErrors
 } from "../../actions/profileAction";
 import { withRouter } from "react-router-dom";
 
 class ProfileEditAvatar extends Component {
   constructor(props) {
     super(props);
-    console.log("props", props);
+    // console.log("props", props);
 
     this.state = {
       errors: {},
+      message: {},
 
       //Here Avatar string update State
       selectedImage: props.avatar,
@@ -33,9 +35,13 @@ class ProfileEditAvatar extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props !== prevProps) {
+    if (prevProps.errors !== this.props.errors) {
       this.setState({
-        errors: this.props.errors,
+        errors: this.props.errors
+      });
+    }
+    if (prevProps.message !== this.props.message) {
+      this.setState({
         message: this.props.message
       });
     }
@@ -49,12 +55,11 @@ class ProfileEditAvatar extends Component {
 
   //Select Avatar from browser to tmp memory
   fileSelectedHandler = e => {
-    console.log("selected image", e.target.files[0]);
-
     this.setState({
       selectedImage: URL.createObjectURL(e.target.files[0]),
       uploadImage: e.target.files[0]
     });
+    this.props.clearErrors();
   };
 
   //Upload Avatar from browser to db
@@ -69,7 +74,7 @@ class ProfileEditAvatar extends Component {
   };
 
   render() {
-    const { selectedImage } = this.state;
+    const { selectedImage, message, errors } = this.state;
 
     //content showen to confirm delete profile (isConfirmDelete: true)
 
@@ -99,14 +104,15 @@ class ProfileEditAvatar extends Component {
 
             <div className="">
               <button type="submit" className="btn btn-sm btn-info my-3">
-                Upload
+                Change Avatar
               </button>
             </div>
             <div className="">
-              {this.state.errors.error ? (
-                <div className="my-3 text-danger">
-                  {this.state.errors.error}
-                </div>
+              {errors.error ? (
+                <div className="my-3 text-danger">{errors.error}</div>
+              ) : null}
+              {message ? (
+                <div className="my-3 text-success">{message.avatar}</div>
               ) : null}
             </div>
           </form>
@@ -119,10 +125,10 @@ class ProfileEditAvatar extends Component {
 const mapStateToProps = state => ({
   errors: state.errors.errors,
   user: state.auth.user,
-  message: state.message,
+  message: state.message.message,
   profile: state.profile.profile
 });
 export default connect(
   mapStateToProps,
-  { getProfile, deleteProfile, updateAvatar }
+  { getProfile, deleteProfile, updateAvatar, clearErrors }
 )(withRouter(ProfileEditAvatar));

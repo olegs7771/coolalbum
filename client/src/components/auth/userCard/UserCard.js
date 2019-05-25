@@ -11,7 +11,6 @@ class UserCard extends Component {
     super(props);
 
     this.state = {
-      profileExists: false,
       avatar: ""
     };
 
@@ -25,74 +24,80 @@ class UserCard extends Component {
     if (prevProps.profile !== this.props.profile) {
       // this.props coming here
       console.log("this.props", this.props);
-
-      this.setState({
-        profileExist: true
-      });
     }
   }
 
   render() {
     const { user } = this.props;
-    const { loading } = this.props.profile;
+    // console.log("user", user);
 
+    const { loading, profile } = this.props.profile;
     let profileContent;
-    //show userCard with: viewprofile or create profile
-    //check if user has profile from state
-    if (this.state.profileExist) {
-      return (profileContent = (
-        <div className="row">
-          <div className="col-md-6 border my-4">
-            <UserCardItem
-              name={user.name}
-              email={user.email}
-              avatar={user.avatar}
-              date={user.date}
-            />
-            <Link
-              to={`/profile_edit/${user.id}`}
-              className="btn btn-sm btn-info mb-2"
-            >
-              {" "}
-              <i className="fas fa-user mr-1" />
-              View Profile{" "}
-            </Link>
-          </div>
-        </div>
-      ));
-    } else {
-      profileContent = (
-        <div className="row">
-          <div className="col-md-6 border my-4">
-            <UserCardItem
-              name={user.name}
-              email={user.email}
-              avatar={user.avatar}
-              date={user.date}
-            />
 
-            <div className="mx-auto my-3">
-              In oreder to fully use our site <br />
-              Please create profile
+    if (profile === null || loading) {
+      profileContent = <Spinner />;
+    } else {
+      //check for profile
+      if (Object.keys(profile).length > 0) {
+        //user has profile
+
+        profileContent = (
+          <div className="row ">
+            <div className="col-md-6 my-4 border">
+              <UserCardItem
+                phone={user.phone}
+                name={user.name}
+                email={user.email}
+                avatar={user.avatar}
+                date={user.date}
+              />
             </div>
-            <Link
-              to={`/profile_create/${user.id}`}
-              className="btn btn-sm btn-info mb-2"
-            >
-              {" "}
-              <i className="fas fa-user mr-1" />
-              Create Profile{" "}
-            </Link>
+            <div className="col-md-6 my-4">
+              <Link
+                to={`/profile_edit/${user.id}`}
+                className="btn btn-sm btn-info mb-2"
+              >
+                {" "}
+                <i className="fas fa-user mr-1" />
+                View Profile{" "}
+              </Link>
+            </div>
           </div>
-        </div>
-      );
+        );
+      } else {
+        profileContent = (
+          <div className="row">
+            <div className="col-md-6  my-4">
+              <div className="card card-body ">
+                <UserCardItem
+                  name={user.name}
+                  email={user.email}
+                  avatar={user.avatar}
+                  phone={user.phone}
+                  date={user.date}
+                />
+              </div>
+            </div>
+            <div className="col-md-6 my-4">
+              <div className="mx-auto my-3">
+                In oreder to fully use our site <br />
+                Please create profile
+              </div>
+              <Link
+                to={`/profile_create/${user.id}`}
+                className="btn btn-sm btn-dark mb-2"
+              >
+                {" "}
+                <i className="fas fa-user mr-1" />
+                Create Profile{" "}
+              </Link>
+            </div>
+          </div>
+        );
+      }
     }
 
-    if (loading) {
-      return <Spinner />;
-    } else {
-      return <div>{profileContent};</div>;
-    }
+    return <div className=" ">{profileContent}</div>;
   }
 }
 
