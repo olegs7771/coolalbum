@@ -50,7 +50,8 @@ function checkFileType(file, cb) {
   }
 }
 
-//Routes
+//Route Private
+//Updating Avatar in User
 router.post(
   "/update",
 
@@ -94,7 +95,7 @@ router.post(
                   { new: true }
                 ).then(() => {
                   res.status(200).json({
-                    msg:
+                    avatar:
                       "Avatar has been successfully updated.Please Login again."
                   });
                 });
@@ -111,8 +112,8 @@ router.post(
                 )
                   .then(() => {
                     res.status(200).json({
-                      msg:
-                        "Avatar has been successfully updated.Please Login again."
+                      avatar:
+                        "Avatar has been successfully updated.Please Login again!"
                     });
                   })
                   .catch(err => {

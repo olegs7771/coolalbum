@@ -16,26 +16,36 @@ const nexmo = new Nexmo(
   },
   { debug: true }
 );
-<<<<<<< HEAD
-
-//testing route
-router.get("/test", (req, res) => {
-  res.app.io.emit("txt", { key: "value" });
-});
-=======
->>>>>>> ca88cddba95ae61ba89eff2b8e4be187b3c2e6a6
 
 // Sending SMS
 router.post(
   "/send",
 
   (req, res) => {
-    const text = req.body.text,
-      phone = req.body.phone,
-      email = req.body.email;
-    User.findOne({ email }).then(user => {
-      console.log("user", user);
-    });
+    console.log("req.body", req.body);
+    const email = req.body.email;
+    User.findOne({ email })
+      .then(user => {
+        console.log("user", user);
+        if (!user) {
+          return res.status(400).json({ error: "No Such E-mail" });
+        }
+        //user been found
+        res.status(200).json({ message: "Email is validated!" });
+        const phone = req.body.phone;
+        //Check for User's phone number
+        User.findOne({ phone }).then(user => {
+          if (!user) {
+            return res.status(400).json({ phone: "not valid number" });
+          }
+          console.log(user);
+        });
+
+        const text = req.body.text;
+      })
+      .catch(err => {
+        console.log(err);
+      });
 
     // nexmo.message.sendSms("Nexmo ", phone, text, (err, responseData) => {
     //   if (err) {
@@ -52,7 +62,7 @@ router.post(
     //   }
     // });
 
-    res.status(200).json({ msg: "ok" });
+    // res.status(200).json({ msg: "ok" });
   }
 );
 
