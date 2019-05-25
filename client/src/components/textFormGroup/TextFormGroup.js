@@ -10,13 +10,18 @@ const TextFormGroup = ({
   value,
   name,
   onChange,
-  error
+  error,
+  message
 }) => {
   return (
-    <div className="form-group">
+    <div className="form-group ">
       <label htmlFor={name}>{label}</label>
       <input
-        className={classnames("form-control", { "is-invalid": error })}
+        className={classnames(
+          "form-control",
+          { "is-invalid": error },
+          { "is-valid": message }
+        )}
         placeholder={placeholder}
         type={type}
         value={value}
@@ -24,6 +29,7 @@ const TextFormGroup = ({
         onChange={onChange}
       />
       {error && <div className="invalid-feedback">{error}</div>}
+      {message && <div className="valid-feedback">{message}</div>}
 
       <small className="text-muted"> {info}</small>
     </div>

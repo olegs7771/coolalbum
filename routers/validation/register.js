@@ -22,6 +22,10 @@ module.exports = function validateRegisterInput(data) {
   if (!validator.isEmail(data.email)) {
     errors.email = "Wrong email format";
   }
+  //Phone
+  if (!validator.isMobilePhone(data.phone)) {
+    errors.phone = "wrong format";
+  }
   //Email Password
   if (!validator.isAlphanumeric(data.password.toUpperCase())) {
     errors.password = "Password must contain numbers and letters";

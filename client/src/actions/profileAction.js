@@ -1,14 +1,18 @@
 import {
   GET_ERRORS,
-  // LOADING_PROFILE,
+  CLEAR_ERRORS,
+  LOADING_PROFILE,
   GET_PROFILE,
-  GET_MESSAGE
+  GET_MESSAGE,
+  CLEAR_MESSAGE
   // GET_PROFILES
 } from "./types";
 import axios from "axios";
+import store from "../store";
+import { logoutUser } from "./userActions";
 
 // Create new Profile or Update profile
-export const createProfile = data => dispatch => {
+export const createProfile = (data, history) => dispatch => {
   console.log("data", data);
 
   axios
@@ -18,8 +22,15 @@ export const createProfile = data => dispatch => {
 
       dispatch({
         type: GET_MESSAGE,
-        payload: res.data.msg
+        payload: res.data
       });
+    })
+    .then(() => {
+      setTimeout(() => {
+        dispatch(clearMessages());
+        store.dispatch(logoutUser());
+        history.push("/login");
+      }, 6000);
     })
     .catch(err => {
       dispatch({
@@ -39,11 +50,15 @@ export const updateAvatar = (fd, history) => dispatch => {
 
       dispatch({
         type: GET_MESSAGE,
-        payload: res.data.msg
+        payload: res.data
       });
     })
     .then(() => {
-      history.push("/");
+      setTimeout(() => {
+        dispatch(clearMessages());
+        store.dispatch(logoutUser());
+        history.push("/login");
+      }, 6000);
     })
 
     .catch(err => {
@@ -56,6 +71,7 @@ export const updateAvatar = (fd, history) => dispatch => {
 
 // Get Current Profile
 export const getProfile = id => dispatch => {
+  dispatch(setProfileLoading());
   axios
     .post("/api/profiles/current", id)
     .then(res => {
@@ -73,14 +89,20 @@ export const getProfile = id => dispatch => {
 };
 
 // Delete Current Profile
-export const deleteProfile = () => dispatch => {
+export const deleteProfile = history => dispatch => {
   axios
     .delete("/api/profiles/delete")
     .then(res => {
       dispatch({
-        type: GET_PROFILE,
-        payload: res.data
+        type: GET_MESSAGE,
+        payload: res.data.msg
       });
+    })
+    .then(() => {
+      setTimeout(() => {
+        dispatch(clearMessages());
+        history.push("/");
+      }, 6000);
     })
     .catch(err => {
       dispatch({
@@ -88,4 +110,22 @@ export const deleteProfile = () => dispatch => {
         payload: err.response.data
       });
     });
+};
+//Profile Loading
+export const setProfileLoading = () => {
+  return {
+    type: LOADING_PROFILE
+  };
+};
+//Clear Messages
+export const clearMessages = () => {
+  return {
+    type: CLEAR_MESSAGE
+  };
+};
+//Clear Errors
+export const clearErrors = () => {
+  return {
+    type: CLEAR_ERRORS
+  };
 };

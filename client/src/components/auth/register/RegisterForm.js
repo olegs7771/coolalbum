@@ -2,14 +2,19 @@ import React, { Component } from "react";
 import TextFormGroup from "../../textFormGroup/TextFormGroup";
 import { connect } from "react-redux";
 import FaceBookBtn from "../../../utils/FaceBookBtn";
+
 import { registerUser } from "../../../actions/userActions";
 import { withRouter } from "react-router-dom";
+//intl_phone_input
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
 
 class RegisterForm extends Component {
   state = {
     username: "",
     email: "",
     password: "",
+    phone: "",
     showLoginBtnFaceBook: false,
     errors: {}
   };
@@ -35,6 +40,7 @@ class RegisterForm extends Component {
     const newUser = {
       name: this.state.username,
       email: this.state.email,
+      phone: this.state.phone,
       password: this.state.password
     };
     console.log(this.props);
@@ -45,7 +51,7 @@ class RegisterForm extends Component {
   };
 
   render() {
-    const { username, email, password, errors } = this.state;
+    const { username, email, phone, password, errors } = this.state;
 
     return (
       <div className="col-md-6 my-3  mx-auto">
@@ -69,6 +75,19 @@ class RegisterForm extends Component {
                 error={errors.email}
                 info="We will never share your email with anyone else"
               />
+
+              <div className="mt-3">
+                <PhoneInput
+                  placeholder="Enter phone number"
+                  value={phone}
+                  className="form-control form-control-lg "
+                  onChange={phone => this.setState({ phone })}
+                />{" "}
+                <br />
+                <div className="">
+                  Your number needed for login with SMS (Optinal)
+                </div>
+              </div>
               <TextFormGroup
                 placeholder="Password..."
                 value={password}
@@ -76,7 +95,6 @@ class RegisterForm extends Component {
                 onChange={this.onChange}
                 error={errors.password}
               />
-
               <button className="btn btn-dark">Join Now</button>
             </form>
           </div>

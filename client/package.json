@@ -7,6 +7,7 @@
     "classnames": "^2.2.6",
     "global": "^4.3.2",
     "jwt-decode": "^2.2.0",
+    "materialize-css": "^1.0.0-rc.2",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.23",
     "react": "^16.7.0",
@@ -14,12 +15,14 @@
     "react-dom": "^16.7.0",
     "react-facebook-login": "^4.1.1",
     "react-moment": "^0.8.4",
-    "react-redux": "^6.0.0",
+    "react-phone-number-input": "^2.3.13",
+    "react-redux": "^6.0.1",
     "react-router-dom": "^4.3.1",
     "react-scripts": "^2.1.2",
     "reactjs-localstorage": "0.0.7",
     "redux": "^4.0.1",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "socket.io-client": "^2.2.0"
   },
   "scripts": {
     "start": "react-scripts start",

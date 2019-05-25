@@ -8,7 +8,7 @@ import {
   getProfile,
   deleteProfile
 } from "../../actions/profileAction";
-import { withRouter, Link } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 class ProfileEdit extends Component {
   constructor(props) {
@@ -36,10 +36,19 @@ class ProfileEdit extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props !== prevProps) {
+    if (this.props.errors !== prevProps.errors) {
       this.setState({
-        errors: this.props.errors,
+        errors: this.props.errors
+      });
+    }
+    if (this.props.message !== prevProps.message) {
+      this.setState({
         message: this.props.message
+      });
+    }
+    if (this.props.profile !== prevProps.profile) {
+      this.setState({
+        profile: this.props.profile
       });
 
       const profile = this.props.profile;
@@ -68,7 +77,7 @@ class ProfileEdit extends Component {
     });
   };
 
-  handleEditProfile = e => {
+  onSubmitCreateProfile = e => {
     const { name, email, status, location } = this.state;
     e.preventDefault();
 
@@ -79,7 +88,7 @@ class ProfileEdit extends Component {
       location,
       user: this.props.match.params.id
     };
-    this.props.createProfile(newProfileData);
+    this.props.createProfile(newProfileData, this.props.history);
   };
 
   // cancel delete profile
@@ -92,7 +101,7 @@ class ProfileEdit extends Component {
   handleDeleteProfile = e => {
     e.preventDefault();
 
-    this.props.deleteProfile();
+    this.props.deleteProfile(this.props.history);
   };
 
   render() {
@@ -106,7 +115,6 @@ class ProfileEdit extends Component {
       message,
       avatar
     } = this.state;
-    console.log("this.state", this.state);
 
     //content showen to confirm delete profile (isConfirmDelete: true)
 
@@ -140,6 +148,15 @@ class ProfileEdit extends Component {
           {<span className="h3 text-info"> {this.props.user.name}</span>}
 
           <span className="h3"> here you can edit your profile</span>
+        </div>
+        {/* {Message} */}
+        <div className="my-2">
+          {Object.keys(message).length > 0 ? (
+            <div className="text-success">
+              <i className="fas fa-thumbs-up mr-2" />
+              {message.profile} <br />
+            </div>
+          ) : null}
         </div>
 
         <div className="row">
@@ -175,11 +192,7 @@ class ProfileEdit extends Component {
                   error={errors.location}
                 />
                 <div className="btn-group">
-                  <button
-                    type="submit"
-                    className="btn btn-info"
-                    onClick={this.handleEditProfile}
-                  >
+                  <button type="submit" className="btn btn-info">
                     <i className="fas fa-user-edit mr-2" />
                     Edit
                   </button>
@@ -196,20 +209,7 @@ class ProfileEdit extends Component {
                     Delete Profile
                   </button>
                 </div>
-                {/* {Message} */}
 
-                <div className="my-2">
-                  {message.message ? (
-                    <div className="text-success">
-                      <i className="fas fa-thumbs-up mr-2" />
-                      {message.message} <br />
-                      <Link to="/" className="my-2 btn btn-info">
-                        <i className="fas fa-arrow-left mr-2" />
-                        Home
-                      </Link>
-                    </div>
-                  ) : null}
-                </div>
                 {isConfirmDelete ? <div>{confirmDelete}</div> : null}
               </form>
             </div>
@@ -229,7 +229,7 @@ class ProfileEdit extends Component {
 const mapStateToProps = state => ({
   errors: state.errors.errors,
   user: state.auth.user,
-  message: state.message,
+  message: state.message.message,
   profile: state.profile.profile
 });
 export default connect(

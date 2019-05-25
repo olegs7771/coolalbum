@@ -4,17 +4,19 @@ import { connect } from "react-redux";
 import {
   getProfile,
   deleteProfile,
-  updateAvatar
+  updateAvatar,
+  clearErrors
 } from "../../actions/profileAction";
-import { withRouter, Link } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 class ProfileEditAvatar extends Component {
   constructor(props) {
     super(props);
-    console.log("props", props);
+    // console.log("props", props);
 
     this.state = {
       errors: {},
+      message: {},
 
       //Here Avatar string update State
       selectedImage: props.avatar,
@@ -33,13 +35,15 @@ class ProfileEditAvatar extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props !== prevProps) {
+    if (prevProps.errors !== this.props.errors) {
       this.setState({
-        errors: this.props.errors,
+        errors: this.props.errors
+      });
+    }
+    if (prevProps.message !== this.props.message) {
+      this.setState({
         message: this.props.message
       });
-
-      const profile = this.props.profile;
     }
   }
 
@@ -51,12 +55,11 @@ class ProfileEditAvatar extends Component {
 
   //Select Avatar from browser to tmp memory
   fileSelectedHandler = e => {
-    console.log("selected image", e.target.files[0]);
-
     this.setState({
       selectedImage: URL.createObjectURL(e.target.files[0]),
       uploadImage: e.target.files[0]
     });
+    this.props.clearErrors();
   };
 
   //Upload Avatar from browser to db
@@ -71,47 +74,48 @@ class ProfileEditAvatar extends Component {
   };
 
   render() {
-    const { selectedImage, uploadImage, errors } = this.state;
+    const { selectedImage, message, errors } = this.state;
 
     //content showen to confirm delete profile (isConfirmDelete: true)
 
     return (
       <div>
-        <div className="row">
-          <div className="col-md-4">
-            <img
-              src={selectedImage}
-              className="rounded-circle"
-              style={{ width: "150px" }}
-              alt=""
-            />
-            <br />
+        <div className="">
+          <img
+            src={selectedImage}
+            className="rounded-circle"
+            style={{ width: "150px" }}
+            alt=""
+          />
+          <br />
 
-            <form onSubmit={this.fileUploadHandler}>
+          <form onSubmit={this.fileUploadHandler}>
+            <div className="custom-file my-2">
               <input
                 type="file"
                 name="myImage"
                 onChange={this.fileSelectedHandler}
-                className="btn btn-sm btn-info mt-3"
+                className=" custom-file-input my-2"
               />
-              <br />
-              <div className="my-1 text-muted">max size 100k</div>
-              <div className="row">
-                <div className="col">
-                  <button type="submit" className="btn btn-sm btn-info my-3">
-                    Upload
-                  </button>
-                </div>
-                <div className="col">
-                  {this.state.errors.error ? (
-                    <div className="my-3 text-danger">
-                      {this.state.errors.error}
-                    </div>
-                  ) : null}
-                </div>
-              </div>
-            </form>
-          </div>
+              <label className="custom-file-label">Choose file...</label>
+            </div>
+            <br />
+            <div className="my-1 text-muted">max size 100k</div>
+
+            <div className="">
+              <button type="submit" className="btn btn-sm btn-info my-3">
+                Change Avatar
+              </button>
+            </div>
+            <div className="">
+              {errors.error ? (
+                <div className="my-3 text-danger">{errors.error}</div>
+              ) : null}
+              {message ? (
+                <div className="my-3 text-success">{message.avatar}</div>
+              ) : null}
+            </div>
+          </form>
         </div>
       </div>
     );
@@ -121,10 +125,10 @@ class ProfileEditAvatar extends Component {
 const mapStateToProps = state => ({
   errors: state.errors.errors,
   user: state.auth.user,
-  message: state.message,
+  message: state.message.message,
   profile: state.profile.profile
 });
 export default connect(
   mapStateToProps,
-  { getProfile, deleteProfile, updateAvatar }
+  { getProfile, deleteProfile, updateAvatar, clearErrors }
 )(withRouter(ProfileEditAvatar));

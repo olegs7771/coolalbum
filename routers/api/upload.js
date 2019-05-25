@@ -50,7 +50,8 @@ function checkFileType(file, cb) {
   }
 }
 
-//Routes
+//Route Private
+//Updating Avatar in User
 router.post(
   "/update",
 
@@ -74,38 +75,57 @@ router.post(
           //Delete previous Avatar in /public/uploads
           User.findOne({ _id: req.user.id }).then(user => {
             const avatar = user.avatar;
-            const file = `.public/${avatar}`;
-            console.log("file", typeof file);
+            const file = `./public${avatar}`;
+            console.log("file", file); //path to file to be deleted
             //check if there file in public/uploads
-            fse
-              .ensureFile(file)
-              .then(() => {
-                console.log("file in ensureFile", file);
+            fse.pathExists(file).then(exists => {
+              if (!exists) {
+                console.log("!exists");
+
+                //There is no such file in /public/uploads
+                const avatar = req.file.path.replace("public", "");
+
+                User.update(
+                  { _id: req.user.id },
+                  {
+                    $set: {
+                      avatar
+                    }
+                  },
+                  { new: true }
+                ).then(() => {
+                  res.status(200).json({
+                    avatar:
+                      "Avatar has been successfully updated.Please Login again."
+                  });
+                });
+              } else {
+                const avatar = req.file.path.replace("public", "");
+                User.update(
+                  { _id: req.user.id },
+                  {
+                    $set: {
+                      avatar
+                    }
+                  },
+                  { new: true }
+                )
+                  .then(() => {
+                    res.status(200).json({
+                      avatar:
+                        "Avatar has been successfully updated.Please Login again!"
+                    });
+                  })
+                  .catch(err => {
+                    console.log(err);
+                  });
 
                 fse.unlink(file, err => {
-                  if (err) {
-                    throw err;
-                  }
-                  console.log(file + " success file been deleted!");
+                  if (err) throw err;
+                  console.log("file deleted");
                 });
-              })
-              .catch(err => {
-                console.error(err);
-              });
-          });
-
-          const avatar = req.file.path.replace("public", "");
-
-          User.update(
-            { _id: req.user._id },
-            {
-              $set: {
-                avatar
               }
-            },
-            { new: true }
-          ).then(() => {
-            console.log("updated");
+            });
           });
         }
       }

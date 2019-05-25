@@ -25,6 +25,7 @@ class Header extends Component {
     if (token) {
       //decode token with jwt-decode
       const decodedToken = jwtDecode(token);
+
       //  putting it into redux state
       this.props.setCurrentUser(decodedToken);
     }
@@ -34,8 +35,6 @@ class Header extends Component {
     const { user } = this.props.auth;
 
     if (user) {
-      console.log("user.avatar", user.avatar);
-
       return (
         <div className="pos-f-t">
           <nav className="navbar navbar-dark bg-dark">
@@ -49,15 +48,15 @@ class Header extends Component {
                   <li className="nav-item active">
                     <span className="text-white">Welcome</span>{" "}
                     <Link to={`/userCard/${user.id}`}>
-                      <span className="text-info ml-2 h5">{user.name}</span>
+                      <span className="text-info ml-2 ">{user.name}</span>
                     </Link>
                     {/* {if no avatar do not use white border on avatar} */}
                     {!isEmpty(user.avatar) ? (
                       <img
                         src={user.avatar}
                         alt=""
-                        className="rounded-circle ml-4 "
-                        style={{ width: "50px", border: "2px solid white" }}
+                        className="rounded-circle ml-2 "
+                        style={{ width: "30px", border: "2px solid white" }}
                       />
                     ) : (
                       <img

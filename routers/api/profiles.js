@@ -48,7 +48,7 @@ router.post(
               if (profile) {
                 res.status(200).json({
                   profile,
-                  msg: "Profile has been seccefully updated"
+                  profile: "Profile has been seccefully updated"
                 });
               }
             })
@@ -69,58 +69,14 @@ router.post(
             .save()
             .then(user => {
               // return newly saved user
-              res
-                .status(200)
-                .json({ user, msg: "Your Profile was successfully created" });
+              res.status(200).json({
+                user,
+                profile: "Your Profile was successfully created"
+              });
             })
             .catch(err => {
               res.status(400).json(err);
             });
-        }
-      })
-      //end check if profile exists
-      .catch(err => {
-        console.log(err);
-      });
-  }
-);
-//edit avatar
-
-router.post(
-  "/update_avatar",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    console.log("req.body", req.body);
-
-    Profile.findOne({ user: req.user.id })
-      .then(profile => {
-        if (profile) {
-          //profile exists
-          // we can update current values
-          const avatar = req.body.avatar;
-          Profile.update(
-            { user: req.user.id },
-            {
-              $set: {
-                avatar
-              }
-            },
-
-            { new: true }
-          )
-            .then(profile => {
-              if (profile) {
-                res.status(200).json({
-                  profile,
-                  msg: "Avatar has been seccefully updated"
-                });
-              }
-            })
-            .catch(err => {
-              res.status(400).json(err);
-            });
-        } else {
-          res.status(401).json({ msg: "No profile for this user" });
         }
       })
       //end check if profile exists
@@ -137,6 +93,9 @@ router.post(
   (req, res) => {
     Profile.findOne({ user: req.body.id })
       .then(profile => {
+        if (!profile) {
+          return res.status(200).json({});
+        }
         res.status(200).json(profile);
       })
       .catch(err => {
