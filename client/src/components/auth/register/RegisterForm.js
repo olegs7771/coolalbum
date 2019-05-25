@@ -76,14 +76,15 @@ class RegisterForm extends Component {
                 info="We will never share your email with anyone else"
               />
 
-              <div className="mx-auto">
+              <div className="mt-3">
                 <PhoneInput
                   placeholder="Enter phone number"
                   value={phone}
+                  className="form-control form-control-lg "
                   onChange={phone => this.setState({ phone })}
                 />{" "}
                 <br />
-                <div className="my-2">
+                <div className="">
                   Your number needed for login with SMS (Optinal)
                 </div>
               </div>

@@ -73,6 +73,8 @@ class ProfileCreate extends Component {
       errors,
       message
     } = this.state;
+    console.log("this.state.message", message);
+    console.log("this.props", this.props.message);
 
     return (
       <div>
@@ -83,10 +85,10 @@ class ProfileCreate extends Component {
         </div>
         <div className="card card-body">
           <div className="my-2">
-            {message.message ? (
+            {Object.keys(message).length > 0 ? (
               <div className="text-success">
                 <i className="fas fa-thumbs-up mr-2" />
-                {message.message} <br />
+                {message.profile} <br />
               </div>
             ) : null}
           </div>
@@ -159,7 +161,7 @@ const mapStateToProps = state => ({
   errors: state.errors.errors,
   user: state.auth.user,
   profile: state.profile.profile,
-  message: state.message
+  message: state.message.message
 });
 export default connect(
   mapStateToProps,

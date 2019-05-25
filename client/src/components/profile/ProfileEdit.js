@@ -115,8 +115,6 @@ class ProfileEdit extends Component {
       message,
       avatar
     } = this.state;
-    console.log("this.props", this.props.message);
-    console.log("this.state.message", message);
 
     //content showen to confirm delete profile (isConfirmDelete: true)
 

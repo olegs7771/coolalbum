@@ -10,12 +10,11 @@ const TextFormGroup = ({
   value,
   name,
   onChange,
-
   error,
   message
 }) => {
   return (
-    <div className="form-group">
+    <div className="form-group ">
       <label htmlFor={name}>{label}</label>
       <input
         className={classnames(
