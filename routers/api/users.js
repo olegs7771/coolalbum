@@ -245,7 +245,26 @@ router.post(
 //Update Current User
 router.post(
   "/update",
-  passport.authenticate("jwt", { session: false }, (req, res) => {})
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    console.log("req.body", req.body);
+    console.log("req.user", req.user);
+    const up
+    User.findOneAndUpdate(
+      {
+        _id: req.user._id
+      },
+      {
+        $set: 
+          
+
+
+       
+      },
+      {new:true}
+    );
+    res.json({ msg: "ok" });
+  }
 );
 
 module.exports = router;
