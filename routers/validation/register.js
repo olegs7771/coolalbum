@@ -11,6 +11,9 @@ module.exports = function validateRegisterInput(data) {
   if (validator.isEmpty(data.email)) {
     errors.email = "Email can not be empty";
   }
+  if (validator.isEmpty(data.location)) {
+    errors.location = "Fill Location";
+  }
   if (validator.isEmpty(data.password)) {
     errors.password = "Password can not be empty";
   }

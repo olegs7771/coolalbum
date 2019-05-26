@@ -36,6 +36,7 @@ router.post("/register", (req, res) => {
         name: req.body.name,
         email: req.body.email,
         phone: req.body.phone,
+        location: req.body.location,
         password: req.body.password
       };
 
@@ -50,6 +51,7 @@ router.post("/register", (req, res) => {
           name: req.body.name,
           email: req.body.email,
           phone: req.body.phone,
+          location: req.body.location,
           password: req.body.password,
           token
         });
@@ -114,6 +116,7 @@ router.post("/confirmRegistration", (req, res) => {
             name: user.name,
             email: user.email,
             phone: user.phone,
+            location: user.location,
             password, //hashed
             avatar,
             password,
@@ -187,6 +190,7 @@ router.post("/login", (req, res) => {
             email: user.email,
             phone: user.phone,
             avatar: user.avatar,
+            location: user.location,
             date: user.date
           };
           //creating token for exp 10h
@@ -236,6 +240,12 @@ router.post(
       res.json({ success: true, token: "bearer  " + token });
     });
   }
+);
+
+//Update Current User
+router.post(
+  "/update",
+  passport.authenticate("jwt", { session: false }, (req, res) => {})
 );
 
 module.exports = router;

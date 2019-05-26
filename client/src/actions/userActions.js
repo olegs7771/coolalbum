@@ -1,10 +1,17 @@
-import { GET_ERRORS, SET_CURRENT_USER, LOGOUT_USER } from "./types";
+import {
+  GET_ERRORS,
+  CLEAR_ERRORS,
+  SET_CURRENT_USER,
+  LOGOUT_USER
+} from "./types";
 import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
 
 //Register New User
 export const registerUser = (userData, history) => dispatch => {
+  console.log("userData", userData);
+  dispatch(deleteErrors());
   axios
     .post("api/users/register", userData)
     .then(res => {
@@ -124,4 +131,20 @@ export const authFacebook = (userData, history) => dispatch => {
         payload: err.response.data
       });
     });
+};
+
+//Update Registered User with new data
+
+export const updateUser = (userData, history) => dispatch => {
+  console.log("userData", userData);
+
+  axios.post("/api/users/update", userData).then(res => {
+    console.log("res.data", res.data);
+  });
+};
+
+export const deleteErrors = () => dispatch => {
+  dispatch({
+    type: CLEAR_ERRORS
+  });
 };

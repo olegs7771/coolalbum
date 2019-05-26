@@ -13,6 +13,12 @@ const UserSchema = new Schema({
   phone: {
     type: String
   },
+  location: {
+    type: String
+  },
+  bio: {
+    type: String
+  },
   password: {
     type: String
   },
