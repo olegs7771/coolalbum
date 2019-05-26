@@ -10,7 +10,7 @@ class UserCardItem extends Component {
   // };
 
   render() {
-    const { name, email, avatar, phone, date } = this.props;
+    const { name, email, avatar, phone, date, location } = this.props;
     // console.log("this.props", this.props);
 
     return (
@@ -28,6 +28,10 @@ class UserCardItem extends Component {
             <li className="list-group-item  ">
               <span className="text-info">Phone</span>
               {""} <span className=" h6 ml-4 ">{phone}</span>
+            </li>
+            <li className="list-group-item  ">
+              <span className="text-info">Location</span>
+              {""} <span className=" h6 ml-4 ">{location}</span>
             </li>
             <li className="list-group-item  ">
               <span className="text-info">Registered at </span>

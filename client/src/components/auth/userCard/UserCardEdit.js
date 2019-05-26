@@ -1,20 +1,18 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import TextFormGroup from "../../textFormGroup/TextFormGroup";
+import TextAreaFormGroup from "../../textFormGroup/TextAreaFormGroup";
 import ProfileEditAvatar from "../../profile/ProfileEditAvatar";
+import { updateUser } from "../../../actions/userActions";
 
-import {
-  createProfile,
-  getProfile,
-  deleteProfile
-} from "../../../actions/profileAction";
+import { getProfile } from "../../../actions/profileAction";
 
 class UserCardEdit extends Component {
   state = {
     name: "",
     email: "",
     avatar: "",
-    status: "",
+    bio: "",
     location: "",
     errors: {},
     message: {},
@@ -46,31 +44,41 @@ class UserCardEdit extends Component {
       });
     }
     if (this.props.user !== prevProps.user) {
+      console.log("props.user changed");
+
       const user = this.props.user;
 
       if (user) {
         this.setState({
           name: user.name,
           email: user.email,
-          status: user.status,
-          location: user.location
-        });
-      }
-
-      // { Here we obtain Avatar string from User}
-      if (this.props.user) {
-        this.setState({
-          avatar: this.props.user.avatar
+          bio: user.bio,
+          location: user.location,
+          avatar: user.avatar
         });
       }
     }
   }
+  //after submit user been update in db
+
+  onSubmitUpdateUser = e => {
+    const { name, email, bio, location } = this.state;
+    e.preventDefault();
+
+    const upUser = {
+      name,
+      email,
+      bio,
+      location
+    };
+    this.props.updateUser(upUser, this.props.history);
+  };
 
   render() {
     const {
       name,
       email,
-      status,
+      bio,
       location,
       errors,
       isConfirmDelete,
@@ -86,34 +94,41 @@ class UserCardEdit extends Component {
 
         <div className="row">
           <div className="col-md-8  mt-4">
-            <TextFormGroup
-              label="Name"
-              value={name}
-              name="name"
-              onChange={this.onChange}
-              error={errors.name}
-            />
-            <TextFormGroup
-              label="Email"
-              value={email}
-              name="email"
-              onChange={this.onChange}
-              error={errors.email}
-            />
-            <TextFormGroup
-              label="Status"
-              value={status}
-              name="status"
-              onChange={this.onChange}
-              error={errors.status}
-            />
-            <TextFormGroup
-              label="Location"
-              value={location}
-              name="location"
-              onChange={this.onChange}
-              error={errors.location}
-            />
+            <form onSubmit={this.onSubmitUpdateUser}>
+              <TextFormGroup
+                label="Name"
+                value={name}
+                name="name"
+                onChange={this.onChange}
+                error={errors.name}
+              />
+              <TextFormGroup
+                label="Email"
+                value={email}
+                name="email"
+                onChange={this.onChange}
+                error={errors.email}
+              />
+              <TextFormGroup
+                label="Location"
+                value={location}
+                name="location"
+                onChange={this.onChange}
+                error={errors.location}
+              />
+              <TextAreaFormGroup
+                label="Bio"
+                placeholder="write about yourself something..."
+                value={bio}
+                name="bio"
+                onChange={this.onChange}
+                error={errors.bio}
+                info="You can write a  some basic information about yourself"
+              />
+              <button type="submit" className="btn btn-dark btn-lg my-4">
+                Edit
+              </button>
+            </form>
           </div>
           <div className="col-md-4">
             <div className="h5 text-center my-3">Edit Avatar</div>
@@ -134,5 +149,5 @@ const mapStateToProps = state => ({
 });
 export default connect(
   mapStateToProps,
-  { createProfile, getProfile, deleteProfile }
+  { updateUser, getProfile }
 )(UserCardEdit);

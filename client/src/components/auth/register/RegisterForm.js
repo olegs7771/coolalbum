@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import TextFormGroup from "../../textFormGroup/TextFormGroup";
+
 import { connect } from "react-redux";
 import FaceBookBtn from "../../../utils/FaceBookBtn";
 
-import { registerUser } from "../../../actions/userActions";
+import { registerUser, deleteErrors } from "../../../actions/userActions";
 import { withRouter } from "react-router-dom";
 //intl_phone_input
 import PhoneInput from "react-phone-number-input";
@@ -15,6 +16,7 @@ class RegisterForm extends Component {
     email: "",
     password: "",
     phone: "",
+    location: "",
     showLoginBtnFaceBook: false,
     errors: {}
   };
@@ -32,6 +34,7 @@ class RegisterForm extends Component {
     this.setState({
       [e.target.name]: e.target.value
     });
+    this.props.deleteErrors();
   };
 
   onSubmit = e => {
@@ -41,6 +44,8 @@ class RegisterForm extends Component {
       name: this.state.username,
       email: this.state.email,
       phone: this.state.phone,
+      location: this.state.location,
+
       password: this.state.password
     };
     console.log(this.props);
@@ -51,7 +56,15 @@ class RegisterForm extends Component {
   };
 
   render() {
-    const { username, email, phone, password, errors } = this.state;
+    const {
+      username,
+      email,
+      phone,
+      location,
+
+      password,
+      errors
+    } = this.state;
 
     return (
       <div className="col-md-6 my-3  mx-auto">
@@ -89,6 +102,14 @@ class RegisterForm extends Component {
                 </div>
               </div>
               <TextFormGroup
+                placeholder="Location..."
+                value={location}
+                name="location"
+                onChange={this.onChange}
+                error={errors.location}
+              />
+
+              <TextFormGroup
                 placeholder="Password..."
                 value={password}
                 name="password"
@@ -123,5 +144,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { registerUser }
+  { registerUser, deleteErrors }
 )(withRouter(RegisterForm));
