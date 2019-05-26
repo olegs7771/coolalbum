@@ -249,19 +249,17 @@ router.post(
   (req, res) => {
     console.log("req.body", req.body);
     console.log("req.user", req.user);
-    const up
+    const upUser = {
+      name: req.body.name
+    };
     User.findOneAndUpdate(
       {
         _id: req.user._id
       },
       {
-        $set: 
-          
-
-
-       
+        $set: upUser
       },
-      {new:true}
+      { new: true }
     );
     res.json({ msg: "ok" });
   }
