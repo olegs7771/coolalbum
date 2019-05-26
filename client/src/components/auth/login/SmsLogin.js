@@ -6,8 +6,10 @@ import { sendSmsCode } from "../../../actions/phoneAction";
 import PhoneInput from "react-phone-number-input";
 import TextFormGroup from "../../textFormGroup/TextFormGroup";
 import "react-phone-number-input/style.css";
+
 //Socket.io client
 import io from "socket.io-client";
+
 const socket = io("http://localhost:5000");
 
 class SmsLogin extends Component {
@@ -17,7 +19,8 @@ class SmsLogin extends Component {
     text: "",
     number: null,
     code: "",
-    errors: {}
+    errors: {},
+    messages: {}
   };
 
   //User on submit sends Email and Phone Number.
@@ -48,22 +51,49 @@ class SmsLogin extends Component {
     console.log("code", this.state.code);
   };
 
-  //after recieving sms code user inters in state
-  onChange = e => {
+  //after recieving sms code user inters it in state
+  onChangeCode = e => {
     this.setState({
       [e.target.name]: e.target.value
     });
   };
-  componentDidUpdate(prevProps) {
+  //Intering Email field for sending to fetch code
+  onChangeMail = e => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  };
+
+  //obtain errors from props to state
+  componentDidUpdate(prevProps, prevState) {
+    console.log("prevState", prevState);
+    console.log("this.state", this.state);
+
     if (prevProps !== this.props) {
       this.setState({
-        errors: this.props.errors
+        errors: this.props.errors,
+        messages: this.props.message
       });
+      //clear this.state.errors if this.state.messages obj>0
+      if (Object.keys(this.state.messages).length > 0) {
+        this.setState({
+          errors: {}
+        });
+      }
+    }
+    if (prevState.email !== this.state.email) {
+      const data = {
+        email: this.state.email
+      };
+      this.props.sendSmsCode(data, this.props.history);
     }
   }
 
   render() {
-    const { phone, number, code, email, errors } = this.state;
+    const { phone, number, code, email, errors, messages } = this.state;
+
+    console.log("this.state errors", this.state.errors);
+    console.log("this.state phone", this.state.phone);
 
     if (!number) {
       //SMS form after sended by user
@@ -78,10 +108,11 @@ class SmsLogin extends Component {
                 type="email"
                 value={email}
                 name="email"
-                onChange={this.onChange}
-                error={errors.email}
+                onChange={this.onChangeMail}
+                error={errors.error}
+                message={messages.message}
               />
-
+              {errors.email ? <div>{errors.email}</div> : null}
               <span className="text-left h5">Enter your phone number</span>
               <div className="form-group my-3 ">
                 <PhoneInput
@@ -117,8 +148,7 @@ class SmsLogin extends Component {
                   className="form-control form-control-lg"
                   name="code"
                   value={code}
-                  onChange={this.onChange}
-                  className="form-control form-control-lg "
+                  onChange={this.onChangeCode}
                 />
                 <button
                   type="submit"
@@ -135,7 +165,8 @@ class SmsLogin extends Component {
   }
 }
 const mapStateToProps = state => ({
-  errors: state.errors.errors
+  errors: state.errors.errors,
+  message: state.message.message
 });
 
 export default connect(

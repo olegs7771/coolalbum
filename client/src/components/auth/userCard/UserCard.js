@@ -29,7 +29,7 @@ class UserCard extends Component {
 
   render() {
     const { user } = this.props;
-    console.log("user", user);
+    // console.log("user", user);
 
     const { loading, profile } = this.props.profile;
     let profileContent;
@@ -68,7 +68,7 @@ class UserCard extends Component {
         profileContent = (
           <div className="row">
             <div className="col-md-6  my-4">
-              <div className="card card-body bg-dark">
+              <div className="card card-body ">
                 <UserCardItem
                   name={user.name}
                   email={user.email}
@@ -97,7 +97,7 @@ class UserCard extends Component {
       }
     }
 
-    return <div className=" bg-light">{profileContent}</div>;
+    return <div className=" ">{profileContent}</div>;
   }
 }
 

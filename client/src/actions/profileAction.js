@@ -22,7 +22,7 @@ export const createProfile = (data, history) => dispatch => {
 
       dispatch({
         type: GET_MESSAGE,
-        payload: res.data.msg
+        payload: res.data
       });
     })
     .then(() => {
@@ -50,7 +50,7 @@ export const updateAvatar = (fd, history) => dispatch => {
 
       dispatch({
         type: GET_MESSAGE,
-        payload: res.data.msg
+        payload: res.data
       });
     })
     .then(() => {

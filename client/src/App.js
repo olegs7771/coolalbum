@@ -12,6 +12,7 @@ import SuccessRegMsg from "./utils/SuccessRegMsg";
 import ConfirmRegister from "./utils/ConfirmRegister";
 import Contact from "./utils/Contact";
 import UserCard from "./components/auth/userCard/UserCard";
+import UserCardEdit from "./components/auth/userCard/UserCardEdit";
 import ProfileCreate from "./components/profile/ProfileCreate";
 import ProfileEdit from "./components/profile/ProfileEdit";
 
@@ -73,6 +74,7 @@ class App extends Component {
                 />
                 <Route exact path="/contact" component={Contact} />
                 <Route exact path="/userCard/:id" component={UserCard} />
+                <Route exact path="/userCard_edit" component={UserCardEdit} />
                 <Route
                   exact
                   path="/profile_create/:id"

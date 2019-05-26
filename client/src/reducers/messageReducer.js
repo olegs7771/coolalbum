@@ -2,7 +2,7 @@ import { GET_MESSAGE, CLEAR_MESSAGE } from "../actions/types";
 // import { isEmpty } from "../utils/isEmpty";
 
 const initialState = {
-  message: null
+  message: {}
 };
 export default function(state = initialState, action) {
   switch (action.type) {
@@ -14,7 +14,7 @@ export default function(state = initialState, action) {
     case CLEAR_MESSAGE:
       return {
         ...state,
-        message: null
+        message: {}
       };
     default:
       return state;
