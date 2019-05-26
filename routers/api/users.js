@@ -260,7 +260,7 @@ router.post(
         $set: upUser
       },
       { new: true }
-    );
+    ).save();
     res.json({ msg: "ok" });
   }
 );
