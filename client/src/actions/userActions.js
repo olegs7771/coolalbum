@@ -3,7 +3,8 @@ import {
   CLEAR_ERRORS,
   SET_CURRENT_USER,
   LOGOUT_USER,
-  GET_MESSAGE
+  GET_MESSAGE,
+  CLEAR_MESSAGE
 } from "./types";
 import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
@@ -180,5 +181,42 @@ export const updateUser = (userData, history) => dispatch => {
 export const deleteErrors = () => dispatch => {
   dispatch({
     type: CLEAR_ERRORS
+  });
+};
+
+//login check if user exists
+export const isEmailExists = data => dispatch => {
+  console.log("email", data);
+  dispatch(clearErrors());
+  dispatch(clearMessages());
+
+  axios
+    .post("/api/users/email", data)
+    .then(res => {
+      console.log("res.data", res.data);
+
+      dispatch({
+        type: GET_MESSAGE,
+        payload: res.data
+      });
+    })
+    .catch(err => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
+    });
+};
+
+// Clear Errors
+export const clearErrors = () => dispatch => {
+  return dispatch({
+    type: CLEAR_ERRORS
+  });
+};
+// Clear Messages
+export const clearMessages = () => dispatch => {
+  return dispatch({
+    type: CLEAR_MESSAGE
   });
 };

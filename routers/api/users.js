@@ -281,4 +281,8 @@ router.post(
   }
 );
 
+//check if Email exists for login form
+
+router.post("/email", (req, res) => {});
+
 module.exports = router;
