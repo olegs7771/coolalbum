@@ -117,6 +117,7 @@ router.post("/confirmRegistration", (req, res) => {
             email: user.email,
             phone: user.phone,
             location: user.location,
+            bio: user.bio,
             password, //hashed
             avatar,
             password,
@@ -191,6 +192,7 @@ router.post("/login", (req, res) => {
             phone: user.phone,
             avatar: user.avatar,
             location: user.location,
+            bio: user.bio,
             date: user.date
           };
           //creating token for exp 10h
@@ -236,7 +238,9 @@ router.post(
       location: "",
 
       avatar: req.user.avatar,
-      date: req.user.date
+      date: req.user.date,
+      location: req.user.location,
+      bio: req.user.location
     };
     jwt.sign(payload, keys, { expiresIn: 3600 }, (err, token) => {
       res.json({ success: true, token: "bearer  " + token });
@@ -265,8 +269,14 @@ router.post(
         $set: upUser
       },
       { new: true }
-    );
-    res.json({ msg: "ok" });
+    )
+      .then(() => {
+        console.log("updated");
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    res.json({ user: "User has been updated" });
   }
 );
 

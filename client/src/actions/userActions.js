@@ -2,7 +2,8 @@ import {
   GET_ERRORS,
   CLEAR_ERRORS,
   SET_CURRENT_USER,
-  LOGOUT_USER
+  LOGOUT_USER,
+  GET_MESSAGE
 } from "./types";
 import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
@@ -140,9 +141,38 @@ export const authFacebook = (userData, history) => dispatch => {
 export const updateUser = (userData, history) => dispatch => {
   console.log("userData", userData);
 
-  axios.post("/api/users/update", userData).then(res => {
-    console.log("res.data", res.data);
-  });
+  axios
+    .post("/api/users/update", userData)
+    .then(res => {
+      console.log("res.data", res.data);
+      dispatch({
+        type: GET_MESSAGE,
+        payload: res.data
+      });
+    })
+    .then(() => {
+      setTimeout(() => {
+        // Remove jwtToken from localStorage
+        localStorage.removeItem("jwtToken");
+        //Remove auth header for future request
+        setAuthToken(false);
+        //Set current user to {} which will set isAuthenticated to false
+        dispatch({
+          type: LOGOUT_USER,
+          payload: {}
+        });
+
+        //relogin update user
+
+        history.push("/");
+      }, 5000);
+    })
+    .catch(err => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
+    });
 };
 
 export const deleteErrors = () => dispatch => {
