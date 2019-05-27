@@ -152,6 +152,8 @@ export const updateUser = (userData, history) => dispatch => {
     })
     .then(() => {
       setTimeout(() => {
+        console.log("userData", userData);
+
         // Remove jwtToken from localStorage
         localStorage.removeItem("jwtToken");
         //Remove auth header for future request
@@ -164,7 +166,7 @@ export const updateUser = (userData, history) => dispatch => {
 
         //relogin update user
 
-        history.push("/");
+        history.push("/login");
       }, 5000);
     })
     .catch(err => {
