@@ -117,6 +117,7 @@ router.post("/confirmRegistration", (req, res) => {
             email: user.email,
             phone: user.phone,
             location: user.location,
+            bio: user.bio,
             password, //hashed
             avatar,
             password,
@@ -191,6 +192,7 @@ router.post("/login", (req, res) => {
             phone: user.phone,
             avatar: user.avatar,
             location: user.location,
+            bio: user.bio,
             date: user.date
           };
           //creating token for exp 10h
@@ -234,7 +236,9 @@ router.post(
       name: req.user.name,
       email: req.user.email,
       avatar: req.user.avatar,
-      date: req.user.date
+      date: req.user.date,
+      location: req.user.location,
+      bio: req.user.location
     };
     jwt.sign(payload, keys, { expiresIn: 3600 }, (err, token) => {
       res.json({ success: true, token: "bearer  " + token });
@@ -250,7 +254,10 @@ router.post(
     console.log("req.body", req.body);
     console.log("req.user", req.user);
     const upUser = {
-      name: req.body.name
+      name: req.body.name,
+      email: req.body.email,
+      location: req.body.location,
+      bio: req.body.bio
     };
     User.findOneAndUpdate(
       {
@@ -267,7 +274,7 @@ router.post(
       .catch(err => {
         console.log(err);
       });
-    res.json({ msg: "ok" });
+    res.json({ user: "User has been updated" });
   }
 );
 

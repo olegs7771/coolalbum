@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { reactLocalStorage } from "reactjs-localstorage";
 import TextFormGroup from "../../textFormGroup/TextFormGroup";
 import TextAreaFormGroup from "../../textFormGroup/TextAreaFormGroup";
 import ProfileEditAvatar from "../../profile/ProfileEditAvatar";
@@ -25,11 +26,25 @@ class UserCardEdit extends Component {
   };
 
   componentDidMount() {
+    const token = reactLocalStorage.get("jwtToken");
+    console.log("token", token);
+
     //trigger getProfile();
     const id = {
       id: this.props.match.params.id
     };
     this.props.getProfile(id);
+
+    //get user creds from props to state
+    if (Object.keys(this.props.user).length > 0) {
+      this.setState({
+        location: this.props.user.location,
+        name: this.props.user.name,
+        email: this.props.user.email,
+        bio: this.props.user.bio,
+        avatar: this.props.user.avatar
+      });
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -43,25 +58,11 @@ class UserCardEdit extends Component {
         message: this.props.message
       });
     }
-    if (this.props.user !== prevProps.user) {
-      console.log("props.user changed");
-
-      const user = this.props.user;
-
-      if (user) {
-        this.setState({
-          name: user.name,
-          email: user.email,
-          bio: user.bio,
-          location: user.location,
-          avatar: user.avatar
-        });
-      }
-    }
   }
   //after submit user been update in db
 
   onSubmitUpdateUser = e => {
+    const token = reactLocalStorage.get("jwtToken");
     const { name, email, bio, location } = this.state;
     e.preventDefault();
 
@@ -69,7 +70,8 @@ class UserCardEdit extends Component {
       name,
       email,
       bio,
-      location
+      location,
+      token
     };
     this.props.updateUser(upUser, this.props.history);
   };
@@ -91,7 +93,9 @@ class UserCardEdit extends Component {
     return (
       <div>
         <div className="h4 my-4">Edit User Card </div>
-
+        {message.user ? (
+          <div className="my-3 text-success"> {message.user}</div>
+        ) : null}
         <div className="row">
           <div className="col-md-8  mt-4">
             <form onSubmit={this.onSubmitUpdateUser}>
