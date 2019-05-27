@@ -260,7 +260,13 @@ router.post(
         $set: upUser
       },
       { new: true }
-    ).save();
+    )
+      .then(() => {
+        console.log("updated");
+      })
+      .catch(err => {
+        console.log(err);
+      });
     res.json({ msg: "ok" });
   }
 );
