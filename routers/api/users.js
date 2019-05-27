@@ -233,6 +233,8 @@ router.post(
       id: req.user.id,
       name: req.user.name,
       email: req.user.email,
+      location: "",
+
       avatar: req.user.avatar,
       date: req.user.date
     };
@@ -250,7 +252,10 @@ router.post(
     console.log("req.body", req.body);
     console.log("req.user", req.user);
     const upUser = {
-      name: req.body.name
+      name: req.body.name,
+      email: req.body.email,
+      location: req.body.location,
+      bio: req.body.bio
     };
     User.findOneAndUpdate(
       {
@@ -260,7 +265,7 @@ router.post(
         $set: upUser
       },
       { new: true }
-    ).save();
+    );
     res.json({ msg: "ok" });
   }
 );

@@ -43,7 +43,7 @@ class UserCardEdit extends Component {
         message: this.props.message
       });
     }
-    if (this.props.user !== prevProps.user) {
+    if (prevProps.user !== this.props.user) {
       console.log("props.user changed");
 
       const user = this.props.user;

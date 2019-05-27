@@ -110,6 +110,8 @@ export const setCurrentUser = decoded => {
 
 //Register with password-facebook-token
 export const authFacebook = (userData, history) => dispatch => {
+  console.log("userData", userData);
+
   axios
     .post("/api/users/auth/facebook", { access_token: userData })
     .then(res => {
