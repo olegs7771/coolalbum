@@ -3,24 +3,46 @@ import TextFormGroup from "../../textFormGroup/TextFormGroup";
 
 import { connect } from "react-redux";
 import { loginUser } from "../../../actions/userActions";
+import { sendSmsCode } from "../../../actions/phoneAction";
 import { withRouter } from "react-router-dom";
 
 class LoginForm extends Component {
   state = {
     email: "",
     password: "",
-    errors: {}
+    errors: {},
+    messages: {}
   };
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     if (prevProps !== this.props) {
       this.setState({
-        errors: this.props.errors
+        errors: this.props.errors,
+        messages: this.props.message
       });
+      //clear this.state.errors if this.state.messages obj>0
+      if (Object.keys(this.state.messages).length > 0) {
+        this.setState({
+          errors: {}
+        });
+      }
+    }
+    if (prevState.email !== this.state.email) {
+      const data = {
+        email: this.state.email
+      };
+      this.props.sendSmsCode(data, this.props.history);
     }
   }
 
   onChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  };
+
+  //Intering Email field for sending to fetch code
+  onChangeMail = e => {
     this.setState({
       [e.target.name]: e.target.value
     });
@@ -39,7 +61,7 @@ class LoginForm extends Component {
   };
 
   render() {
-    const { email, password, errors } = this.state;
+    const { email, password, errors, message } = this.state;
 
     return (
       <div>
@@ -52,8 +74,9 @@ class LoginForm extends Component {
                 type="email"
                 value={email}
                 name="email"
-                onChange={this.onChange}
+                onChange={this.onChangeMail}
                 error={errors.email}
+                // message={messages.message}
               />
               <TextFormGroup
                 placeholder="Password..."
@@ -72,10 +95,11 @@ class LoginForm extends Component {
   }
 }
 const mapStateToProps = state => ({
-  errors: state.errors.errors
+  errors: state.errors.errors,
+  message: state.message.message
 });
 
 export default connect(
   mapStateToProps,
-  { loginUser }
+  { loginUser, sendSmsCode }
 )(withRouter(LoginForm));

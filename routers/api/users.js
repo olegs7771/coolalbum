@@ -37,6 +37,7 @@ router.post("/register", (req, res) => {
         email: req.body.email,
         phone: req.body.phone,
         location: req.body.location,
+        bio: req.body.bio,
         password: req.body.password
       };
 
@@ -235,6 +236,8 @@ router.post(
       id: req.user.id,
       name: req.user.name,
       email: req.user.email,
+      location: "",
+
       avatar: req.user.avatar,
       date: req.user.date,
       location: req.user.location,
@@ -277,5 +280,9 @@ router.post(
     res.json({ user: "User has been updated" });
   }
 );
+
+//check if Email exists for login form
+
+router.post("/email", (req, res) => {});
 
 module.exports = router;

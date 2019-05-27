@@ -3,7 +3,8 @@ import {
   CLEAR_ERRORS,
   SET_CURRENT_USER,
   LOGOUT_USER,
-  GET_MESSAGE
+  GET_MESSAGE,
+  CLEAR_MESSAGE
 } from "./types";
 import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
@@ -111,6 +112,8 @@ export const setCurrentUser = decoded => {
 
 //Register with password-facebook-token
 export const authFacebook = (userData, history) => dispatch => {
+  console.log("userData", userData);
+
   axios
     .post("/api/users/auth/facebook", { access_token: userData })
     .then(res => {
@@ -150,6 +153,8 @@ export const updateUser = (userData, history) => dispatch => {
     })
     .then(() => {
       setTimeout(() => {
+        console.log("userData", userData);
+
         // Remove jwtToken from localStorage
         localStorage.removeItem("jwtToken");
         //Remove auth header for future request
@@ -162,7 +167,7 @@ export const updateUser = (userData, history) => dispatch => {
 
         //relogin update user
 
-        history.push("/");
+        history.push("/login");
       }, 5000);
     })
     .catch(err => {
@@ -176,5 +181,42 @@ export const updateUser = (userData, history) => dispatch => {
 export const deleteErrors = () => dispatch => {
   dispatch({
     type: CLEAR_ERRORS
+  });
+};
+
+//login check if user exists
+export const isEmailExists = data => dispatch => {
+  console.log("email", data);
+  dispatch(clearErrors());
+  dispatch(clearMessages());
+
+  axios
+    .post("/api/users/email", data)
+    .then(res => {
+      console.log("res.data", res.data);
+
+      dispatch({
+        type: GET_MESSAGE,
+        payload: res.data
+      });
+    })
+    .catch(err => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
+    });
+};
+
+// Clear Errors
+export const clearErrors = () => dispatch => {
+  return dispatch({
+    type: CLEAR_ERRORS
+  });
+};
+// Clear Messages
+export const clearMessages = () => dispatch => {
+  return dispatch({
+    type: CLEAR_MESSAGE
   });
 };

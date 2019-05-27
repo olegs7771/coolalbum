@@ -62,7 +62,6 @@ class UserCardEdit extends Component {
   //after submit user been update in db
 
   onSubmitUpdateUser = e => {
-    const token = reactLocalStorage.get("jwtToken");
     const { name, email, bio, location } = this.state;
     e.preventDefault();
 
@@ -70,8 +69,7 @@ class UserCardEdit extends Component {
       name,
       email,
       bio,
-      location,
-      token
+      location
     };
     this.props.updateUser(upUser, this.props.history);
   };
