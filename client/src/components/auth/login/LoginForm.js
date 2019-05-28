@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import TextFormGroup from "../../textFormGroup/TextFormGroup";
 
 import { connect } from "react-redux";
-import { loginUser } from "../../../actions/userActions";
-import { sendSmsCode } from "../../../actions/phoneAction";
+import { loginUser, isEmailExists } from "../../../actions/userActions";
+
 import { withRouter } from "react-router-dom";
 
 class LoginForm extends Component {
@@ -11,17 +11,17 @@ class LoginForm extends Component {
     email: "",
     password: "",
     errors: {},
-    messages: {}
+    message: {}
   };
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps !== this.props) {
       this.setState({
         errors: this.props.errors,
-        messages: this.props.message
+        message: this.props.message
       });
       //clear this.state.errors if this.state.messages obj>0
-      if (Object.keys(this.state.messages).length > 0) {
+      if (Object.keys(this.state.message).length > 0) {
         this.setState({
           errors: {}
         });
@@ -31,7 +31,7 @@ class LoginForm extends Component {
       const data = {
         email: this.state.email
       };
-      this.props.sendSmsCode(data, this.props.history);
+      this.props.isEmailExists(data, this.props.history);
     }
   }
 
@@ -75,8 +75,8 @@ class LoginForm extends Component {
                 value={email}
                 name="email"
                 onChange={this.onChangeMail}
-                error={errors.email}
-                // message={messages.message}
+                error={errors.loginEmail}
+                message={message.loginEmail}
               />
               <TextFormGroup
                 placeholder="Password..."
@@ -101,5 +101,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { loginUser, sendSmsCode }
+  { loginUser, isEmailExists }
 )(withRouter(LoginForm));

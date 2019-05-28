@@ -194,7 +194,6 @@ export const isEmailExists = data => dispatch => {
     .post("/api/users/email", data)
     .then(res => {
       console.log("res.data", res.data);
-
       dispatch({
         type: GET_MESSAGE,
         payload: res.data

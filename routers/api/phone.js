@@ -6,6 +6,7 @@ const passport = require("passport");
 //Bring in Model (models/User.js)
 const User = require("../../models/User");
 const Nexmo = require("nexmo");
+var randomize = require("randomatic");
 
 // init nexmo sms sending
 
@@ -28,17 +29,21 @@ router.post(
       .then(user => {
         console.log("user", user);
         if (!user) {
-          return res.status(400).json({ error: "No Such E-mail" });
+          return res.status(400).json({ loginSmsEmail: "No Such E-mail" });
         }
         //user been found
-        res.status(200).json({ message: "Email is validated!" });
+        // res.status(200).json({ message: "Email is validated!" });
         const phone = req.body.phone;
         //Check for User's phone number
         User.findOne({ phone }).then(user => {
           if (!user) {
             return res.status(400).json({ phone: "not valid number" });
+          } else {
+            //randomatic gens  6 digit number
+            const randomNum = randomize("0", 6);
+
+            User.ensureIndexes({ status: 1 }, { expireAfterSeconds: 3600 });
           }
-          console.log(user);
         });
 
         const text = req.body.text;

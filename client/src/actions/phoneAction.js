@@ -5,6 +5,8 @@ import axios from "axios";
 
 export const sendSmsCode = (data, history) => dispatch => {
   console.log("sms data", data);
+  //data:{phone,email,text}
+
   dispatch(clearErrors());
   dispatch(clearMessages());
 
