@@ -32,9 +32,9 @@ class SmsLogin extends Component {
 
     const { phone, email } = this.state;
     const data = {
-      phone,
-      email,
-      text
+      phone, //user phone number
+      email, // user email
+      text // text to be sent to user with code
     };
     //sending phone number from form to phoneAction
     this.props.sendSmsCode(data, this.props.history);
@@ -66,9 +66,6 @@ class SmsLogin extends Component {
 
   //obtain errors from props to state
   componentDidUpdate(prevProps, prevState) {
-    console.log("prevState", prevState);
-    console.log("this.state", this.state);
-
     if (prevProps !== this.props) {
       this.setState({
         errors: this.props.errors,
@@ -91,13 +88,10 @@ class SmsLogin extends Component {
 
   render() {
     const { phone, number, code, email, errors, messages } = this.state;
-
-    console.log("this.state errors", this.state.errors);
-    console.log("this.state phone", this.state.phone);
+    console.log("this.props", this.props);
+    console.log("this.state", this.state);
 
     if (!number) {
-      //SMS form after sended by user
-
       return (
         <div className="col-md-12 my-5 border">
           <div className="h3 text-center text-info">Login with SMS</div>
@@ -109,7 +103,7 @@ class SmsLogin extends Component {
                 value={email}
                 name="email"
                 onChange={this.onChangeMail}
-                error={errors.error}
+                error={errors.loginSmsEmail}
                 message={messages.message}
               />
               {errors.email ? <div>{errors.email}</div> : null}
@@ -133,7 +127,6 @@ class SmsLogin extends Component {
         </div>
       );
     } else {
-      // SMS form before Send by user
       return (
         <div className='"col-md-12 my-5 border'>
           <div className="container">
