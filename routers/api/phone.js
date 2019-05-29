@@ -41,8 +41,7 @@ router.post(
           } else {
             //randomatic gens  6 digit number
             const randomNum = randomize("0", 6);
-
-            User.ensureIndexes({ status: 1 }, { expireAfterSeconds: 3600 });
+            console.log(randomNum);
           }
         });
 

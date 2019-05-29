@@ -22,7 +22,9 @@ const UserSchema = new Schema({
   password: {
     type: String
   },
-
+  status: {
+    type: String
+  },
   confirmed: {
     type: Boolean,
     default: false
