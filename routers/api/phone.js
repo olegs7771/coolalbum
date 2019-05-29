@@ -41,8 +41,48 @@ router.post(
           } else {
             //randomatic gens  6 digit number
             const randomNum = randomize("0", 6);
+            res.status(200).json(randomNum);
+            const objNum = {
+              randomNum
+            };
+            User.findOneAndUpdate(
+              { email },
+              {
+                $set: objNum
+              },
 
-            User.ensureIndexes({ status: 1 }, { expireAfterSeconds: 3600 });
+              { new: true }
+            )
+              .then(update => {
+                console.log("update", update.randomNum);
+                // user db has randomNum
+                //Sending Nexmo SMS message to user
+                const text = `Dear ${update.name},Your code for login is ${
+                  update.randomNum
+                }.`;
+                nexmo.message.sendSms(
+                  "Nexmo ",
+                  phone,
+                  text,
+                  (err, responseData) => {
+                    if (err) {
+                      console.log("err", err);
+                    } else {
+                      console.dir(responseData);
+                      //Get Data from responseData
+                      const data = {
+                        id: responseData.messages[0]["message-id"],
+                        number: responseData.messages[0]["to"]
+                      };
+                      //Emit Data to the Client
+                      req.app.io.emit("smsStatus", data);
+                    }
+                  }
+                );
+              })
+              .catch(err => {
+                console.log(err);
+              });
           }
         });
 
@@ -51,24 +91,11 @@ router.post(
       .catch(err => {
         console.log(err);
       });
-
-    // nexmo.message.sendSms("Nexmo ", phone, text, (err, responseData) => {
-    //   if (err) {
-    //     console.log("err", err);
-    //   } else {
-    //     console.dir(responseData);
-    //     //Get Data from responseData
-    //     const data = {
-    //       id: responseData.messages[0]["message-id"],
-    //       number: responseData.messages[0]["to"]
-    //     };
-    //     //Emit Data to the Client
-    //     req.app.io.emit("smsStatus", data);
-    //   }
-    // });
-
-    // res.status(200).json({ msg: "ok" });
   }
 );
+
+// router.post('/code',(req,res)=>{
+
+// })
 
 module.exports = router;
