@@ -28,13 +28,10 @@ class SmsLogin extends Component {
   onSubmitCodeRequest = e => {
     e.preventDefault();
 
-    const text = "Your code will be  valid for 5 min";
-
     const { phone, email } = this.state;
     const data = {
       phone, //user phone number
-      email, // user email
-      text // text to be sent to user with code
+      email // user email
     };
     //sending phone number from form to phoneAction
     this.props.sendSmsCode(data, this.props.history);
@@ -48,7 +45,10 @@ class SmsLogin extends Component {
   //On Submitting Next code beed sent to userAction
   onSubmitCode = e => {
     e.preventDefault();
-    console.log("code", this.state.code);
+    const data = {
+      authCode: this.state.code
+    };
+    console.log("data", data);
   };
 
   //after recieving sms code user inters it in state
@@ -78,9 +78,18 @@ class SmsLogin extends Component {
         });
       }
     }
+    //this.state.email changed , data sends  to api
     if (prevState.email !== this.state.email) {
       const data = {
         email: this.state.email
+      };
+      this.props.sendSmsCode(data, this.props.history);
+    }
+
+    // this.state.code changed , data sends to api
+    if (prevState.code !== this.state.code) {
+      const data = {
+        email: this.state.code
       };
       this.props.sendSmsCode(data, this.props.history);
     }
@@ -91,7 +100,7 @@ class SmsLogin extends Component {
     console.log("this.props", this.props);
     console.log("this.state", this.state);
 
-    if (!number) {
+    if (number) {
       return (
         <div className="col-md-12 my-5 border">
           <div className="h3 text-center text-info">Login with SMS</div>
@@ -136,8 +145,6 @@ class SmsLogin extends Component {
               <div className="form-group my-3 ">
                 <input
                   type="number"
-                  max="6"
-                  min="6"
                   className="form-control form-control-lg"
                   name="code"
                   value={code}
