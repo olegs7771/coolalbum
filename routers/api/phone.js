@@ -7,6 +7,8 @@ const passport = require("passport");
 const User = require("../../models/User");
 const Nexmo = require("nexmo");
 var randomize = require("randomatic");
+const jwt = require("jsonwebtoken");
+const keys = require("../../config/dev_keys").secredOrKey;
 
 // init nexmo sms sending
 
@@ -41,9 +43,6 @@ router.post(
           } else {
             //randomatic gens  6 digit number
             const randomNum = randomize("0", 6);
-<<<<<<< HEAD
-            console.log(randomNum);
-=======
             res.status(200).json(randomNum);
             const objNum = {
               randomNum
@@ -86,7 +85,6 @@ router.post(
               .catch(err => {
                 console.log(err);
               });
->>>>>>> 5c5435054029ae662bca7fd5325214cb270bc4da
           }
         });
 
@@ -98,8 +96,31 @@ router.post(
   }
 );
 
-// router.post('/code',(req,res)=>{
+router.post("/code", (req, res) => {
+  console.log("req.body", req.body);
+  const randomNum = req.body.code;
+  User.findOne({ randomNum }).then(user => {
+    if (!user) {
+      return res.status(400).json({ code: "Wrong code" });
+    }
+    console.log("user", user);
 
-// })
+    //randomNum match! create token for further login
+    const payload = {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      avatar: user.avatar,
+      location: user.location,
+      bio: user.bio,
+      date: user.date
+    };
+    //creating token for exp 10h
+    jwt.sign(payload, keys, { expiresIn: 36000 }, (err, token) => {
+      res.json({ code: randomNum, token: "bearer  " + token });
+    });
+  });
+});
 
 module.exports = router;

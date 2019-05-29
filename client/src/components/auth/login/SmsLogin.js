@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { sendSmsCode } from "../../../actions/phoneAction";
+import { sendSmsCode, sendCode } from "../../../actions/phoneAction";
 //intl_phone_input
 import PhoneInput from "react-phone-number-input";
 import TextFormGroup from "../../textFormGroup/TextFormGroup";
@@ -89,9 +89,9 @@ class SmsLogin extends Component {
     // this.state.code changed , data sends to api
     if (prevState.code !== this.state.code) {
       const data = {
-        email: this.state.code
+        code: this.state.code
       };
-      this.props.sendSmsCode(data, this.props.history);
+      this.props.sendCode(data, this.props.history);
     }
   }
 
@@ -143,12 +143,13 @@ class SmsLogin extends Component {
               <span className="text-left h5">Enter 6 Digits Code</span>
 
               <div className="form-group my-3 ">
-                <input
+                <TextFormGroup
                   type="number"
                   className="form-control form-control-lg"
                   name="code"
                   value={code}
                   onChange={this.onChangeCode}
+                  error={errors.code}
                 />
                 <button
                   type="submit"
@@ -171,5 +172,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { sendSmsCode }
+  { sendSmsCode, sendCode }
 )(withRouter(SmsLogin));
