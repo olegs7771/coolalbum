@@ -70,6 +70,49 @@ export const sendCode = (data, history) => dispatch => {
     });
 };
 
+//checks if email valid onChange
+export const isEmailvalid = data => dispatch => {
+  dispatch(clearErrors());
+  dispatch(clearMessages());
+  axios
+    .post("/api/phone/isEmailValid", data)
+    .then(res => {
+      console.log("res.data", res.data);
+      dispatch({
+        type: GET_MESSAGE,
+        payload: res.data
+      });
+    })
+    .catch(err => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
+    });
+};
+
+//checks if phone valid onChange
+export const isPhonevalid = data => dispatch => {
+  dispatch(clearErrors());
+  dispatch(clearMessages());
+
+  axios
+    .post("/api/phone/isPhoneValid", data)
+    .then(res => {
+      console.log("res.data", res.data);
+      dispatch({
+        type: GET_MESSAGE,
+        payload: res.data
+      });
+    })
+    .catch(err => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
+    });
+};
+
 // Clear Errors
 export const clearErrors = () => dispatch => {
   return dispatch({

@@ -7,6 +7,8 @@ import Header from "./components/layout/Header";
 import Main from "./components/layout/main/Main";
 import Register from "./components/auth/register/Register";
 import Login from "./components/auth/login/Login";
+import RecoverPassword from "./components/auth/login/RecoverPassword";
+import RecoverNewPassword from "./components/auth/login/RecoverNewPassword";
 import SuccessRegMsg from "./utils/SuccessRegMsg";
 //here comes confirmation for registartion
 import ConfirmRegister from "./utils/ConfirmRegister";
@@ -65,6 +67,12 @@ class App extends Component {
               <Switch>
                 <Route exact path="/" component={Main} />
                 <Route exact path="/login" component={Login} />
+                <Route exact path="/recover_pass" component={RecoverPassword} />
+                <Route
+                  exact
+                  path="/recover_newPass/:token/:_id"
+                  component={RecoverNewPassword}
+                />
                 <Route exact path="/register" component={Register} />
                 <Route exact path="/success_msg" component={SuccessRegMsg} />
                 <Route

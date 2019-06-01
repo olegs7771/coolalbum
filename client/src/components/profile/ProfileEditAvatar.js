@@ -1,18 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import {
-  getProfile,
-  deleteProfile,
-  updateAvatar,
-  clearErrors
-} from "../../actions/profileAction";
+import { getProfile } from "../../actions/profileAction";
 import { withRouter } from "react-router-dom";
 
 class ProfileEditAvatar extends Component {
   constructor(props) {
     super(props);
-    // console.log("props", props);
+    console.log("props", props);
 
     this.state = {
       errors: {},
@@ -130,5 +125,5 @@ const mapStateToProps = state => ({
 });
 export default connect(
   mapStateToProps,
-  { getProfile, deleteProfile, updateAvatar, clearErrors }
+  { getProfile }
 )(withRouter(ProfileEditAvatar));

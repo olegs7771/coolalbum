@@ -26,24 +26,19 @@ router.post(
 
   (req, res) => {
     console.log("req.body", req.body);
+    if (req.body.email === "") {
+      return res.status(400).json({ loginSmsEmail: "No email" });
+    }
     const email = req.body.email;
     User.findOne({ email })
       .then(user => {
-        console.log("user", user);
-        if (!user) {
-          return res.status(400).json({ loginSmsEmail: "No Such E-mail" });
-        }
-        //user been found
-        // res.status(200).json({ message: "Email is validated!" });
         const phone = req.body.phone;
-        //Check for User's phone number
-        User.findOne({ phone }).then(user => {
-          if (!user) {
-            return res.status(400).json({ phone: "not valid number" });
-          } else {
+        if (phone) {
+          //Check for User's phone number
+          User.findOne({ phone }).then(user => {
             //randomatic gens  6 digit number
             const randomNum = randomize("0", 6);
-            res.status(200).json(randomNum);
+
             const objNum = {
               randomNum
             };
@@ -85,10 +80,8 @@ router.post(
               .catch(err => {
                 console.log(err);
               });
-          }
-        });
-
-        const text = req.body.text;
+          });
+        }
       })
       .catch(err => {
         console.log(err);
@@ -119,7 +112,45 @@ router.post("/code", (req, res) => {
     //creating token for exp 10h
     jwt.sign(payload, keys, { expiresIn: 36000 }, (err, token) => {
       res.json({ code: randomNum, token: "bearer  " + token });
+      // delete rendomNum in db
+      const delNum = {
+        randomNum: ""
+      };
+      User.findOneAndUpdate(
+        { email },
+        {
+          $set: delNum
+        },
+
+        { new: true }
+      ).then(update => {
+        console.log(update);
+      });
     });
+  });
+});
+
+//check if email is valid onChange
+router.post("/isEmailValid", (req, res) => {
+  const email = req.body.email;
+  User.findOne({ email }).then(user => {
+    if (!user) {
+      return res.status(400).json({ loginSmsEmail: "No Such E-mail" });
+    }
+    res.status(200).json({ message: "Email is validated!" });
+  });
+});
+//check if phone is valid onChange
+router.post("/isPhoneValid", (req, res) => {
+  console.log("req.body", req.body);
+
+  const phone = req.body.phone;
+  User.findOne({ phone }).then(user => {
+    if (!user) {
+      return res.status(400).json({ phone: "not valid number" });
+    } else {
+      res.status(200).json({ phone: "Number is valid!" });
+    }
   });
 });
 

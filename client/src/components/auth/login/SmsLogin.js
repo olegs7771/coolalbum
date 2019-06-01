@@ -1,7 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { sendSmsCode, sendCode } from "../../../actions/phoneAction";
+import {
+  sendSmsCode,
+  sendCode,
+  isEmailvalid,
+  isPhonevalid
+} from "../../../actions/phoneAction";
 //intl_phone_input
 import PhoneInput from "react-phone-number-input";
 import TextFormGroup from "../../textFormGroup/TextFormGroup";
@@ -77,13 +82,24 @@ class SmsLogin extends Component {
           errors: {}
         });
       }
+      if (Object.keys(this.state.errors).length > 0) {
+        this.setState({
+          messages: {}
+        });
+      }
     }
     //this.state.email changed , data sends  to api
     if (prevState.email !== this.state.email) {
       const data = {
         email: this.state.email
       };
-      this.props.sendSmsCode(data, this.props.history);
+      this.props.isEmailvalid(data, this.props.history);
+    }
+    if (prevState.phone !== this.state.phone) {
+      const data = {
+        phone: this.state.phone
+      };
+      this.props.isPhonevalid(data, this.props.history);
     }
 
     // this.state.code changed , data sends to api
@@ -100,7 +116,7 @@ class SmsLogin extends Component {
     console.log("this.props", this.props);
     console.log("this.state", this.state);
 
-    if (number) {
+    if (!number) {
       return (
         <div className="col-md-12 my-5 border">
           <div className="h3 text-center text-info">Login with SMS</div>
@@ -115,15 +131,18 @@ class SmsLogin extends Component {
                 error={errors.loginSmsEmail}
                 message={messages.message}
               />
-              {errors.email ? <div>{errors.email}</div> : null}
+
               <span className="text-left h5">Enter your phone number</span>
               <div className="form-group my-3 ">
                 <PhoneInput
                   placeholder="Enter phone number"
                   value={phone}
+                  name="phone"
                   onChange={phone => this.setState({ phone })}
                   className="form-control form-control-lg "
                 />
+                <div className="text-danger">{errors.phone}</div>
+                <div className="text-success">{messages.phone}</div>
                 <button
                   type="submit"
                   className="btn btn-block btn-primary mt-1"
@@ -150,6 +169,7 @@ class SmsLogin extends Component {
                   value={code}
                   onChange={this.onChangeCode}
                   error={errors.code}
+                  message={messages.code}
                 />
                 <button
                   type="submit"
@@ -172,5 +192,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { sendSmsCode, sendCode }
+  { sendSmsCode, sendCode, isEmailvalid, isPhonevalid }
 )(withRouter(SmsLogin));
