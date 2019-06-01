@@ -7,6 +7,9 @@ import ProfileEditAvatar from "../../profile/ProfileEditAvatar";
 import { updateUser } from "../../../actions/userActions";
 
 import { getProfile } from "../../../actions/profileAction";
+//intl_phone_input
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
 
 class UserCardEdit extends Component {
   state = {
@@ -15,6 +18,7 @@ class UserCardEdit extends Component {
     avatar: "",
     bio: "",
     location: "",
+    phone: "",
     errors: {},
     message: {},
     isConfirmDelete: false
@@ -80,8 +84,9 @@ class UserCardEdit extends Component {
       email,
       bio,
       location,
+      phone,
       errors,
-      isConfirmDelete,
+
       message,
       avatar
     } = this.state;
@@ -127,6 +132,18 @@ class UserCardEdit extends Component {
                 error={errors.bio}
                 info="You can write a  some basic information about yourself"
               />
+              <div className="mx-auto">
+                <PhoneInput
+                  placeholder="Enter phone number"
+                  value={phone}
+                  onChange={phone => this.setState({ phone })}
+                  className="form-control"
+                />{" "}
+                <br />
+                <div className="my-2">
+                  Your number needed for login with SMS (Optinal)
+                </div>
+              </div>
               <button type="submit" className="btn btn-dark btn-lg my-4">
                 Edit
               </button>

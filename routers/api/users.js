@@ -11,21 +11,24 @@ const passport = require("passport");
 const validateRegisterInput = require("../validation/register");
 const validateLoginInput = require("../validation/login");
 const sendMail = require("../../mailer/transporter");
-const isEmpty = require("../validation/isEmpty");
+
+const validator = require("validator");
 
 // @desc /Register New User
 // @route POST /api/users/register
 // @access Public
 
 router.post("/register", (req, res) => {
-  //First line of validation
-
   const { errors, isValid } = validateRegisterInput(req.body);
+
+  console.log("req.body", req.body);
+
   if (!isValid) {
     return res.status(400).json(errors);
   }
+  const email = req.body.email;
 
-  User.findOne({ email: req.body.email }).then(user => {
+  User.findOne({ email }).then(user => {
     if (user) {
       return res.status(400).json({ msg: "User Exists" });
     } else {
@@ -60,17 +63,16 @@ router.post("/register", (req, res) => {
         newUser.save().then(user => {
           //create data object for mailer trasporter
 
-          const text = ` Dear ${
-            req.body.name
-          } Please confirm your registration in 12 hours period from now by click on following URL`;
           const urlConfirm = `https://localhost:3000/confirm_registration/${
             user.token
           }/${user._id}`;
+          const register = "Register";
           const data = {
             token: user.token,
             name: user.name,
             email: user.email,
-            text,
+            register,
+
             URL: urlConfirm
           };
           sendMail(data, response => {
@@ -254,8 +256,6 @@ router.post(
   "/update",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    console.log("req.body", req.body);
-    console.log("req.user", req.user);
     const upUser = {
       name: req.body.name,
       email: req.body.email,
@@ -284,7 +284,7 @@ router.post(
 //check if Email exists for login form
 
 router.post("/email", (req, res) => {
-  console.log("req.body", req.body);
+  // console.log("req.body", req.body);
   const email = req.body.email;
   User.findOne({ email }).then(user => {
     if (!user) {
@@ -293,6 +293,91 @@ router.post("/email", (req, res) => {
       res.status(200).json({ loginEmail: "Email is valid" });
     }
   });
+});
+
+//send user email with password recovery instructions
+router.post("/recover", (req, res) => {
+  console.log("req.body", req.body);
+  if (!req.body.email) {
+    return res.status(400).json({ loginEmail: "Please fill in Email address" });
+  }
+  const email = req.body.email;
+  User.findOne({ email }).then(user => {
+    if (user) {
+      console.log("user", user);
+      //creating body for email
+      const payload = {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        location: user.location,
+        avatar: user.avatar,
+        date: user.date,
+        location: user.location,
+        bio: user.location
+      };
+      jwt.sign(payload, keys, { expiresIn: 3600 }, (err, token) => {
+        // res.json({ success: true, token: "bearer  " + token });
+
+        const URL = `https://localhost:3000/recover_newPass/${token}/${
+          user._id
+        }`;
+        const name = user.name;
+        const recover = "Recover";
+
+        const data = {
+          URL,
+          name,
+          recover
+        };
+        sendMail(data, response => {
+          console.log(response.messageId);
+          if (response.messageId) {
+            res.console.log("mail been sent");
+          }
+        });
+      });
+    }
+  });
+});
+
+//check if password1 valid onChange
+router.post("/password", (req, res) => {
+  console.log("req.body", req.body);
+  const passport1 = req.body.password1;
+  if (req.body.password1) {
+    if (req.body.password1.length < 6) {
+      return res.status(400).json({ password1: "Too short" });
+    }
+    if (req.body.password1.length > 8) {
+      return res.status(400).json({ password1: "Too long" });
+    }
+    res.status(200).json({ password1: "Valid" });
+  }
+});
+
+//matching passwords
+router.post("/match", (req, res) => {
+  if (req.body.password1.length === 0) {
+    return res.status(400).json({ password1: "empty field" });
+  }
+  if (req.body.password2.length === 0) {
+    return res.status(400).json({ password2: "empty field" });
+  }
+
+  if (req.body.password1 !== req.body.password2) {
+    return res
+      .status(400)
+      .json({ password1: "No match", password2: "No match" });
+  } else {
+    // both passwords had been matched
+    const email = req.body.email;
+    console.log("email", email);
+
+    // User.findOneAndUpdate({email},{
+    //   $
+    // })
+  }
 });
 
 module.exports = router;

@@ -2,7 +2,7 @@ const nodemailer = require("nodemailer");
 const mailPass = require("../config/dev_keys").mailPass;
 
 module.exports = function sendMail(data, cb) {
-  //create htmlBody
+  //create htmlBody for email (contact us)
   const htmlBody = `<b>From</b>
    <ul className='list-group'>
 
@@ -17,12 +17,22 @@ module.exports = function sendMail(data, cb) {
   We have received  a request to authorize this email on CoolAlbum website
   Please  <a href=${data.URL}>confirm</a>   to complete your registration
   `;
+  // create htmlBody for recovering password
+  const htmlRecoverBody = `Dear ${data.name}, please <a href=${
+    data.URL
+  }>follow this</a>  link to create your new password.
+  `;
+
   let html;
 
-  if (data.token) {
+  if (data.register) {
     html = htmlRegBody;
-  } else {
+  }
+  if (data.name) {
     html = htmlBody;
+  }
+  if (data.recover) {
+    html = htmlRecoverBody;
   }
 
   let transporter = nodemailer.createTransport({
@@ -42,7 +52,7 @@ module.exports = function sendMail(data, cb) {
     {
       from: '"CoolAlbum 👻" <coolalbum@coolalbum.info>', // sender address
       to: "olegs777@bezeqint.net", // list of receivers
-      subject: "Greate Opportunity", // Subject line
+      subject: "CoolAlbum", // Subject line
       text: "Hello world?", // plain text body
       html // html body
     },

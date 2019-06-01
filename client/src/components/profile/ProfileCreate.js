@@ -7,9 +7,9 @@ import {
   clearErrors
 } from "../../actions/profileAction";
 import { withRouter } from "react-router-dom";
-import ProfileEditAvatar from "./ProfileEditAvatar";
+
 //intl_phone_input
-import PhoneInput from "react-phone-number-input";
+
 import "react-phone-number-input/style.css";
 
 class ProfileCreate extends Component {
@@ -69,7 +69,7 @@ class ProfileCreate extends Component {
       // avatar,
       status,
       location,
-      phone,
+
       errors,
       message
     } = this.state;
@@ -125,29 +125,11 @@ class ProfileCreate extends Component {
                     onChange={this.onChange}
                     error={errors.location}
                   />
-                  <div className="mx-auto">
-                    <PhoneInput
-                      placeholder="Enter phone number"
-                      value={phone}
-                      onChange={phone => this.setState({ phone })}
-                    />{" "}
-                    <br />
-                    <div className="my-2">
-                      Your number needed for login with SMS (Optinal)
-                    </div>
-                  </div>
 
                   <button type="submit" className="btn btn-info">
                     Create
                   </button>
                 </form>
-              </div>
-            </div>
-
-            <div className="col-md-4 ">
-              <div className="container">
-                <span className="h5 d-block ">Edit Avatar</span>
-                <ProfileEditAvatar avatar={this.props.user.avatar} />
               </div>
             </div>
           </div>
