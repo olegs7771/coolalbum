@@ -2,11 +2,12 @@ import React, { Component } from "react";
 import TextFormGroup from "../../textFormGroup/TextFormGroup";
 import jwt_decode from "jwt-decode";
 import { connect } from "react-redux";
-import { isPassValid } from "../../../actions/userActions";
+import { isPassValid, isMatchedPass } from "../../../actions/userActions";
 
 class RecoverNewPassword extends Component {
   state = {
     name: "",
+    email: "",
     password1: "",
     password2: "",
     errors: {},
@@ -14,11 +15,12 @@ class RecoverNewPassword extends Component {
   };
 
   componentDidMount() {
-    console.log("params", this.props.match.params);
+    // console.log("params", this.props.match.params);
     const decoded = jwt_decode(this.props.match.params.token);
-    console.log("decoded", decoded);
+    // console.log("decoded", decoded);
     this.setState({
-      name: decoded.name
+      name: decoded.name,
+      email: decoded.email
     });
   }
 
@@ -35,18 +37,17 @@ class RecoverNewPassword extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps !== this.props) {
+    if (prevProps.errors !== this.props.errors) {
       this.setState({
-        errors: this.props.errors,
-        message: this.props.message
+        errors: this.props.errors
       });
-      //clear this.state.errors if this.state.messages obj>0
-      if (Object.keys(this.state.messages).length > 0) {
-        this.setState({
-          errors: {}
-        });
-      }
     }
+    if (prevProps.message !== this.props.message) {
+      this.setState({
+        messages: this.props.message
+      });
+    }
+
     if (prevState.password1 !== this.state.password1) {
       const data = {
         password1: this.state.password1
@@ -54,10 +55,33 @@ class RecoverNewPassword extends Component {
 
       this.props.isPassValid(data);
     }
+    if (prevState.password2 !== this.state.password2) {
+      const data = {
+        password2: this.state.password2
+      };
+
+      this.props.isPassValid(data);
+    }
   }
+  //on submit form form mattching
+  onSubmitPassword = e => {
+    e.preventDefault();
+    console.log("submitted");
+    const data = {
+      password1: this.state.password1,
+      password2: this.state.password2,
+      email: this.state.email
+    };
+    //we add email of user for further findAndUpdate({email})
+
+    this.props.isMatchedPass(data);
+  };
 
   render() {
     const { name, password1, password2, errors, messages } = this.state;
+    console.log("this.props", this.props);
+    console.log("this.state", this.state);
+
     return (
       <div>
         {" "}
@@ -70,22 +94,22 @@ class RecoverNewPassword extends Component {
             Please provide your e-mail address on which we will send you further
             instructions.
           </p>
-          <form onSubmit={this.onSubmitMail}>
+          <form onSubmit={this.onSubmitPassword}>
             <TextFormGroup
               placeholder="new password"
               value={password1}
               name="password1"
               onChange={this.onChangePassword1}
-              error={errors.loginEmail}
-              message={messages.loginEmail}
+              error={errors.password1}
+              message={messages.password1}
             />
             <TextFormGroup
               placeholder="confirm password"
               value={password2}
               name="password2"
               onChange={this.onChangePassword2}
-              error={errors.loginEmail}
-              message={messages.loginEmail}
+              error={errors.password2}
+              message={messages.password2}
             />
             <button type="submit" className="btn btn-block btn-dark">
               Confirm
@@ -102,5 +126,5 @@ const mapStateToProps = state => ({
 });
 export default connect(
   mapStateToProps,
-  { isPassValid }
+  { isPassValid, isMatchedPass }
 )(RecoverNewPassword);

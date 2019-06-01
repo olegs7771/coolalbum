@@ -86,7 +86,7 @@ class UserCardEdit extends Component {
       location,
       phone,
       errors,
-      isConfirmDelete,
+
       message,
       avatar
     } = this.state;

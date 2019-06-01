@@ -341,11 +341,42 @@ router.post("/recover", (req, res) => {
   });
 });
 
-//check if password valid onChange
+//check if password1 valid onChange
 router.post("/password", (req, res) => {
   console.log("req.body", req.body);
-  if (validator.isEmpty(req.body.password1)) {
-    console.log("empty");
+  const passport1 = req.body.password1;
+  if (req.body.password1) {
+    if (req.body.password1.length < 6) {
+      return res.status(400).json({ password1: "Too short" });
+    }
+    if (req.body.password1.length > 8) {
+      return res.status(400).json({ password1: "Too long" });
+    }
+    res.status(200).json({ password1: "Valid" });
+  }
+});
+
+//matching passwords
+router.post("/match", (req, res) => {
+  if (req.body.password1.length === 0) {
+    return res.status(400).json({ password1: "empty field" });
+  }
+  if (req.body.password2.length === 0) {
+    return res.status(400).json({ password2: "empty field" });
+  }
+
+  if (req.body.password1 !== req.body.password2) {
+    return res
+      .status(400)
+      .json({ password1: "No match", password2: "No match" });
+  } else {
+    // both passwords had been matched
+    const email = req.body.email;
+    console.log("email", email);
+
+    // User.findOneAndUpdate({email},{
+    //   $
+    // })
   }
 });
 

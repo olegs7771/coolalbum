@@ -9,7 +9,7 @@ import {
 import { withRouter } from "react-router-dom";
 
 //intl_phone_input
-import PhoneInput from "react-phone-number-input";
+
 import "react-phone-number-input/style.css";
 
 class ProfileCreate extends Component {
@@ -69,7 +69,7 @@ class ProfileCreate extends Component {
       // avatar,
       status,
       location,
-      phone,
+
       errors,
       message
     } = this.state;

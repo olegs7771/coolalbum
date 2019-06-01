@@ -231,6 +231,8 @@ export const recoverPass = (data, history) => dispatch => {
 //password recovery onChange
 
 export const isPassValid = data => dispatch => {
+  dispatch(clearErrors());
+  dispatch(clearMessages());
   console.log("data", data);
   axios
     .post("/api/users/password", data)
@@ -242,6 +244,29 @@ export const isPassValid = data => dispatch => {
       });
     })
     .catch(err => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
+    });
+};
+
+//match pawwords isMatched
+export const isMatchedPass = data => dispatch => {
+  console.log("data", data);
+  axios
+    .post("/api/users/match", data)
+    .then(res => {
+      console.log("res.data", res.data);
+
+      dispatch({
+        type: GET_MESSAGE,
+        payload: res.data
+      });
+    })
+    .catch(err => {
+      console.log("err", err.response.data);
+
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
