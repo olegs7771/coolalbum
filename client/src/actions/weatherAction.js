@@ -6,11 +6,10 @@ import {
 import axios from "axios";
 
 //Get Geo from Ip
-export const getGeoFromIp = data => dispatch => {
-  console.log("data", data);
+export const getGeoFromIp = () => dispatch => {
   dispatch(setWeatherLoading());
   axios
-    .post("/api/weather/geo", data)
+    .post("/api/weather/geo")
     .then(res => {
       console.log("res.data", res.data);
       dispatch({
