@@ -17,7 +17,7 @@ export const GET_MESSAGE = "GET_MESSAGE";
 export const CLEAR_MESSAGE = "CLEAR_MESSAGE";
 //SMS
 export const SEND_SMS = "SEND_SMS";
-//Geo from IP
-export const GET_GEO = "GET_GEO";
+
 //Weather
+export const LOADING_CURRENT_WEATHER = "LOADING_CURRENT_WEATHER ";
 export const GET_CURRENT_WEATHER = "GET_CURRENT_WEATHER ";

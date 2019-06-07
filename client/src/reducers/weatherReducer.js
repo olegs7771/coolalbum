@@ -1,22 +1,20 @@
-import { MESSAGE_MAIL_SENT, MESSAGE_MAIL_LOADING } from "../actions/types";
+import { LOADING_CURRENT_WEATHER, GET_CURRENT_WEATHER } from "../actions/types";
 
 const initialState = {
-  message: null,
+  weather: null,
   loading: false
 };
 export default function(state = initialState, action) {
   switch (action.type) {
-    case MESSAGE_MAIL_LOADING:
+    case LOADING_CURRENT_WEATHER:
       return {
         ...state,
         loading: true
       };
-
-    case MESSAGE_MAIL_SENT:
+    case GET_CURRENT_WEATHER:
       return {
         ...state,
-        message: action.payload,
-        loading: true
+        loading: false
       };
 
     default:

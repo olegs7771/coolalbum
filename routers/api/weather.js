@@ -11,7 +11,7 @@ router.post("/geo", (req, res) => {
   const ip_info = get_ip(req);
   console.log("ip_info ", ip_info);
 
-  const allData = geoip.allData(req.body.ip);
+  const allData = geoip.allData(ip_info.clientIp);
   res.status(200).json({
     response: allData
   });
