@@ -31,10 +31,8 @@ class Header extends Component {
       this.props.setCurrentUser(decodedToken);
     }
     // Fetch Weather API from OPEN WEATHER MAP
-    const data = {
-      ip: "84.109.36.175"
-    };
-    this.props.getGeoFromIp(data);
+
+    this.props.getGeoFromIp();
   }
 
   render() {
