@@ -304,7 +304,6 @@ router.post("/recover", (req, res) => {
   const email = req.body.email;
   User.findOne({ email }).then(user => {
     if (user) {
-      console.log("user", user);
       //creating body for email
       const payload = {
         id: user._id,
@@ -333,7 +332,13 @@ router.post("/recover", (req, res) => {
         sendMail(data, response => {
           console.log(response.messageId);
           if (response.messageId) {
-            res.console.log("mail been sent");
+            console.log("response from mailer", response);
+
+            res.status(200).json({
+              loginEmail: `Message with a recovery instructions has been sent to ${
+                response.envelope.to
+              }. Please check Email`
+            });
           }
         });
       });
@@ -372,11 +377,36 @@ router.post("/match", (req, res) => {
   } else {
     // both passwords had been matched
     const email = req.body.email;
-    console.log("email", email);
+    //hash new password before $set in db
+    const saltRounds = 10;
+    bcrypt.genSalt(saltRounds, (err, salt) => {
+      bcrypt.hash(req.body.password2, salt, (err, hash) => {
+        if (err) {
+          console.log("err", err);
+        }
+        console.log("hash", hash);
+        console.log("email", email);
 
-    // User.findOneAndUpdate({email},{
-    //   $
-    // })
+        const password = hash;
+        const set = {
+          password
+        };
+
+        User.findOneAndUpdate(
+          { email },
+          {
+            $set: set
+          },
+          { new: true }
+        ).then(upUser => {
+          console.log("upUser", upUser);
+          res.status(200).json({
+            message:
+              "Your password been successfully updated. You can log in with your new password"
+          });
+        });
+      });
+    });
   }
 });
 
