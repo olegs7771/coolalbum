@@ -1,10 +1,19 @@
-import { GET_ERRORS, SET_CURRENT_USER, LOGOUT_USER } from "./types";
+import {
+  GET_ERRORS,
+  CLEAR_ERRORS,
+  SET_CURRENT_USER,
+  LOGOUT_USER,
+  GET_MESSAGE,
+  CLEAR_MESSAGE
+} from "./types";
 import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
 
 //Register New User
 export const registerUser = (userData, history) => dispatch => {
+  console.log("userData", userData);
+  dispatch(deleteErrors());
   axios
     .post("api/users/register", userData)
     .then(res => {
@@ -103,6 +112,8 @@ export const setCurrentUser = decoded => {
 
 //Register with password-facebook-token
 export const authFacebook = (userData, history) => dispatch => {
+  console.log("userData", userData);
+
   axios
     .post("/api/users/auth/facebook", { access_token: userData })
     .then(res => {
@@ -124,4 +135,154 @@ export const authFacebook = (userData, history) => dispatch => {
         payload: err.response.data
       });
     });
+};
+
+//Update Registered User with new data
+
+export const updateUser = (userData, history) => dispatch => {
+  console.log("userData", userData);
+
+  axios
+    .post("/api/users/update", userData)
+    .then(res => {
+      console.log("res.data", res.data);
+      dispatch({
+        type: GET_MESSAGE,
+        payload: res.data
+      });
+    })
+    .then(() => {
+      setTimeout(() => {
+        console.log("userData", userData);
+
+        // Remove jwtToken from localStorage
+        localStorage.removeItem("jwtToken");
+        //Remove auth header for future request
+        setAuthToken(false);
+        //Set current user to {} which will set isAuthenticated to false
+        dispatch({
+          type: LOGOUT_USER,
+          payload: {}
+        });
+
+        //relogin update user
+
+        history.push("/login");
+      }, 5000);
+    })
+    .catch(err => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
+    });
+};
+
+export const deleteErrors = () => dispatch => {
+  dispatch({
+    type: CLEAR_ERRORS
+  });
+};
+
+//login check if user exists
+export const isEmailExists = data => dispatch => {
+  console.log("email", data);
+  dispatch(clearErrors());
+  dispatch(clearMessages());
+
+  axios
+    .post("/api/users/email", data)
+    .then(res => {
+      console.log("res.data", res.data);
+      dispatch(clearErrors());
+      dispatch({
+        type: GET_MESSAGE,
+        payload: res.data
+      });
+    })
+    .catch(err => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
+    });
+};
+
+//sending user instructions on recovering password
+export const recoverPass = (data, history) => dispatch => {
+  console.log("data", data);
+  axios
+    .post("/api/users/recover", data)
+    .then(res => {
+      console.log("res.data", res.data);
+      dispatch({
+        type: GET_MESSAGE,
+        payload: res.data
+      });
+    })
+    .catch(err => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
+    });
+};
+
+//password recovery onChange
+
+export const isPassValid = data => dispatch => {
+  dispatch(clearErrors());
+  dispatch(clearMessages());
+  console.log("data", data);
+  axios
+    .post("/api/users/password", data)
+    .then(res => {
+      console.log("res.data", res.data);
+      dispatch({
+        type: GET_MESSAGE,
+        payload: res.data
+      });
+    })
+    .catch(err => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
+    });
+};
+
+//match pawwords isMatched
+export const isMatchedPass = data => dispatch => {
+  console.log("data", data);
+  axios
+    .post("/api/users/match", data)
+    .then(res => {
+      console.log("res.data", res.data);
+
+      dispatch({
+        type: GET_MESSAGE,
+        payload: res.data
+      });
+    })
+    .catch(err => {
+      console.log("err", err.response.data);
+
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
+    });
+};
+
+// Clear Errors
+export const clearErrors = () => dispatch => {
+  return dispatch({
+    type: CLEAR_ERRORS
+  });
+};
+// Clear Messages
+export const clearMessages = () => dispatch => {
+  return dispatch({
+    type: CLEAR_MESSAGE
+  });
 };

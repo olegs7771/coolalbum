@@ -1,21 +1,24 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { reactLocalStorage } from "reactjs-localstorage";
 import TextFormGroup from "../../textFormGroup/TextFormGroup";
+import TextAreaFormGroup from "../../textFormGroup/TextAreaFormGroup";
 import ProfileEditAvatar from "../../profile/ProfileEditAvatar";
+import { updateUser } from "../../../actions/userActions";
 
-import {
-  createProfile,
-  getProfile,
-  deleteProfile
-} from "../../../actions/profileAction";
+import { getProfile } from "../../../actions/profileAction";
+//intl_phone_input
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
 
 class UserCardEdit extends Component {
   state = {
     name: "",
     email: "",
     avatar: "",
-    status: "",
+    bio: "",
     location: "",
+    phone: "",
     errors: {},
     message: {},
     isConfirmDelete: false
@@ -27,11 +30,25 @@ class UserCardEdit extends Component {
   };
 
   componentDidMount() {
+    const token = reactLocalStorage.get("jwtToken");
+    console.log("token", token);
+
     //trigger getProfile();
     const id = {
       id: this.props.match.params.id
     };
     this.props.getProfile(id);
+
+    //get user creds from props to state
+    if (Object.keys(this.props.user).length > 0) {
+      this.setState({
+        location: this.props.user.location,
+        name: this.props.user.name,
+        email: this.props.user.email,
+        bio: this.props.user.bio,
+        avatar: this.props.user.avatar
+      });
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -45,35 +62,31 @@ class UserCardEdit extends Component {
         message: this.props.message
       });
     }
-    if (this.props.user !== prevProps.user) {
-      const user = this.props.user;
-
-      if (user) {
-        this.setState({
-          name: user.name,
-          email: user.email,
-          status: user.status,
-          location: user.location
-        });
-      }
-
-      // { Here we obtain Avatar string from User}
-      if (this.props.user) {
-        this.setState({
-          avatar: this.props.user.avatar
-        });
-      }
-    }
   }
+  //after submit user been update in db
+
+  onSubmitUpdateUser = e => {
+    const { name, email, bio, location } = this.state;
+    e.preventDefault();
+
+    const upUser = {
+      name,
+      email,
+      bio,
+      location
+    };
+    this.props.updateUser(upUser, this.props.history);
+  };
 
   render() {
     const {
       name,
       email,
-      status,
+      bio,
       location,
+      phone,
       errors,
-      isConfirmDelete,
+
       message,
       avatar
     } = this.state;
@@ -83,37 +96,58 @@ class UserCardEdit extends Component {
     return (
       <div>
         <div className="h4 my-4">Edit User Card </div>
-
+        {message.user ? (
+          <div className="my-3 text-success"> {message.user}</div>
+        ) : null}
         <div className="row">
           <div className="col-md-8  mt-4">
-            <TextFormGroup
-              label="Name"
-              value={name}
-              name="name"
-              onChange={this.onChange}
-              error={errors.name}
-            />
-            <TextFormGroup
-              label="Email"
-              value={email}
-              name="email"
-              onChange={this.onChange}
-              error={errors.email}
-            />
-            <TextFormGroup
-              label="Status"
-              value={status}
-              name="status"
-              onChange={this.onChange}
-              error={errors.status}
-            />
-            <TextFormGroup
-              label="Location"
-              value={location}
-              name="location"
-              onChange={this.onChange}
-              error={errors.location}
-            />
+            <form onSubmit={this.onSubmitUpdateUser}>
+              <TextFormGroup
+                label="Name"
+                value={name}
+                name="name"
+                onChange={this.onChange}
+                error={errors.name}
+              />
+              <TextFormGroup
+                label="Email"
+                value={email}
+                name="email"
+                onChange={this.onChange}
+                error={errors.email}
+              />
+              <TextFormGroup
+                label="Location"
+                value={location}
+                name="location"
+                onChange={this.onChange}
+                error={errors.location}
+              />
+              <TextAreaFormGroup
+                label="Bio"
+                placeholder="write about yourself something..."
+                value={bio}
+                name="bio"
+                onChange={this.onChange}
+                error={errors.bio}
+                info="You can write a  some basic information about yourself"
+              />
+              <div className="mx-auto">
+                <PhoneInput
+                  placeholder="Enter phone number"
+                  value={phone}
+                  onChange={phone => this.setState({ phone })}
+                  className="form-control"
+                />{" "}
+                <br />
+                <div className="my-2">
+                  Your number needed for login with SMS (Optinal)
+                </div>
+              </div>
+              <button type="submit" className="btn btn-dark btn-lg my-4">
+                Edit
+              </button>
+            </form>
           </div>
           <div className="col-md-4">
             <div className="h5 text-center my-3">Edit Avatar</div>
@@ -134,5 +168,5 @@ const mapStateToProps = state => ({
 });
 export default connect(
   mapStateToProps,
-  { createProfile, getProfile, deleteProfile }
+  { updateUser, getProfile }
 )(UserCardEdit);

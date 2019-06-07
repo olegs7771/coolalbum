@@ -2,25 +2,47 @@ import React, { Component } from "react";
 import TextFormGroup from "../../textFormGroup/TextFormGroup";
 
 import { connect } from "react-redux";
-import { loginUser } from "../../../actions/userActions";
+import { loginUser, isEmailExists } from "../../../actions/userActions";
+
 import { withRouter } from "react-router-dom";
 
 class LoginForm extends Component {
   state = {
     email: "",
     password: "",
-    errors: {}
+    errors: {},
+    message: {}
   };
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     if (prevProps !== this.props) {
       this.setState({
-        errors: this.props.errors
+        errors: this.props.errors,
+        message: this.props.message
       });
+      //clear this.state.errors if this.state.messages obj>0
+      if (Object.keys(this.state.message).length > 0) {
+        this.setState({
+          errors: {}
+        });
+      }
+    }
+    if (prevState.email !== this.state.email) {
+      const data = {
+        email: this.state.email
+      };
+      this.props.isEmailExists(data, this.props.history);
     }
   }
 
   onChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  };
+
+  //Intering Email field for sending to fetch code
+  onChangeMail = e => {
     this.setState({
       [e.target.name]: e.target.value
     });
@@ -39,7 +61,7 @@ class LoginForm extends Component {
   };
 
   render() {
-    const { email, password, errors } = this.state;
+    const { email, password, errors, message } = this.state;
 
     return (
       <div>
@@ -52,8 +74,9 @@ class LoginForm extends Component {
                 type="email"
                 value={email}
                 name="email"
-                onChange={this.onChange}
-                error={errors.email}
+                onChange={this.onChangeMail}
+                error={errors.loginEmail}
+                message={message.loginEmail}
               />
               <TextFormGroup
                 placeholder="Password..."
@@ -63,6 +86,14 @@ class LoginForm extends Component {
                 error={errors.password}
               />
 
+              <div className="form-check form-check-inline my-4">
+                <input className="form-check-input" type="checkbox" value="" />
+                <label className="form-check-label">Remember me</label>
+              </div>
+              <a href="/recover_pass" className="ml-4">
+                Forgot password?
+              </a>
+              <br />
               <button className="btn btn-dark">Login</button>
             </form>
           </div>
@@ -72,10 +103,11 @@ class LoginForm extends Component {
   }
 }
 const mapStateToProps = state => ({
-  errors: state.errors.errors
+  errors: state.errors.errors,
+  message: state.message.message
 });
 
 export default connect(
   mapStateToProps,
-  { loginUser }
+  { loginUser, isEmailExists }
 )(withRouter(LoginForm));

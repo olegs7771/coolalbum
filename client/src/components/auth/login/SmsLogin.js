@@ -1,7 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { sendSmsCode } from "../../../actions/phoneAction";
+import {
+  sendSmsCode,
+  sendCode,
+  isEmailvalid,
+  isPhonevalid
+} from "../../../actions/phoneAction";
 //intl_phone_input
 import PhoneInput from "react-phone-number-input";
 import TextFormGroup from "../../textFormGroup/TextFormGroup";
@@ -28,13 +33,10 @@ class SmsLogin extends Component {
   onSubmitCodeRequest = e => {
     e.preventDefault();
 
-    const text = "Your code will be  valid for 5 min";
-
     const { phone, email } = this.state;
     const data = {
-      phone,
-      email,
-      text
+      phone, //user phone number
+      email // user email
     };
     //sending phone number from form to phoneAction
     this.props.sendSmsCode(data, this.props.history);
@@ -48,7 +50,10 @@ class SmsLogin extends Component {
   //On Submitting Next code beed sent to userAction
   onSubmitCode = e => {
     e.preventDefault();
-    console.log("code", this.state.code);
+    const data = {
+      authCode: this.state.code
+    };
+    console.log("data", data);
   };
 
   //after recieving sms code user inters it in state
@@ -66,9 +71,6 @@ class SmsLogin extends Component {
 
   //obtain errors from props to state
   componentDidUpdate(prevProps, prevState) {
-    console.log("prevState", prevState);
-    console.log("this.state", this.state);
-
     if (prevProps !== this.props) {
       this.setState({
         errors: this.props.errors,
@@ -80,24 +82,41 @@ class SmsLogin extends Component {
           errors: {}
         });
       }
+      if (Object.keys(this.state.errors).length > 0) {
+        this.setState({
+          messages: {}
+        });
+      }
     }
+    //this.state.email changed , data sends  to api
     if (prevState.email !== this.state.email) {
       const data = {
         email: this.state.email
       };
-      this.props.sendSmsCode(data, this.props.history);
+      this.props.isEmailvalid(data, this.props.history);
+    }
+    if (prevState.phone !== this.state.phone) {
+      const data = {
+        phone: this.state.phone
+      };
+      this.props.isPhonevalid(data, this.props.history);
+    }
+
+    // this.state.code changed , data sends to api
+    if (prevState.code !== this.state.code) {
+      const data = {
+        code: this.state.code
+      };
+      this.props.sendCode(data, this.props.history);
     }
   }
 
   render() {
     const { phone, number, code, email, errors, messages } = this.state;
-
-    console.log("this.state errors", this.state.errors);
-    console.log("this.state phone", this.state.phone);
+    console.log("this.props", this.props);
+    console.log("this.state", this.state);
 
     if (!number) {
-      //SMS form after sended by user
-
       return (
         <div className="col-md-12 my-5 border">
           <div className="h3 text-center text-info">Login with SMS</div>
@@ -109,18 +128,21 @@ class SmsLogin extends Component {
                 value={email}
                 name="email"
                 onChange={this.onChangeMail}
-                error={errors.error}
+                error={errors.loginSmsEmail}
                 message={messages.message}
               />
-              {errors.email ? <div>{errors.email}</div> : null}
+
               <span className="text-left h5">Enter your phone number</span>
               <div className="form-group my-3 ">
                 <PhoneInput
                   placeholder="Enter phone number"
                   value={phone}
+                  name="phone"
                   onChange={phone => this.setState({ phone })}
                   className="form-control form-control-lg "
                 />
+                <div className="text-danger">{errors.phone}</div>
+                <div className="text-success">{messages.phone}</div>
                 <button
                   type="submit"
                   className="btn btn-block btn-primary mt-1"
@@ -133,7 +155,6 @@ class SmsLogin extends Component {
         </div>
       );
     } else {
-      // SMS form before Send by user
       return (
         <div className='"col-md-12 my-5 border'>
           <div className="container">
@@ -141,14 +162,14 @@ class SmsLogin extends Component {
               <span className="text-left h5">Enter 6 Digits Code</span>
 
               <div className="form-group my-3 ">
-                <input
+                <TextFormGroup
                   type="number"
-                  max="6"
-                  min="6"
                   className="form-control form-control-lg"
                   name="code"
                   value={code}
                   onChange={this.onChangeCode}
+                  error={errors.code}
+                  message={messages.code}
                 />
                 <button
                   type="submit"
@@ -171,5 +192,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { sendSmsCode }
+  { sendSmsCode, sendCode, isEmailvalid, isPhonevalid }
 )(withRouter(SmsLogin));

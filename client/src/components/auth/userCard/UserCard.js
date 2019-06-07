@@ -50,6 +50,7 @@ class UserCard extends Component {
                 email={user.email}
                 avatar={user.avatar}
                 date={user.date}
+                location={user.location}
               />
             </div>
             <div className="col-md-6 my-4">
@@ -75,6 +76,7 @@ class UserCard extends Component {
                   avatar={user.avatar}
                   phone={user.phone}
                   date={user.date}
+                  location={user.location}
                 />
               </div>
             </div>
