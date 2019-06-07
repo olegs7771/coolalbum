@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { setCurrentUser, logoutUser } from "../../actions/userActions";
+import { getGeoFromIp } from "../../actions/weatherAction";
 import { reactLocalStorage } from "reactjs-localstorage";
 import jwtDecode from "jwt-decode";
 import { isEmpty } from "../../utils/isEmpty";
@@ -29,6 +30,11 @@ class Header extends Component {
       //  putting it into redux state
       this.props.setCurrentUser(decodedToken);
     }
+    // Fetch Weather API from OPEN WEATHER MAP
+    const data = {
+      ip: "84.109.36.175"
+    };
+    this.props.getGeoFromIp(data);
   }
 
   render() {
@@ -135,5 +141,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { setCurrentUser, logoutUser }
+  { setCurrentUser, logoutUser, getGeoFromIp }
 )(withRouter(Header));

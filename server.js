@@ -10,6 +10,7 @@ const profiles = require("./routers/api/profiles");
 const email = require("./routers/api/email");
 const upload = require("./routers/api/upload");
 const phone = require("./routers/api/phone");
+const weather = require("./routers/api/weather");
 //set storage engine
 
 const app = express();
@@ -46,6 +47,7 @@ app.use("/api/profiles", profiles);
 app.use("/api/email", email);
 app.use("/api/uploads", upload);
 app.use("/api/phone", phone);
+app.use("/api/weather", weather);
 
 // Server Static Assets while in production
 if (process.env.NODE_ENV === "production") {
