@@ -14,6 +14,7 @@ export default function(state = initialState, action) {
     case GET_CURRENT_WEATHER:
       return {
         ...state,
+        weather: action.payload,
         loading: false
       };
 
