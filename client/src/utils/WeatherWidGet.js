@@ -22,19 +22,22 @@ class WeatherWidGet extends Component {
     let desc;
     if (weather.weather) {
       const { data1, data2, location, daytime } = weather.weather;
+      console.log("daytime", daytime);
+      console.log("Date.now()", Date.now());
 
       //description
       desc = <div>{data1.description}</div>;
-      if (daytime.sunrise < Date.now()) {
+      if (daytime.sunrise < Date.now() && daytime.sunset > Date.now()) {
         dayTime = (
           <div>
             <i className="  far  fa-sun  " />
           </div>
         );
-      } else {
+      }
+      if (daytime.sunset < Date.now() || daytime.sunrise > Date.now()) {
         dayTime = (
           <div>
-            <i className="fas fa-moon" />
+            <i className="  far  fa-moon  " />
           </div>
         );
       }
