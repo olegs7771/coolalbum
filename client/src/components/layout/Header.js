@@ -2,9 +2,12 @@ import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { setCurrentUser, logoutUser } from "../../actions/userActions";
+import { getWeather } from "../../actions/weatherAction";
 import { reactLocalStorage } from "reactjs-localstorage";
 import jwtDecode from "jwt-decode";
 import { isEmpty } from "../../utils/isEmpty";
+//weather widget
+import WeatherWidGet from "../../utils/WeatherWidGet";
 class Header extends Component {
   state = {
     isAuthenticated: false
@@ -29,6 +32,9 @@ class Header extends Component {
       //  putting it into redux state
       this.props.setCurrentUser(decodedToken);
     }
+    // Fetch Weather API from OPEN WEATHER MAP
+
+    this.props.getWeather();
   }
 
   render() {
@@ -41,6 +47,7 @@ class Header extends Component {
             <a className="navbar-brand" href="/">
               CoolAlbum
             </a>
+            <WeatherWidGet />
 
             <nav className="navbar navbar-dark bg-dark navbar-expand-lg ml-auto ">
               {!isEmpty(user) ? (
@@ -135,5 +142,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { setCurrentUser, logoutUser }
+  { setCurrentUser, logoutUser, getWeather }
 )(withRouter(Header));

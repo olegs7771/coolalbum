@@ -4,11 +4,13 @@ import profileReducer from "./profileReducer";
 import errorsReducer from "./errorsReducer";
 import mailReducer from "./mailReducer";
 import messageReducer from "./messageReducer";
+import weatherReducer from "./weatherReducer";
 
 export default combineReducers({
   auth: authReducer,
   profile: profileReducer,
   errors: errorsReducer,
   message: messageReducer,
-  mail: mailReducer
+  mail: mailReducer,
+  weather: weatherReducer
 });

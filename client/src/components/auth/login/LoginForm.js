@@ -62,6 +62,8 @@ class LoginForm extends Component {
 
   render() {
     const { email, password, errors, message } = this.state;
+    console.log("this.props", this.props);
+    console.log("this.state", this.state);
 
     return (
       <div>

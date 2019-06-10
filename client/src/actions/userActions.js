@@ -252,7 +252,7 @@ export const isPassValid = data => dispatch => {
 };
 
 //match pawwords isMatched
-export const isMatchedPass = data => dispatch => {
+export const isMatchedPass = (data, history) => dispatch => {
   console.log("data", data);
   axios
     .post("/api/users/match", data)
@@ -263,10 +263,11 @@ export const isMatchedPass = data => dispatch => {
         type: GET_MESSAGE,
         payload: res.data
       });
+      setTimeout(() => {
+        history.push("/login");
+      }, 5000);
     })
     .catch(err => {
-      console.log("err", err.response.data);
-
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data

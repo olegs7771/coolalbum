@@ -3,6 +3,7 @@ import TextFormGroup from "../../textFormGroup/TextFormGroup";
 import jwt_decode from "jwt-decode";
 import { connect } from "react-redux";
 import { isPassValid, isMatchedPass } from "../../../actions/userActions";
+import { withRouter } from "react-router-dom";
 
 class RecoverNewPassword extends Component {
   state = {
@@ -74,7 +75,7 @@ class RecoverNewPassword extends Component {
     };
     //we add email of user for further findAndUpdate({email})
 
-    this.props.isMatchedPass(data);
+    this.props.isMatchedPass(data, this.props.history);
   };
 
   render() {
@@ -115,6 +116,9 @@ class RecoverNewPassword extends Component {
               Confirm
             </button>
           </form>
+          {messages.message ? (
+            <div className="my-3 text-success">{messages.message}</div>
+          ) : null}
         </div>
       </div>
     );
@@ -127,4 +131,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   { isPassValid, isMatchedPass }
-)(RecoverNewPassword);
+)(withRouter(RecoverNewPassword));
