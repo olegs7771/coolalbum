@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
-import store from "./store";
+import configureStore from "./store/configureStore";
 
 import Header from "./components/layout/Header";
 import Main from "./components/layout/main/Main";
@@ -55,7 +55,7 @@ if (localStorage.jwtToken) {
     window.location.href = "/login";
   }
 }
-
+const store = configureStore();
 class App extends Component {
   render() {
     return (
