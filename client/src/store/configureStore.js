@@ -3,7 +3,7 @@ if (process.env.NODE_ENV === "production") {
   console.log("production");
 } else {
   module.exports = require("./configureStore.dev");
-}
-console.log("development");
+  console.log("development");
 
-console.log("process.env.NODE_ENV", process.env.NODE_ENV);
+  console.log("process.env.NODE_ENV", process.env.NODE_ENV);
+}
