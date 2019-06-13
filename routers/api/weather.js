@@ -53,6 +53,8 @@ router.post("/weather", (req, res) => {
     if (err) {
       res.status(400).json({ status: err });
     }
+    console.log("JSONObj", JSONObj);
+
     if (JSONObj) {
       res.status(200).json({
         data1: JSONObj.weather[0],
