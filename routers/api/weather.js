@@ -14,8 +14,14 @@ router.post("/weather", (req, res) => {
 
   //for test only we use our own IP
   const myIP = "84.109.36.175";
+  let currentIP;
+  if (process.env.NODE_ENV === "production") {
+    currentIP = ip_info.clientIp;
+  } else {
+    currentIP = myIP;
+  }
 
-  const geoData = geoip.allData(myIP); /// for dev use (ip_info.clientIp)
+  const geoData = geoip.allData(currentIP); /// for dev use (ip_info.clientIp)
 
   console.log("geoData ", geoData);
   console.log(
