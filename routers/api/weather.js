@@ -55,7 +55,7 @@ router.post("/weather", (req, res) => {
     }
     console.log("JSONObj", JSONObj);
 
-    if (JSONObj) {
+    if (JSONObj.message !== "Internal error: 500000") {
       res.status(200).json({
         data1: JSONObj.weather[0],
         data2: JSONObj.main,
