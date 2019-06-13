@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
-import configureStore from "./store/configureStore";
 
 import Header from "./components/layout/Header";
 import Main from "./components/layout/main/Main";
@@ -25,7 +24,7 @@ import { logoutUser } from "./actions/userActions";
 import "./App.css";
 import setAuthToken from "./utils/setAuthToken";
 import { setCurrentUser } from "./actions/userActions";
-
+import configureStore from "./store/configureStore";
 //check for token
 if (localStorage.jwtToken) {
   //Set auth token to header
@@ -55,6 +54,7 @@ if (localStorage.jwtToken) {
     window.location.href = "/login";
   }
 }
+
 const store = configureStore();
 class App extends Component {
   render() {
