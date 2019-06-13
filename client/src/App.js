@@ -25,6 +25,7 @@ import "./App.css";
 import setAuthToken from "./utils/setAuthToken";
 import { setCurrentUser } from "./actions/userActions";
 import configureStore from "./store/configureStore";
+const store = configureStore();
 //check for token
 if (localStorage.jwtToken) {
   //Set auth token to header
@@ -55,49 +56,48 @@ if (localStorage.jwtToken) {
   }
 }
 
-const store = configureStore();
-class App extends Component {
-  render() {
-    console.log("store", store);
+function App() {
+  // render() {
+  console.log("store", store);
 
-    return (
-      <Provider store={store}>
-        <Router>
-          <div className="App">
-            <Header />
-            <div className="container">
-              <Switch>
-                <Route exact path="/" component={Main} />
-                <Route exact path="/login" component={Login} />
-                <Route exact path="/recover_pass" component={RecoverPassword} />
-                <Route
-                  exact
-                  path="/recover_newPass/:token/:_id"
-                  component={RecoverNewPassword}
-                />
-                <Route exact path="/register" component={Register} />
-                <Route exact path="/success_msg" component={SuccessRegMsg} />
-                <Route
-                  exact
-                  path="/confirm_registration/:token/:_id"
-                  component={ConfirmRegister}
-                />
-                <Route exact path="/contact" component={Contact} />
-                <Route exact path="/userCard/:id" component={UserCard} />
-                <Route exact path="/userCard_edit" component={UserCardEdit} />
-                <Route
-                  exact
-                  path="/profile_create/:id"
-                  component={ProfileCreate}
-                />
-                <Route exact path="/profile_edit/:id" component={ProfileEdit} />
-              </Switch>
-            </div>
+  return (
+    <Provider store={store}>
+      <Router>
+        <div className="App">
+          <Header />
+          <div className="container">
+            <Switch>
+              <Route exact path="/" component={Main} />
+              <Route exact path="/login" component={Login} />
+              <Route exact path="/recover_pass" component={RecoverPassword} />
+              <Route
+                exact
+                path="/recover_newPass/:token/:_id"
+                component={RecoverNewPassword}
+              />
+              <Route exact path="/register" component={Register} />
+              <Route exact path="/success_msg" component={SuccessRegMsg} />
+              <Route
+                exact
+                path="/confirm_registration/:token/:_id"
+                component={ConfirmRegister}
+              />
+              <Route exact path="/contact" component={Contact} />
+              <Route exact path="/userCard/:id" component={UserCard} />
+              <Route exact path="/userCard_edit" component={UserCardEdit} />
+              <Route
+                exact
+                path="/profile_create/:id"
+                component={ProfileCreate}
+              />
+              <Route exact path="/profile_edit/:id" component={ProfileEdit} />
+            </Switch>
           </div>
-        </Router>
-      </Provider>
-    );
-  }
+        </div>
+      </Router>
+    </Provider>
+  );
+  // }
 }
 
 export default App;
