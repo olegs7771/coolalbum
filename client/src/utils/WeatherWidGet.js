@@ -27,14 +27,13 @@ class WeatherWidGet extends Component {
 
       //description
       desc = <div>{data1.description}</div>;
-      if (daytime.sunrise < Date.now() && daytime.sunset > Date.now()) {
+      if (daytime.sunrise < Date.now() || daytime.sunset > Date.now()) {
         dayTime = (
           <div>
             <i className="  far  fa-sun  " />
           </div>
         );
-      }
-      if (daytime.sunset < Date.now() || daytime.sunrise > Date.now()) {
+      } else {
         dayTime = (
           <div>
             <i className="  far  fa-moon  " />

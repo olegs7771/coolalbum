@@ -58,6 +58,8 @@ if (localStorage.jwtToken) {
 const store = configureStore();
 class App extends Component {
   render() {
+    console.log("store", store);
+
     return (
       <Provider store={store}>
         <Router>
