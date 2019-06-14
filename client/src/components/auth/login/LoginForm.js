@@ -89,13 +89,30 @@ class LoginForm extends Component {
               />
 
               <div className="form-check form-check-inline my-4">
-                <input className="form-check-input" type="checkbox" value="" />
-                <label className="form-check-label">Remember me</label>
+                <div className="row">
+                  <div className="col-md-4">
+                    {" "}
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value=""
+                    />
+                    <label className="form-check-label">Remember me</label>
+                  </div>
+                  <div className="col-md-8 ">
+                    {" "}
+                    <a
+                      href="/recover_pass"
+                      className="ml-4"
+                      className="text-center"
+                    >
+                      Forgot password?
+                    </a>
+                    <br />
+                  </div>
+                </div>
               </div>
-              <a href="/recover_pass" className="ml-4">
-                Forgot password?
-              </a>
-              <br />
+
               <button className="btn btn-dark">Login</button>
             </form>
           </div>

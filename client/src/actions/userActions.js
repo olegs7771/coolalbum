@@ -117,6 +117,8 @@ export const authFacebook = (userData, history) => dispatch => {
   axios
     .post("/api/users/auth/facebook", { access_token: userData })
     .then(res => {
+      console.log("res.data", res.data);
+
       const { token } = res.data;
       //Save to localStorage recieved token
       localStorage.setItem("jwtToken", token);
@@ -124,7 +126,7 @@ export const authFacebook = (userData, history) => dispatch => {
       setAuthToken(token);
       // set the user (using user creds from token. but first we must to decode token with jwt-decode module)
       const decoded = jwt_decode(token);
-
+      console.log("decoded facebook", decoded);
       //set current user (we create separate function here)
       dispatch(setCurrentUser(decoded));
       history.push("/");

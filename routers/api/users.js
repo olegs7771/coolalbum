@@ -234,12 +234,12 @@ router.post(
   (req, res) => {
     //generate token
     // create JWT with user info
+    //set location
+
     const payload = {
       id: req.user.id,
       name: req.user.name,
       email: req.user.email,
-      location: "",
-
       avatar: req.user.avatar,
       date: req.user.date,
       location: req.user.location,

@@ -47,8 +47,11 @@ class Header extends Component {
             <a className="navbar-brand" href="/">
               CoolAlbum
             </a>
-            <WeatherWidGet />
-
+            <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
+              <li className="nav-item">
+                <WeatherWidGet />
+              </li>
+            </ul>
             <nav className="navbar navbar-dark bg-dark navbar-expand-lg ml-auto ">
               {!isEmpty(user) ? (
                 <ul className="nav justify-content-end">
