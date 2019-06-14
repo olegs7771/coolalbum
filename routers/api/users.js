@@ -294,6 +294,19 @@ router.post("/email", (req, res) => {
     }
   });
 });
+//check if Email not exists for register form
+
+router.post("/email_register", (req, res) => {
+  console.log("req.body", req.body);
+  const email = req.body.email;
+  User.findOne({ email }).then(user => {
+    if (!user) {
+      return res.status(200).json({ regEmail: "good!" });
+    } else {
+      res.status(400).json({ regEmail: "User with such email already exists" });
+    }
+  });
+});
 
 //send user email with password recovery instructions
 router.post("/recover", (req, res) => {

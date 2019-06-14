@@ -33,40 +33,42 @@ class WeatherWidGet extends Component {
       } else {
         dayTime = false;
       }
+      console.log("data1.description", data1.description);
 
       //sky condition (scattered clouds)
       if (data1.description === "scattered clouds" && dayTime) {
         skyCon = <i className="fas fa-cloud-sun" />;
       }
-      if (data1.description === "scattered clouds" && dayTime === false) {
+      if (data1.description === "scattered clouds") {
         skyCon = <i className="fas fa-cloud-moon" />;
       }
       //sky condition (	clear sky)
-      if (data1.description === "	clear sky" && dayTime) {
+      if (data1.description === "clear sky" && dayTime) {
         skyCon = <i className="far fa-sun" />;
       }
-      if (data1.description === "	clear sky" && dayTime === false) {
+      if (data1.description === "clear sky") {
         skyCon = <i className="fas fa-moon" />;
+        console.log("true");
       }
       //sky condition (	few clouds)
-      if (data1.description === "	few clouds" && dayTime) {
+      if (data1.description === "few clouds" && dayTime) {
         skyCon = <i className="fas fa-cloud" />;
       }
-      if (data1.description === "	few clouds" && dayTime === false) {
+      if (data1.description === "few clouds") {
         skyCon = <i className="fas fa-cloud" />;
       }
       //sky condition (	rain)
-      if (data1.description === "	few clouds" && dayTime) {
+      if (data1.description === "few clouds" && dayTime) {
         skyCon = <i className="fas fa-cloud-rain" />;
       }
-      if (data1.description === "	few clouds" && dayTime === false) {
+      if (data1.description === "few clouds") {
         skyCon = <i className="fas fa-cloud-rain" />;
       }
       //sky condition (	thunderstorm)
-      if (data1.description === "	few clouds" && dayTime) {
+      if (data1.description === "few clouds" && dayTime) {
         skyCon = <i className="fas fa-poo-storm" />;
       }
-      if (data1.description === "	few clouds" && dayTime === false) {
+      if (data1.description === "few clouds") {
         skyCon = <i className="fas fa-poo-storm" />;
       }
 

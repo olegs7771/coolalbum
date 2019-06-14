@@ -23,13 +23,6 @@ router.post("/weather", (req, res) => {
 
   const geoData = geoip.allData(currentIP); /// for dev use (ip_info.clientIp)
 
-  console.log("geoData ", geoData);
-  console.log(
-    "location",
-    geoData.location.latitude,
-    geoData.location.longitude,
-    geoData.city
-  );
   //with geoData been obtained we can fetch Weather api
   weather.setLang("en");
   // English - en, Russian - ru, Italian - it, Spanish - es (or sp),

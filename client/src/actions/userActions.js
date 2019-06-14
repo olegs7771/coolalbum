@@ -209,6 +209,29 @@ export const isEmailExists = data => dispatch => {
       });
     });
 };
+//register check if email already exists
+export const isUserEmailExists = data => dispatch => {
+  console.log("email", data);
+  dispatch(clearErrors());
+  dispatch(clearMessages());
+
+  axios
+    .post("/api/users/email_register", data)
+    .then(res => {
+      console.log("res.data", res.data);
+      dispatch(clearErrors());
+      dispatch({
+        type: GET_MESSAGE,
+        payload: res.data
+      });
+    })
+    .catch(err => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
+    });
+};
 
 //sending user instructions on recovering password
 export const recoverPass = (data, history) => dispatch => {
