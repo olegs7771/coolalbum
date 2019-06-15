@@ -62,10 +62,15 @@ router.post("/register", (req, res) => {
 
         newUser.save().then(user => {
           //create data object for mailer trasporter
+          let urlConfirm;
           if (process.env.NODE_ENV !== "production") {
-            res.status(200).json({ msg: "user been created in development" });
+            urlConfirm = `https://localhost:3000/confirm_registration/${
+              user.token
+            }/${user._id}`;
           } else {
-            res.status(200).json({ msg: "user been created in production" });
+            urlConfirm = `https://morning-thicket-46114.herokuapp.com/confirm_registration/${
+              user.token
+            }/${user._id}`;
           }
 
           const urlConfirm = `https://localhost:3000/confirm_registration/${
