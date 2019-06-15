@@ -14,10 +14,13 @@ const sendMail = require("../../mailer/transporter");
 
 const validator = require("validator");
 
+if (process.env.NODE_ENV !== "production") {
+  console.log("not production");
+}
 // @desc /Register New User
 // @route POST /api/users/register
 // @access Public
-
+console.log("process.env.NODE_ENV", process.env.NODE_ENV);
 router.post("/register", (req, res) => {
   const { errors, isValid } = validateRegisterInput(req.body);
 
@@ -284,14 +287,19 @@ router.post(
 //check if Email exists for login form
 
 router.post("/email", (req, res) => {
+  if (process.env.NODE_ENV !== "production") {
+    console.log("not production");
+  } else {
+    res.status(200).json({ env: "production" });
+  }
   // console.log("req.body", req.body);
   const email = req.body.email;
   User.findOne({ email }).then(user => {
-    if (!user) {
-      return res.status(400).json({ loginEmail: "Email not exists" });
-    } else {
-      res.status(200).json({ loginEmail: "Email is valid" });
-    }
+    // if (!user) {
+    //   return res.status(400).json({ loginEmail: "Email not exists" });
+    // } else {
+    //   res.status(200).json({ loginEmail: "Email is valid" });
+    // }
   });
 });
 //check if Email not exists for register form

@@ -10,7 +10,7 @@ var weather = require("openweather-apis");
 
 router.post("/weather", (req, res) => {
   const ip_info = get_ip(req);
-  console.log("ip_info", ip_info.clientIp);
+  // console.log("ip_info", ip_info.clientIp);
 
   //for test only we use our own IP
   const myIP = "84.109.36.175";
@@ -52,7 +52,7 @@ router.post("/weather", (req, res) => {
     if (err) {
       res.status(400).json({ status: err });
     }
-    console.log("JSONObj", JSONObj);
+    // console.log("JSONObj", JSONObj);
 
     if (JSONObj) {
       res.status(200).json({
@@ -68,7 +68,7 @@ router.post("/weather", (req, res) => {
     } else {
       res.status(200).json({ message: "Waiting for data" });
     }
-    console.log("JSONObj", JSONObj);
+    // console.log("JSONObj", JSONObj);
   });
 });
 

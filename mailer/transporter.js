@@ -2,6 +2,8 @@ const nodemailer = require("nodemailer");
 const mailPass = require("../config/dev_keys").mailPass;
 
 module.exports = function sendMail(data, cb) {
+  console.log("data in mailer", data);
+
   //create htmlBody for email (contact us)
   const htmlBody = `<b>From</b>
    <ul className='list-group'>
@@ -25,15 +27,15 @@ module.exports = function sendMail(data, cb) {
 
   let html;
 
-  if (data.register) {
+  if (data.register === "Register") {
     html = htmlRegBody;
   }
-  if (data.name) {
-    html = htmlBody;
-  }
-  if (data.recover) {
-    html = htmlRecoverBody;
-  }
+  // if (data.name) {
+  //    (html = htmlBody);
+  // }
+  // if (data.recover) {
+  //    (html = htmlRecoverBody);
+  // }
 
   let transporter = nodemailer.createTransport({
     host: "185.197.74.181",
