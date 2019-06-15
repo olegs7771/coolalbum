@@ -73,10 +73,6 @@ router.post("/register", (req, res) => {
             }/${user._id}`;
           }
 
-          const urlConfirm = `https://localhost:3000/confirm_registration/${
-            user.token
-          }/${user._id}`;
-
           const register = "Register";
           const data = {
             token: user.token,
