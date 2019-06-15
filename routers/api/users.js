@@ -287,19 +287,14 @@ router.post(
 //check if Email exists for login form
 
 router.post("/email", (req, res) => {
-  if (process.env.NODE_ENV !== "production") {
-    console.log("not production");
-  } else {
-    res.status(200).json({ env: "production" });
-  }
   // console.log("req.body", req.body);
   const email = req.body.email;
   User.findOne({ email }).then(user => {
-    // if (!user) {
-    //   return res.status(400).json({ loginEmail: "Email not exists" });
-    // } else {
-    //   res.status(200).json({ loginEmail: "Email is valid" });
-    // }
+    if (!user) {
+      return res.status(400).json({ loginEmail: "Email not exists" });
+    } else {
+      res.status(200).json({ loginEmail: "Email is valid" });
+    }
   });
 });
 //check if Email not exists for register form
@@ -339,9 +334,17 @@ router.post("/recover", (req, res) => {
       jwt.sign(payload, keys, { expiresIn: 3600 }, (err, token) => {
         // res.json({ success: true, token: "bearer  " + token });
 
-        const URL = `https://localhost:3000/recover_newPass/${token}/${
-          user._id
-        }`;
+        //define env
+        if (process.env.NODE_ENV !== "production") {
+          const URL = `https://localhost:3000/recover_newPass/${token}/${
+            user._id
+          }`;
+        } else {
+          const URL = `https://dashboard.heroku.com/recover_newPass/${token}/${
+            user._id
+          }`;
+        }
+
         const name = user.name;
         const recover = "Recover";
 
