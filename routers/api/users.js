@@ -88,7 +88,7 @@ router.post("/register", (req, res) => {
               res.console.log("mail been sent");
             }
           });
-          // res.status(200).json({ msg: "Success! Please check your Email" });
+          res.status(200).json({ msg: "Success! Please check your Email" });
         });
       });
     }
