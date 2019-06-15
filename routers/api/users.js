@@ -335,12 +335,12 @@ router.post("/recover", (req, res) => {
         // res.json({ success: true, token: "bearer  " + token });
 
         //define env
-        if (process.env.NODE_ENV !== "production") {
-          const URL = `https://localhost:3000/recover_newPass/${token}/${
+        if (process.env.NODE_ENV === "production") {
+          const URL = `https://dashboard.heroku.com/recover_newPass/${token}/${
             user._id
           }`;
         } else {
-          const URL = `https://dashboard.heroku.com/recover_newPass/${token}/${
+          const URL = `https://localhost:3000/recover_newPass/${token}/${
             user._id
           }`;
         }
