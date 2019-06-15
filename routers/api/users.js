@@ -374,11 +374,11 @@ router.post("/recover", (req, res) => {
 router.post("/password", (req, res) => {
   console.log("req.body", req.body);
   const passport1 = req.body.password1;
-  if (req.body.password1) {
-    if (req.body.password1.length < 6) {
+  if (passport1) {
+    if (passport1.length < 6) {
       return res.status(400).json({ password1: "Too short" });
     }
-    if (req.body.password1.length > 8) {
+    if (passport1.length > 8) {
       return res.status(400).json({ password1: "Too long" });
     }
     res.status(200).json({ password1: "Valid" });
