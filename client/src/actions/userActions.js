@@ -211,14 +211,12 @@ export const isEmailExists = data => dispatch => {
 };
 //register check if email already exists
 export const isUserEmailExists = data => dispatch => {
-  console.log("email", data);
   dispatch(clearErrors());
   dispatch(clearMessages());
 
   axios
     .post("/api/users/email_register", data)
     .then(res => {
-      console.log("res.data", res.data);
       dispatch(clearErrors());
       dispatch({
         type: GET_MESSAGE,

@@ -14,17 +14,14 @@ const sendMail = require("../../mailer/transporter");
 
 const validator = require("validator");
 
-if (process.env.NODE_ENV !== "production") {
-  console.log("not production");
-}
 // @desc /Register New User
 // @route POST /api/users/register
 // @access Public
-console.log("process.env.NODE_ENV", process.env.NODE_ENV);
+
 router.post("/register", (req, res) => {
   const { errors, isValid } = validateRegisterInput(req.body);
 
-  console.log("req.body", req.body);
+  // console.log("req.body", req.body);
 
   if (!isValid) {
     return res.status(400).json(errors);
@@ -65,10 +62,16 @@ router.post("/register", (req, res) => {
 
         newUser.save().then(user => {
           //create data object for mailer trasporter
+          if (process.env.NODE_ENV !== "production") {
+            res.status(200).json({ msg: "user been created in development" });
+          } else {
+            res.status(200).json({ msg: "user been created in production" });
+          }
 
           const urlConfirm = `https://localhost:3000/confirm_registration/${
             user.token
           }/${user._id}`;
+
           const register = "Register";
           const data = {
             token: user.token,
@@ -84,7 +87,7 @@ router.post("/register", (req, res) => {
               res.console.log("mail been sent");
             }
           });
-          res.status(200).json({ msg: "Success! Please check your Email" });
+          // res.status(200).json({ msg: "Success! Please check your Email" });
         });
       });
     }

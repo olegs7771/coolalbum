@@ -88,7 +88,7 @@ class RegisterForm extends Component {
       errors,
       message
     } = this.state;
-    console.log("this.state", this.state);
+    // console.log("this.state", this.state);
 
     return (
       <div className="col-md-6 my-3  mx-auto">
