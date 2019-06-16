@@ -101,11 +101,7 @@ class LoginForm extends Component {
                   </div>
                   <div className="col-md-8 ">
                     {" "}
-                    <a
-                      href="/recover_pass"
-                      className="ml-4"
-                      className="text-center"
-                    >
+                    <a href="/recover_pass" className="ml-4 text-center">
                       Forgot password?
                     </a>
                     <br />
