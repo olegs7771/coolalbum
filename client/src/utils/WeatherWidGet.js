@@ -19,7 +19,6 @@ class WeatherWidGet extends Component {
     const { weather } = this.state;
     let weatherContent;
     let dayTime;
-    let desc;
     let skyCon;
     if (weather.weather) {
       const { data1, data2, location, daytime } = weather.weather;
@@ -27,7 +26,7 @@ class WeatherWidGet extends Component {
       console.log("Date.now()", Date.now());
 
       //description
-      desc = <div>{data1.description}</div>;
+      // <div>{data1.description}</div>;
       if (daytime.sunrise < Date.now() || daytime.sunset > Date.now()) {
         dayTime = true;
         console.log("daytime", dayTime);
@@ -47,10 +46,10 @@ class WeatherWidGet extends Component {
       //sky condition (	clear sky)
       if (data1.description === "clear sky" && dayTime) {
         skyCon = <i className="far fa-sun" />;
-      }
-      if (data1.description === "clear sky") {
+      } else {
         skyCon = <i className="fas fa-moon" />;
       }
+
       //sky condition (	few clouds)
       if (data1.description === "few clouds" && dayTime) {
         skyCon = <i className="fas fa-cloud" />;
@@ -75,7 +74,7 @@ class WeatherWidGet extends Component {
 
       weatherContent = (
         <div className="row">
-          <div className="col-5">
+          <div className="col-md-6 col-sm-12">
             <div className="text-success ">
               {location} {""}
               <span className="text-white">
@@ -83,15 +82,16 @@ class WeatherWidGet extends Component {
                 {Math.trunc(data2.temp)}
                 {""}&#176;
               </span>
-              <br />
-              {/* {Show current time} */}
               <span className="text-white">
-                {moment(Date.now()).format("DD/MM/YYYY")}
+                {""} {skyCon}
               </span>
             </div>
           </div>
-          <div className="col-4">
-            <div>{skyCon}</div>
+          <div className="col-md-6 col-sm-12">
+            {/* {Show current time} */}
+            <span className="text-white">
+              {moment(Date.now()).format("DD/MM/YYYY")}
+            </span>
           </div>
         </div>
       );

@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { reactLocalStorage } from "reactjs-localstorage";
 import TextFormGroup from "../../textFormGroup/TextFormGroup";
 import TextAreaFormGroup from "../../textFormGroup/TextAreaFormGroup";
-import ProfileEditAvatar from "../../profile/ProfileEditAvatar";
+import UserCardAvatar from "./UserCardAvatar";
 import { updateUser } from "../../../actions/userActions";
 
 import { getProfile } from "../../../actions/profileAction";
@@ -152,7 +152,7 @@ class UserCardEdit extends Component {
           <div className="col-md-4">
             <div className="h5 text-center my-3">Edit Avatar</div>
             <div className=" card card-body  " style={{ height: "432px" }}>
-              {name ? <ProfileEditAvatar avatar={avatar} /> : null}
+              {name ? <UserCardAvatar avatar={avatar} /> : null}
             </div>
           </div>
         </div>
