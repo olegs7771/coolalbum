@@ -90,8 +90,8 @@ class UserCardEdit extends Component {
       message,
       avatar
     } = this.state;
-    console.log("this.props.user", this.props.user);
-    console.log("this.state", this.state);
+    // console.log("this.props.user", this.props.user);
+    // console.log("this.state", this.state);
 
     return (
       <div>

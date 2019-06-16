@@ -14,10 +14,7 @@ class UserCard extends Component {
       avatar: ""
     };
 
-    const id = {
-      id: props.match.params.id
-    };
-    props.getProfile(id);
+    props.getProfile();
   }
 
   componentDidUpdate(prevProps) {

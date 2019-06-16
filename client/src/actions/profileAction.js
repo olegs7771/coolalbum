@@ -8,8 +8,10 @@ import {
   // GET_PROFILES
 } from "./types";
 import axios from "axios";
-import store from "../store";
+import configureStore from "../store/configureStore";
 import { logoutUser } from "./userActions";
+
+const store = configureStore();
 
 // Create new Profile or Update profile
 export const createProfile = (data, history) => dispatch => {
@@ -28,8 +30,9 @@ export const createProfile = (data, history) => dispatch => {
     .then(() => {
       setTimeout(() => {
         dispatch(clearMessages());
-        store.dispatch(logoutUser());
-        history.push("/login");
+        store.dispatch(logoutUser()).then(() => {
+          history.push("/");
+        });
       }, 6000);
     })
     .catch(err => {
@@ -70,10 +73,10 @@ export const updateAvatar = (fd, history) => dispatch => {
 };
 
 // Get Current Profile
-export const getProfile = id => dispatch => {
+export const getProfile = () => dispatch => {
   dispatch(setProfileLoading());
   axios
-    .post("/api/profiles/current", id)
+    .post("/api/profiles/current")
     .then(res => {
       dispatch({
         type: GET_PROFILE,
@@ -117,6 +120,7 @@ export const setProfileLoading = () => {
     type: LOADING_PROFILE
   };
 };
+
 //Clear Messages
 export const clearMessages = () => {
   return {

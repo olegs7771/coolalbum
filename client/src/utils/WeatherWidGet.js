@@ -22,19 +22,19 @@ class WeatherWidGet extends Component {
     let skyCon;
     if (weather.weather) {
       const { data1, data2, location, daytime } = weather.weather;
-      console.log("daytime", daytime);
-      console.log("Date.now()", Date.now());
+      // console.log("daytime", daytime);
+      // console.log("Date.now()", Date.now());
 
       //description
       // <div>{data1.description}</div>;
       if (daytime.sunrise < Date.now() || daytime.sunset > Date.now()) {
         dayTime = true;
-        console.log("daytime", dayTime);
+        // console.log("daytime", dayTime);
       } else {
         dayTime = false;
-        console.log("daytime", daytime);
+        // console.log("daytime", daytime);
       }
-      console.log("data1.description", data1.description);
+      // console.log("data1.description", data1.description);
 
       //sky condition (scattered clouds)
       if (data1.description === "scattered clouds" && dayTime) {

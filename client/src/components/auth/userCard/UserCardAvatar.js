@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { clearErrors, updateAvatar } from "../../../actions/profileAction";
 
 import { withRouter } from "react-router-dom";
 
@@ -123,5 +124,5 @@ const mapStateToProps = state => ({
 });
 export default connect(
   mapStateToProps,
-  {}
+  { clearErrors, updateAvatar }
 )(withRouter(UserCardAvatar));
