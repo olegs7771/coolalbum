@@ -141,7 +141,7 @@ export const authFacebook = (userData, history) => dispatch => {
 
 //Update Registered User with new data
 
-export const updateUser = (userData, history, token) => dispatch => {
+export const updateUser = (userData, history) => dispatch => {
   console.log("userData", userData);
 
   axios

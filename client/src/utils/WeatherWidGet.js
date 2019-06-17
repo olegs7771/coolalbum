@@ -22,18 +22,20 @@ class WeatherWidGet extends Component {
     let skyCon;
     if (weather.weather) {
       const { data1, data2, location, daytime } = weather.weather;
-      // console.log("daytime", daytime);
-      // console.log("Date.now()", Date.now());
+      console.log("sunrise", daytime.sunrise / 1000);
+      console.log("sunset", daytime.sunset / 1000);
+      console.log("Date.now()", Math.trunc(Date.now() / 1000) / 1000);
 
       //description
       console.log("data1.description", data1.description);
 
-      if (daytime.sunrise < Date.now() || daytime.sunset > Date.now()) {
+      if (daytime.sunrise < Date.now() && daytime.sunset > Date.now()) {
         dayTime = true;
         console.log("daytime", dayTime);
-      } else {
+      }
+      if (daytime.sunrise < Date.now() && daytime.sunset < Date.now()) {
         dayTime = false;
-        console.log("daytime", daytime);
+        console.log("daytime", dayTime);
       }
       // console.log("data1.description", data1.description);
 
@@ -41,16 +43,17 @@ class WeatherWidGet extends Component {
       if (data1.description === "scattered clouds" && dayTime) {
         skyCon = <i className="fas fa-cloud-sun" />;
         console.log("day");
-      } else {
-        // skyCon = <i className="fas fa-cloud-moon" />;
-        console.log("night");
+      }
+      if (data1.description === "scattered clouds" && dayTime === false) {
+        skyCon = <i className="fas fa-cloud-moon" />;
       }
 
       //sky condition (	clear sky)
-      if (data1.description === "clear sky" || dayTime) {
+      if (data1.description === "clear sky" && dayTime) {
         skyCon = <i className="far fa-sun" />;
         console.log("1");
-      } else {
+      }
+      if (data1.description === "clear sky" && dayTime === false) {
         skyCon = <i className="fas fa-moon" />;
         console.log("2");
       }
@@ -61,7 +64,7 @@ class WeatherWidGet extends Component {
 
         skyCon = <i className="fas fa-cloud" />;
       }
-      if (data1.description === "few clouds") {
+      if (data1.description === "few clouds" && dayTime === false) {
         console.log("4");
 
         skyCon = <i className="fas fa-cloud" />;

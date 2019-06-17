@@ -11,6 +11,8 @@ import {
 import axios from "axios";
 // import configureStore from "../store/configureStore";
 import setAuthToken from "../utils/setAuthToken";
+import jwt_decode from "jwt-decode";
+import { setCurrentUser } from "./userActions";
 
 // const store = configureStore();
 
@@ -50,8 +52,8 @@ export const createProfile = (data, history) => dispatch => {
     });
 };
 // Create new or Update Profile Avatar
-export const updateAvatar = (fd, history) => dispatch => {
-  console.log("fd", fd);
+export const updateAvatar = (fd, history, token) => dispatch => {
+  console.log("token", token);
 
   axios
     .post("/api/uploads/update", fd)
@@ -78,7 +80,17 @@ export const updateAvatar = (fd, history) => dispatch => {
 
         //relogin update user
 
-        history.push("/login");
+        //Set token to localStorage
+        localStorage.setItem("jwtToken", token);
+        //Set token to Auth header (we crerate it in separate file)
+        setAuthToken(token);
+        // set the user (using user creds from token. but first we must to decode token with jwt-decode module)
+        const decoded = jwt_decode(token);
+        console.log("decoded", decoded);
+
+        //set current user (we create separate function here)
+        dispatch(setCurrentUser(decoded));
+        history.push("/");
       }, 6000);
     })
 
