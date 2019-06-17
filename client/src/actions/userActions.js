@@ -141,7 +141,7 @@ export const authFacebook = (userData, history) => dispatch => {
 
 //Update Registered User with new data
 
-export const updateUser = (userData, history) => dispatch => {
+export const updateUser = (userData, history, token) => dispatch => {
   console.log("userData", userData);
 
   axios
@@ -166,7 +166,6 @@ export const updateUser = (userData, history) => dispatch => {
           type: LOGOUT_USER,
           payload: {}
         });
-
         //relogin update user
 
         history.push("/login");

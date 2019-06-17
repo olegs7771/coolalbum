@@ -4,12 +4,15 @@ import {
   LOADING_PROFILE,
   GET_PROFILE,
   GET_MESSAGE,
-  CLEAR_MESSAGE
+  CLEAR_MESSAGE,
+  LOGOUT_USER
   // GET_PROFILES
 } from "./types";
 import axios from "axios";
-import store from "../store";
-import { logoutUser } from "./userActions";
+// import configureStore from "../store/configureStore";
+import setAuthToken from "../utils/setAuthToken";
+
+// const store = configureStore();
 
 // Create new Profile or Update profile
 export const createProfile = (data, history) => dispatch => {
@@ -28,8 +31,15 @@ export const createProfile = (data, history) => dispatch => {
     .then(() => {
       setTimeout(() => {
         dispatch(clearMessages());
-        store.dispatch(logoutUser());
-        history.push("/login");
+        // Remove jwtToken from localStorage
+        localStorage.removeItem("jwtToken");
+        //Remove auth header for future request
+        setAuthToken(false);
+        //Set current user to {} which will set isAuthenticated to false
+        dispatch({
+          type: LOGOUT_USER,
+          payload: {}
+        });
       }, 6000);
     })
     .catch(err => {
@@ -56,7 +66,18 @@ export const updateAvatar = (fd, history) => dispatch => {
     .then(() => {
       setTimeout(() => {
         dispatch(clearMessages());
-        store.dispatch(logoutUser());
+        // Remove jwtToken from localStorage
+        localStorage.removeItem("jwtToken");
+        //Remove auth header for future request
+        setAuthToken(false);
+        //Set current user to {} which will set isAuthenticated to false
+        dispatch({
+          type: LOGOUT_USER,
+          payload: {}
+        });
+
+        //relogin update user
+
         history.push("/login");
       }, 6000);
     })
@@ -70,10 +91,10 @@ export const updateAvatar = (fd, history) => dispatch => {
 };
 
 // Get Current Profile
-export const getProfile = id => dispatch => {
+export const getProfile = () => dispatch => {
   dispatch(setProfileLoading());
   axios
-    .post("/api/profiles/current", id)
+    .post("/api/profiles/current")
     .then(res => {
       dispatch({
         type: GET_PROFILE,
@@ -117,6 +138,7 @@ export const setProfileLoading = () => {
     type: LOADING_PROFILE
   };
 };
+
 //Clear Messages
 export const clearMessages = () => {
   return {

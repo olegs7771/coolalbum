@@ -22,6 +22,8 @@ router.post("/weather", (req, res) => {
   }
 
   const geoData = geoip.allData(currentIP); /// for dev use (ip_info.clientIp)
+  // console.log("geoData", geoData);
+  // console.log("geoData.location", geoData.location);
 
   //with geoData been obtained we can fetch Weather api
   weather.setLang("en");
@@ -36,7 +38,7 @@ router.post("/weather", (req, res) => {
   // or set the coordinates (latitude,longitude)
   weather.setCoordinate(geoData.location.latitude, geoData.location.longitude);
   // or set city by ID (recommended by OpenWeatherMap)
-  weather.setCityId(4367872);
+  weather.setCityId();
 
   // or set zip code
   // weather.setZipCode(33615);
