@@ -34,18 +34,20 @@ class UserCardEdit extends Component {
     console.log("token", token);
 
     //trigger getProfile();
-    const id = {
-      id: this.props.match.params.id
-    };
-    this.props.getProfile(id);
+    // const id = {
+    //   id: this.props.match.params.id
+    // };
+    this.props.getProfile();
 
     //get user creds from props to state
     if (Object.keys(this.props.user).length > 0) {
+      let bio;
+      this.props.user.bio ? (bio = this.props.user.bio) : (bio = "");
       this.setState({
         location: this.props.user.location,
         name: this.props.user.name,
         email: this.props.user.email,
-        bio: this.props.user.bio,
+        bio,
         avatar: this.props.user.avatar
       });
     }
@@ -86,12 +88,11 @@ class UserCardEdit extends Component {
       location,
       phone,
       errors,
-
       message,
       avatar
     } = this.state;
     // console.log("this.props.user", this.props.user);
-    // console.log("this.state", this.state);
+    console.log("this.state", this.state);
 
     return (
       <div>

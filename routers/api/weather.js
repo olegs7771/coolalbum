@@ -22,8 +22,8 @@ router.post("/weather", (req, res) => {
   }
 
   const geoData = geoip.allData(currentIP); /// for dev use (ip_info.clientIp)
-  console.log("geoData", geoData);
-  console.log("geoData.location", geoData.location);
+  // console.log("geoData", geoData);
+  // console.log("geoData.location", geoData.location);
 
   //with geoData been obtained we can fetch Weather api
   weather.setLang("en");

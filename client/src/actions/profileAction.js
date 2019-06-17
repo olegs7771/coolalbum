@@ -4,14 +4,15 @@ import {
   LOADING_PROFILE,
   GET_PROFILE,
   GET_MESSAGE,
-  CLEAR_MESSAGE
+  CLEAR_MESSAGE,
+  LOGOUT_USER
   // GET_PROFILES
 } from "./types";
 import axios from "axios";
-import configureStore from "../store/configureStore";
-import { logoutUser } from "./userActions";
+// import configureStore from "../store/configureStore";
+import setAuthToken from "../utils/setAuthToken";
 
-const store = configureStore();
+// const store = configureStore();
 
 // Create new Profile or Update profile
 export const createProfile = (data, history) => dispatch => {
@@ -30,8 +31,14 @@ export const createProfile = (data, history) => dispatch => {
     .then(() => {
       setTimeout(() => {
         dispatch(clearMessages());
-        store.dispatch(logoutUser()).then(() => {
-          history.push("/");
+        // Remove jwtToken from localStorage
+        localStorage.removeItem("jwtToken");
+        //Remove auth header for future request
+        setAuthToken(false);
+        //Set current user to {} which will set isAuthenticated to false
+        dispatch({
+          type: LOGOUT_USER,
+          payload: {}
         });
       }, 6000);
     })
@@ -59,7 +66,18 @@ export const updateAvatar = (fd, history) => dispatch => {
     .then(() => {
       setTimeout(() => {
         dispatch(clearMessages());
-        store.dispatch(logoutUser());
+        // Remove jwtToken from localStorage
+        localStorage.removeItem("jwtToken");
+        //Remove auth header for future request
+        setAuthToken(false);
+        //Set current user to {} which will set isAuthenticated to false
+        dispatch({
+          type: LOGOUT_USER,
+          payload: {}
+        });
+
+        //relogin update user
+
         history.push("/login");
       }, 6000);
     })

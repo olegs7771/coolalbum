@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { clearErrors, updateAvatar } from "../../../actions/profileAction";
 
 import { withRouter } from "react-router-dom";
+import { reactLocalStorage } from "reactjs-localstorage";
 
 class UserCardAvatar extends Component {
   constructor(props) {
@@ -12,6 +13,7 @@ class UserCardAvatar extends Component {
     this.state = {
       errors: {},
       message: {},
+      token: "",
 
       //Here Avatar string update State
       selectedImage: props.avatar,
@@ -20,13 +22,10 @@ class UserCardAvatar extends Component {
     this.fileSelectedHandlert = this.fileSelectedHandler.bind(this);
     this.fileUploadHandler = this.fileUploadHandler.bind(this);
   }
-
   componentDidMount() {
-    //trigger getProfile();
-    // const id = {
-    //   id: this.props.match.params.id
-    // };
-    // this.props.getProfile(id);
+    this.setState({
+      token: reactLocalStorage.get("jwtToken")
+    });
   }
 
   componentDidUpdate(prevProps) {
@@ -60,12 +59,13 @@ class UserCardAvatar extends Component {
   //Upload Avatar from browser to db
   fileUploadHandler = e => {
     e.preventDefault();
+    const { token } = this.state;
 
     const fd = new FormData();
 
     fd.append("myImage", this.state.uploadImage);
 
-    this.props.updateAvatar(fd, this.props.history);
+    this.props.updateAvatar(fd, this.props.history, token);
   };
 
   render() {
@@ -83,6 +83,14 @@ class UserCardAvatar extends Component {
             alt=""
           />
           <br />
+          <div className="">
+            {errors.error ? (
+              <div className="my-3 text-danger">{errors.error}</div>
+            ) : null}
+            {message ? (
+              <div className="my-3 text-success">{message.avatar}</div>
+            ) : null}
+          </div>
 
           <form onSubmit={this.fileUploadHandler}>
             <div className="custom-file my-2">
@@ -101,14 +109,6 @@ class UserCardAvatar extends Component {
               <button type="submit" className="btn btn-sm btn-info my-3">
                 Change Avatar
               </button>
-            </div>
-            <div className="">
-              {errors.error ? (
-                <div className="my-3 text-danger">{errors.error}</div>
-              ) : null}
-              {message ? (
-                <div className="my-3 text-success">{message.avatar}</div>
-              ) : null}
             </div>
           </form>
         </div>
