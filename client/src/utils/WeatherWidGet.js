@@ -26,49 +26,66 @@ class WeatherWidGet extends Component {
       // console.log("Date.now()", Date.now());
 
       //description
-      // <div>{data1.description}</div>;
+      console.log("data1.description", data1.description);
+
       if (daytime.sunrise < Date.now() || daytime.sunset > Date.now()) {
         dayTime = true;
-        // console.log("daytime", dayTime);
+        console.log("daytime", dayTime);
       } else {
         dayTime = false;
-        // console.log("daytime", daytime);
+        console.log("daytime", daytime);
       }
       // console.log("data1.description", data1.description);
 
       //sky condition (scattered clouds)
       if (data1.description === "scattered clouds" && dayTime) {
         skyCon = <i className="fas fa-cloud-sun" />;
+        console.log("day");
       } else {
-        skyCon = <i className="fas fa-cloud-moon" />;
+        // skyCon = <i className="fas fa-cloud-moon" />;
+        console.log("night");
       }
 
       //sky condition (	clear sky)
-      if (data1.description === "clear sky" && dayTime) {
+      if (data1.description === "clear sky" || dayTime) {
         skyCon = <i className="far fa-sun" />;
+        console.log("1");
       } else {
         skyCon = <i className="fas fa-moon" />;
+        console.log("2");
       }
 
       //sky condition (	few clouds)
       if (data1.description === "few clouds" && dayTime) {
+        console.log("3");
+
         skyCon = <i className="fas fa-cloud" />;
       }
       if (data1.description === "few clouds") {
+        console.log("4");
+
         skyCon = <i className="fas fa-cloud" />;
       }
       //sky condition (	rain)
       if (data1.description === "rain" && dayTime) {
+        console.log("5");
+
         skyCon = <i className="fas fa-cloud-rain" />;
       }
       if (data1.description === "rain") {
+        console.log("6");
+
         skyCon = <i className="fas fa-cloud-rain" />;
       }
       //sky condition (	thunderstorm)
       if (data1.description === "thunderstorm" && dayTime) {
+        console.log("7");
+
         skyCon = <i className="fas fa-poo-storm" />;
       }
       if (data1.description === "thunderstorm") {
+        console.log("8");
+
         skyCon = <i className="fas fa-poo-storm" />;
       }
 
