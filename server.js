@@ -39,7 +39,7 @@ const db = require("./config/keys").mongoDB;
 
 mongoose
   .connect(db, { useNewUrlParser: true })
-  .then(() => console.log("connected to mongoDB"))
+  .then(() => console.log(`connected to  ${db}`))
   .catch(err => console.log(err));
 
 //Use routes
