@@ -4,6 +4,7 @@ import { clearErrors, updateAvatar } from "../../../actions/profileAction";
 
 import { withRouter } from "react-router-dom";
 import { reactLocalStorage } from "reactjs-localstorage";
+import jwt_decode from "jwt-decode";
 
 class UserCardAvatar extends Component {
   constructor(props) {
@@ -60,12 +61,18 @@ class UserCardAvatar extends Component {
   fileUploadHandler = e => {
     e.preventDefault();
     const { token } = this.state;
+    const decoded = jwt_decode(token);
+    console.log("decoded", decoded);
+    const userData = {
+      email: decoded.email,
+      password: decoded.password
+    };
 
     const fd = new FormData();
 
     fd.append("myImage", this.state.uploadImage);
 
-    this.props.updateAvatar(fd, this.props.history, token);
+    this.props.updateAvatar(fd, this.props.history, userData);
   };
 
   render() {

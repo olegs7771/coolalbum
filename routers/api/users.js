@@ -199,6 +199,7 @@ router.post("/login", (req, res) => {
             id: user._id,
             name: user.name,
             email: user.email,
+            password,
             phone: user.phone,
             avatar: user.avatar,
             location: user.location,

@@ -166,6 +166,7 @@ export const updateUser = (userData, history) => dispatch => {
           type: LOGOUT_USER,
           payload: {}
         });
+
         //relogin update user
 
         history.push("/login");

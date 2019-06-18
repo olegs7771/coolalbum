@@ -9,12 +9,11 @@ import {
   // GET_PROFILES
 } from "./types";
 import axios from "axios";
-// import configureStore from "../store/configureStore";
+import configureStore from "../store/configureStore";
 import setAuthToken from "../utils/setAuthToken";
-import jwt_decode from "jwt-decode";
-import { setCurrentUser } from "./userActions";
+import { loginUser } from "./userActions";
 
-// const store = configureStore();
+const store = configureStore();
 
 // Create new Profile or Update profile
 export const createProfile = (data, history) => dispatch => {
@@ -52,8 +51,8 @@ export const createProfile = (data, history) => dispatch => {
     });
 };
 // Create new or Update Profile Avatar
-export const updateAvatar = (fd, history, token) => dispatch => {
-  console.log("token", token);
+export const updateAvatar = (fd, history, userData) => dispatch => {
+  console.log("userData", userData);
 
   axios
     .post("/api/uploads/update", fd)
@@ -64,8 +63,6 @@ export const updateAvatar = (fd, history, token) => dispatch => {
         type: GET_MESSAGE,
         payload: res.data
       });
-    })
-    .then(() => {
       setTimeout(() => {
         dispatch(clearMessages());
         // Remove jwtToken from localStorage
@@ -77,20 +74,8 @@ export const updateAvatar = (fd, history, token) => dispatch => {
           type: LOGOUT_USER,
           payload: {}
         });
-
-        //relogin update user
-
-        //Set token to localStorage
-        localStorage.setItem("jwtToken", token);
-        //Set token to Auth header (we crerate it in separate file)
-        setAuthToken(token);
-        // set the user (using user creds from token. but first we must to decode token with jwt-decode module)
-        const decoded = jwt_decode(token);
-        console.log("decoded", decoded);
-
-        //set current user (we create separate function here)
-        dispatch(setCurrentUser(decoded));
-        history.push("/");
+        //login updated user
+        store.dispatch(loginUser(userData, history));
       }, 6000);
     })
 
