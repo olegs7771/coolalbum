@@ -5,7 +5,8 @@ import {
   GET_PROFILE,
   GET_MESSAGE,
   CLEAR_MESSAGE,
-  LOGOUT_USER
+  LOGOUT_USER,
+  SET_CURRENT_USER
   // GET_PROFILES
 } from "./types";
 import axios from "axios";
@@ -13,6 +14,7 @@ import configureStore from "../store/configureStore";
 import setAuthToken from "../utils/setAuthToken";
 import { loginUser } from "./userActions";
 
+import jwt_decode from "jwt-decode";
 const store = configureStore();
 
 // Create new Profile or Update profile
@@ -50,6 +52,14 @@ export const createProfile = (data, history) => dispatch => {
       });
     });
 };
+
+// /set logged user
+export const setCurrentUser = decoded => {
+  return {
+    type: SET_CURRENT_USER,
+    payload: decoded
+  };
+};
 // Create new or Update Profile Avatar
 export const updateAvatar = (fd, history, userData) => dispatch => {
   console.log("userData", userData);
@@ -75,7 +85,22 @@ export const updateAvatar = (fd, history, userData) => dispatch => {
           payload: {}
         });
         //login updated user
-        store.dispatch(loginUser(userData, history));
+        // store.dispatch(loginUser(userData, history));
+        axios.post("api/users/login", userData).then(res => {
+          // Save to localStorage token
+          const { token } = res.data;
+          //Set token to localStorage
+          localStorage.setItem("jwtToken", token);
+          //Set token to Auth header (we crerate it in separate file)
+          setAuthToken(token);
+          // set the user (using user creds from token. but first we must to decode token with jwt-decode module)
+          const decoded = jwt_decode(token);
+          console.log("decoded", decoded);
+
+          //set current user (we create separate function here)
+          dispatch(setCurrentUser(decoded));
+          history.push("/");
+        });
       }, 6000);
     })
 
