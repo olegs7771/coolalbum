@@ -12,16 +12,13 @@ const email = require("./routers/api/email");
 const upload = require("./routers/api/upload");
 const phone = require("./routers/api/phone");
 const weather = require("./routers/api/weather");
-//set storage engine
 
 const app = express();
-if ((process.env.NODE_ENV = "production")) {
-  // Prod folder
-  app.use(express.static(path.join(__dirname, "public.prod")));
-} else {
-  // Public folder
-  app.use(express.static(path.join(__dirname, "public")));
-}
+
+//set storage engine
+
+// Public folder
+app.use(express.static(path.join(__dirname, "public")));
 
 //bodyParser MiddleWare
 

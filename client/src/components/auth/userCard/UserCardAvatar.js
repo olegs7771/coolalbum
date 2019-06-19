@@ -5,6 +5,7 @@ import { clearErrors, updateAvatar } from "../../../actions/profileAction";
 import { withRouter } from "react-router-dom";
 import { reactLocalStorage } from "reactjs-localstorage";
 import jwt_decode from "jwt-decode";
+import bcrypt from "bcryptjs";
 
 class UserCardAvatar extends Component {
   constructor(props) {
@@ -63,6 +64,11 @@ class UserCardAvatar extends Component {
     const { token } = this.state;
     const decoded = jwt_decode(token);
     console.log("decoded", decoded);
+    //if password hashed
+    console.log("decoded.password", decoded.password);
+    const decodedPassword = bcrypt(decoded.password);
+    console.log("decodedPassword", decodedPassword);
+
     const userData = {
       email: decoded.email,
       password: decoded.password
