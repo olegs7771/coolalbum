@@ -68,7 +68,7 @@ router.post("/register", (req, res) => {
               user.token
             }/${user._id}`;
           } else {
-            urlConfirm = `https://morning-thicket-46114.herokuapp.com/confirm_registration/${
+            urlConfirm = `https://localhost:3000/confirm_registration/${
               user.token
             }/${user._id}`;
           }
@@ -129,8 +129,10 @@ router.post("/confirmRegistration", (req, res) => {
             location: user.location,
             bio: user.bio,
             password, //hashed
+            unhashedPassword: user.password,
             avatar,
             password,
+
             date: user.date
           };
 
