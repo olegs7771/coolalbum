@@ -65,9 +65,12 @@ class UserCardAvatar extends Component {
     const decoded = jwt_decode(token);
     console.log("decoded", decoded);
     //if password hashed
-    console.log("decoded.password", decoded.password);
-    const decodedPassword = bcrypt(decoded.password);
-    console.log("decodedPassword", decodedPassword);
+    if (decoded.password.length > 20) {
+      const decodedPassword = bcrypt(decoded.password);
+      console.log("decodedPassword", decodedPassword);
+    } else {
+      console.log("decoded.password", decoded.password);
+    }
 
     const userData = {
       email: decoded.email,
