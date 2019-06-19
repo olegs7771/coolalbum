@@ -47,7 +47,8 @@ class UserCardEdit extends Component {
         name: this.props.user.name,
         email: this.props.user.email,
         bio,
-        avatar: this.props.user.avatar
+        avatar: this.props.user.avatar,
+        phone: this.props.user.phone
       });
     }
   }
@@ -95,6 +96,7 @@ class UserCardEdit extends Component {
       password: passwordData
     };
     this.props.updateUser(upUserCred, this.props.history, userData);
+    console.log("upUserCred", upUserCred);
   };
 
   render() {

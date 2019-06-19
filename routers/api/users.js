@@ -270,7 +270,8 @@ router.post(
       name: req.body.name,
       email: req.body.email,
       location: req.body.location,
-      bio: req.body.bio
+      bio: req.body.bio,
+      phone: req.body.phone
     };
     User.findOneAndUpdate(
       {
