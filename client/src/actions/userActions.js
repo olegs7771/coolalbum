@@ -141,11 +141,11 @@ export const authFacebook = (userData, history) => dispatch => {
 
 //Update Registered User with new data
 
-export const updateUser = (userData, history) => dispatch => {
+export const updateUser = (upUserCreds, history, userData) => dispatch => {
   console.log("userData", userData);
 
   axios
-    .post("/api/users/update", userData)
+    .post("/api/users/update", upUserCreds)
     .then(res => {
       console.log("res.data", res.data);
       dispatch({
@@ -155,7 +155,7 @@ export const updateUser = (userData, history) => dispatch => {
     })
     .then(() => {
       setTimeout(() => {
-        console.log("userData", userData);
+        dispatch(clearMessages());
 
         // Remove jwtToken from localStorage
         localStorage.removeItem("jwtToken");
@@ -168,6 +168,21 @@ export const updateUser = (userData, history) => dispatch => {
         });
 
         //relogin update user
+        axios.post("api/users/login", userData).then(res => {
+          // Save to localStorage token
+          const { token } = res.data;
+          //Set token to localStorage
+          localStorage.setItem("jwtToken", token);
+          //Set token to Auth header (we crerate it in separate file)
+          setAuthToken(token);
+          // set the user (using user creds from token. but first we must to decode token with jwt-decode module)
+          const decoded = jwt_decode(token);
+          console.log("decoded", decoded);
+
+          //set current user (we create separate function here)
+          dispatch(setCurrentUser(decoded));
+          history.push("/");
+        });
 
         history.push("/login");
       }, 5000);

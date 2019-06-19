@@ -68,7 +68,7 @@ router.post("/register", (req, res) => {
               user.token
             }/${user._id}`;
           } else {
-            urlConfirm = `https://morning-thicket-46114.herokuapp.com/confirm_registration/${
+            urlConfirm = `https://localhost:3000/confirm_registration/${
               user.token
             }/${user._id}`;
           }
@@ -307,7 +307,6 @@ router.post("/email", (req, res) => {
 //check if Email not exists for register form
 
 router.post("/email_register", (req, res) => {
-  console.log("req.body", req.body);
   const email = req.body.email;
   User.findOne({ email }).then(user => {
     if (!user) {

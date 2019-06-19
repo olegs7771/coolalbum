@@ -10,6 +10,7 @@ import { getProfile } from "../../../actions/profileAction";
 //intl_phone_input
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
+import jwt_decode from "jwt-decode";
 
 class UserCardEdit extends Component {
   state = {
@@ -21,7 +22,8 @@ class UserCardEdit extends Component {
     phone: "",
     errors: {},
     message: {},
-    isConfirmDelete: false
+    isConfirmDelete: false,
+    token: ""
   };
   onChange = e => {
     this.setState({
@@ -30,13 +32,10 @@ class UserCardEdit extends Component {
   };
 
   componentDidMount() {
-    const token = reactLocalStorage.get("jwtToken");
-    console.log("token", token);
+    this.setState({
+      token: reactLocalStorage.get("jwtToken")
+    });
 
-    //trigger getProfile();
-    // const id = {
-    //   id: this.props.match.params.id
-    // };
     this.props.getProfile();
 
     //get user creds from props to state
@@ -68,16 +67,34 @@ class UserCardEdit extends Component {
   //after submit user been update in db
 
   onSubmitUpdateUser = e => {
-    const { name, email, bio, location } = this.state;
+    const { name, email, bio, location, phone, token } = this.state;
+    console.log("token", token);
+
     e.preventDefault();
 
-    const upUser = {
+    const upUserCred = {
       name,
       email,
       bio,
-      location
+      location,
+      phone
     };
-    this.props.updateUser(upUser, this.props.history);
+    // email & password for action to relogin update user
+    const decoded = jwt_decode(token);
+    console.log("decoded", decoded);
+    //if decoded.unhashedPassword
+    let passwordData;
+    if (decoded.unhashedPassword) {
+      passwordData = decoded.unhashedPassword;
+    } else {
+      passwordData = decoded.password;
+    }
+
+    const userData = {
+      email: decoded.email,
+      password: passwordData
+    };
+    this.props.updateUser(upUserCred, this.props.history, userData);
   };
 
   render() {

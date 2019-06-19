@@ -12,7 +12,6 @@ import {
 import axios from "axios";
 import configureStore from "../store/configureStore";
 import setAuthToken from "../utils/setAuthToken";
-import { loginUser } from "./userActions";
 
 import jwt_decode from "jwt-decode";
 const store = configureStore();
