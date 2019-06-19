@@ -15,9 +15,13 @@ const weather = require("./routers/api/weather");
 //set storage engine
 
 const app = express();
-
-// Public folder
-app.use(express.static(path.join(__dirname, "public")));
+if ((process.env.NODE_ENV = "production")) {
+  // Prod folder
+  app.use(express.static(path.join(__dirname, "public.prod")));
+} else {
+  // Public folder
+  app.use(express.static(path.join(__dirname, "public")));
+}
 
 //bodyParser MiddleWare
 
