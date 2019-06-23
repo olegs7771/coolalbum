@@ -98,7 +98,7 @@ router.post(
 
             const file = `./public${avatar}`;
 
-            //path to file to be deleted.
+            //path to file to be deleted in uploads
             console.log("file delete in /uploads", file);
             if (file) {
               //file passed multer and ready for compressor
