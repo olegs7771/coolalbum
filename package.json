@@ -25,6 +25,9 @@
     "fs-extra": "^8.0.1",
     "geo-from-ip": "^1.2.1",
     "gravatar": "^1.8.0",
+    "imagemin": "^6.1.0",
+    "imagemin-jpegtran": "^6.0.0",
+    "imagemin-pngquant": "^8.0.0",
     "ipware": "^2.0.0",
     "jsonwebtoken": "^8.5.1",
     "jwa": "^1.4.1",
@@ -42,7 +45,6 @@
     "validator": "^10.11.0"
   },
   "devDependencies": {
-    "compress-images": "^1.5.8",
     "nodemon": "^1.19.0"
   },
   "repository": {

@@ -5,7 +5,10 @@ const path = require("path");
 //Bring in Models
 const User = require("../../models/User");
 //Bring compressor
-const compressor = require("../../compressor/compressor");
+// const compressor = require("../../compressor/compressor");
+const imagemin = require("imagemin");
+const imageminJpegtran = require("imagemin-jpegtran");
+const imageminPngquant = require("imagemin-pngquant");
 
 //File System
 const fse = require("fs-extra");
@@ -52,18 +55,20 @@ function checkFileType(file, cb) {
 }
 
 //Firing Compressor
+function compressImg(cb) {
+  (async () => {
+    const files = await imagemin(
+      ["public/img/*.{jpg,png}"],
+      "public/uploads/",
+      {
+        plugins: [imageminJpegtran(), imageminPngquant({ quality: "65-80" })]
+      }
+    );
 
-const input = "public/img/*.{jpg,JPG,jpeg,JPEG,png,svg,gif}";
-const output = "public/uploads/";
-const compressImg = cb => {
-  compressor(input, output, compressed => {
-    if (compressed) {
-      return cb(compressed);
-    }
-  });
-
-  return cb(cb);
-};
+    //=> [{data: <Buffer 89 50 4e …>, path: 'build/images/foo.jpg'}, …]
+    return cb(files);
+  })();
+}
 
 //Route Private
 //Updating Avatar in User
@@ -82,7 +87,8 @@ router.post(
 
         res.status(400).json({ error: err });
       } else {
-        console.log("req.file", req.file);
+        // console.log("req.file", req.file);
+        //passed multer
 
         if (req.file.filename) {
           //Delete previous Avatar in /public/uploads
@@ -98,7 +104,7 @@ router.post(
               //file passed multer and ready for compressor
               compressImg(cb => {
                 if (cb) {
-                  console.log("file", file);
+                  console.log("cb[0]['path']", cb[0]["path"]);
                   const fileToDelete = file.replace("\\uploads\\", "\\img\\");
                   console.log("fileToDelete", fileToDelete);
                   //Delete previouse file from /img
@@ -106,11 +112,11 @@ router.post(
                     .remove(fileToDelete)
                     .then(() => {
                       console.log("deleted");
-                      //delete all in /public/img
                     })
                     .catch(err => {
                       console.log(err);
                     });
+                  //delete in uploads
                 }
               });
             }
@@ -118,6 +124,8 @@ router.post(
             //check if there file in public/uploads
             fse.pathExists(file).then(exists => {
               if (!exists) {
+                console.log("no file in uploads");
+
                 //There is no such file in /public/uploads
                 const avatar = req.file.path.replace(
                   "public\\img",
@@ -139,10 +147,13 @@ router.post(
                   });
                 });
               } else {
+                console.log("there file in uploads");
+
                 const avatar = req.file.path.replace(
                   "public\\img",
                   "\\uploads"
                 );
+                console.log(avatar, "---> to delete in uploads");
                 User.update(
                   { _id: req.user.id },
                   {
