@@ -16,7 +16,7 @@ router.post("/weather", (req, res) => {
   const myIP = "84.109.36.175";
   let currentIP;
   if (process.env.NODE_ENV === "production") {
-    currentIP = ip_info.clientIp;
+    currentIP = myIP;
   } else {
     currentIP = myIP;
   }
