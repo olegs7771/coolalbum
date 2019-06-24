@@ -9,6 +9,7 @@ const User = require("../../models/User");
 const imagemin = require("imagemin");
 const imageminJpegtran = require("imagemin-jpegtran");
 const imageminPngquant = require("imagemin-pngquant");
+const imageminMozjpeg = require("imagemin-mozjpeg");
 
 //File System
 const fse = require("fs-extra");
@@ -61,7 +62,7 @@ function compressImg(cb) {
       ["public/img/*.{jpg,png}"],
       "public/uploads/",
       {
-        plugins: [imageminJpegtran(), imageminPngquant({ quality: "65-80" })]
+        plugins: [imageminMozjpeg([100]), imageminPngquant()]
       }
     );
 
@@ -81,105 +82,109 @@ router.post(
       if (req.file === undefined) {
         return res.status(400).json({ error: "Please select file" });
       }
-
       if (err) {
         console.log("err", err);
-
         res.status(400).json({ error: err });
       } else {
-        // console.log("req.file", req.file);
-        //passed multer
-
+        console.log("req.file.path", req.file.path);
+        //passed multer//new file in /public/img
         if (req.file.filename) {
-          //Delete previous Avatar in /public/uploads
-          User.findOne({ _id: req.user.id }).then(user => {
-            const avatar = user.avatar;
-            console.log("avatar", avatar);
+          //fire up compressor
+          compressImg(cb => {
+            if (cb) {
+              console.log("cb[0]['path']", cb[0]["path"]);
+              //find previous file in db to be deleted
+              User.findOne({ _id: req.user.id }).then(user => {
+                const toDeleteImg = user.avatar; //"\\uploads\\myImage-000000000000.jpg"
+                console.log("toDeleteImg", toDeleteImg);
+                const pathToDeleteImg_in_uploads = `./public${toDeleteImg}`;
 
-            const file = `./public${avatar}`;
-
-            //path to file to be deleted in uploads
-            console.log("file delete in /uploads", file);
-            if (file) {
-              //file passed multer and ready for compressor
-              compressImg(cb => {
-                if (cb) {
-                  console.log("cb[0]['path']", cb[0]["path"]);
-                  const fileToDelete = file.replace("\\uploads\\", "\\img\\");
-                  console.log("fileToDelete", fileToDelete);
-                  //Delete previouse file from /img
-                  fse
-                    .remove(fileToDelete)
-                    .then(() => {
-                      console.log("deleted");
-                    })
-                    .catch(err => {
-                      console.log(err);
-                    });
-                  //delete in uploads
-                }
-              });
-            }
-
-            //check if there file in public/uploads
-            fse.pathExists(file).then(exists => {
-              if (!exists) {
-                console.log("no file in uploads");
-
-                //There is no such file in /public/uploads
-                const avatar = req.file.path.replace(
-                  "public\\img",
-                  "\\uploads"
+                //path to file to be deleted in uploads
+                console.log(
+                  "file delete in /uploads",
+                  pathToDeleteImg_in_uploads
                 );
+                //checks if file exists in /uploads
+                fse.pathExists(pathToDeleteImg_in_uploads).then(exists => {
+                  if (!exists) {
+                    console.log("no file in uploads");
+                    //There is no such file in /public/uploads
+                    const avatar = req.file.path.replace(
+                      "public\\img",
+                      "\\uploads"
+                    );
+                    User.update(
+                      { _id: req.user.id },
+                      {
+                        $set: {
+                          avatar
+                        }
+                      },
+                      { new: true }
+                    ).then(() => {
+                      res.status(200).json({
+                        avatar: "Avatar was successfully updated."
+                      });
+                    });
+                  } else {
+                    console.log("there file in uploads");
 
-                User.update(
-                  { _id: req.user.id },
-                  {
-                    $set: {
-                      avatar
-                    }
-                  },
-                  { new: true }
-                ).then(() => {
-                  res.status(200).json({
-                    avatar:
-                      "Avatar has been successfully updated.Please Login again."
-                  });
+                    const avatar = req.file.path.replace(
+                      "public\\img",
+                      "\\uploads"
+                    );
+                    User.update(
+                      { _id: req.user.id },
+                      {
+                        $set: {
+                          avatar
+                        }
+                      },
+                      { new: true }
+                    )
+                      .then(() => {
+                        res.status(200).json({
+                          avatar: "Avatar was successfully updated"
+                        });
+
+                        //Delete previouse file from /uploads || remove raw file from public/img
+                        fse.unlink(pathToDeleteImg_in_uploads, err => {
+                          if (err) throw err;
+                          console.log(
+                            pathToDeleteImg_in_uploads,
+                            "was deleted"
+                          );
+                        });
+                      })
+                      .catch(err => {
+                        console.log(err);
+                      });
+                  }
                 });
-              } else {
-                console.log("there file in uploads");
-
-                const avatar = req.file.path.replace(
-                  "public\\img",
-                  "\\uploads"
+                const pathToDeleteImg_in_img = pathToDeleteImg_in_uploads.replace(
+                  "\\uploads\\",
+                  "\\img\\"
                 );
-                console.log(avatar, "---> to delete in uploads");
-                User.update(
-                  { _id: req.user.id },
-                  {
-                    $set: {
-                      avatar
-                    }
-                  },
-                  { new: true }
-                )
-                  .then(() => {
-                    res.status(200).json({
-                      avatar: "Avatar was successfully updated"
-                    });
+                console.log(
+                  "crrent file to delete from public/img",
+                  req.file.path
+                );
 
-                    //Delete previouse file from /uploads
-                    fse.unlink(file, err => {
-                      if (err) throw err;
-                      console.log(file, "was deleted");
-                    });
+                console.log("pathToDeleteImg_in_img", pathToDeleteImg_in_img);
+                //Delete previouse file from /img
+                fse
+                  .remove(req.file.path)
+                  .then(() => {
+                    console.log("deleted in img");
                   })
                   .catch(err => {
                     console.log(err);
                   });
-              }
-            });
+              });
+            }
           });
+
+          //Delete previous Avatar in /public/uploads
         }
       }
     });

@@ -27,6 +27,7 @@
     "gravatar": "^1.8.0",
     "imagemin": "^6.1.0",
     "imagemin-jpegtran": "^6.0.0",
+    "imagemin-mozjpeg": "^8.0.0",
     "imagemin-pngquant": "^8.0.0",
     "ipware": "^2.0.0",
     "jsonwebtoken": "^8.5.1",
