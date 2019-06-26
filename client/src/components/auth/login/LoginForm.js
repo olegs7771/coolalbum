@@ -15,9 +15,14 @@ class LoginForm extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps !== this.props) {
+    if (prevProps.errors !== this.props.errors) {
       this.setState({
-        errors: this.props.errors,
+        errors: this.props.errors
+      });
+      //clear this.state.errors if this.state.messages obj>0
+    }
+    if (prevProps.message !== this.props.message) {
+      this.setState({
         message: this.props.message
       });
       //clear this.state.errors if this.state.messages obj>0

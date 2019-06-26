@@ -73,14 +73,14 @@ router.post("/register", (req, res) => {
             }/${user._id}`;
           }
 
-          const register = "Register";
+          const register = true;
           const data = {
             token: user.token,
             name: user.name,
             email: user.email,
             register,
 
-            URL: urlConfirm
+            urlReg: urlConfirm
           };
           sendMail(data, response => {
             console.log(response.messageId);
@@ -149,6 +149,7 @@ router.post("/confirmRegistration", (req, res) => {
                 $set: {
                   confirmed: true,
                   password,
+                  createdAt: "",
                   avatar
                 }
               }
@@ -325,7 +326,10 @@ router.post("/recover", (req, res) => {
     return res.status(400).json({ loginEmail: "Please fill in Email address" });
   }
   const email = req.body.email;
-  User.findOne({ email }).then(user => {
+  User.findOne({ email }).then((user, err) => {
+    if (err) {
+      console.log("err", err);
+    }
     if (user) {
       //creating body for email
       const payload = {
@@ -340,26 +344,32 @@ router.post("/recover", (req, res) => {
       };
       jwt.sign(payload, keys, { expiresIn: 3600 }, (err, token) => {
         // res.json({ success: true, token: "bearer  " + token });
-
+        if (err) {
+          throw err;
+        }
         //define env
+        let urlReg;
         if (process.env.NODE_ENV === "production") {
-          const URL = `https://dashboard.heroku.com/recover_newPass/${token}/${
+          urlReg = `https://infinite-everglades-47869.herokuapp.com/recover_newPass/${token}/${
             user._id
           }`;
         } else {
-          const URL = `https://localhost:3000/recover_newPass/${token}/${
+          urlReg = `https://localhost:3000/recover_newPass/${token}/${
             user._id
           }`;
         }
 
         const name = user.name;
-        const recover = "Recover";
+        const email = user.email;
+        const recover = true;
 
         const data = {
-          URL,
+          urlReg,
           name,
+          email,
           recover
         };
+
         sendMail(data, response => {
           console.log(response.messageId);
           if (response.messageId) {

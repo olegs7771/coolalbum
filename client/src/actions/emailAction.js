@@ -3,7 +3,7 @@ import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
 
 export const sendEmailMessage = (emailData, history) => dispatch => {
-  setAuthToken(localStorage.jwtToken);
+  // setAuthToken(localStorage.jwtToken);
   dispatch(mailMessageLoading());
 
   axios
