@@ -20,8 +20,8 @@ const TextAreaFormGroup = ({
         placeholder={placeholder}
         value={value}
         type={type}
-        cols="20"
-        rows="5"
+        cols="10"
+        rows="2"
         onChange={onChange}
         className={classnames("form-control", { "is-invalid": error })}
       />

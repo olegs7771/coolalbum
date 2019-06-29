@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { authFacebook } from "../actions/userActions";
 import { withRouter } from "react-router-dom";
 import Spinner from "./Spinner";
+import styled from "styled-components";
 
 class FaceBookBtn extends Component {
   state = {
@@ -41,6 +42,8 @@ class FaceBookBtn extends Component {
             fields="name,email,picture"
             onClick={this.componentClicked}
             callback={this.responseFacebook}
+            icon="fa-facebook"
+            cssClass="my-facebook-button-class"
           />
         </div>
       ));

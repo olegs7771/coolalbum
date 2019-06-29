@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { setCurrentUser, logoutUser } from "../../actions/userActions";
-import { getWeather } from "../../actions/weatherAction";
+import { setCurrentUser, logoutUser } from "../../../actions/userActions";
+import { getWeather } from "../../../actions/weatherAction";
 import { reactLocalStorage } from "reactjs-localstorage";
 import jwtDecode from "jwt-decode";
-import { isEmpty } from "../../utils/isEmpty";
+import { isEmpty } from "../../../utils/isEmpty";
 //weather widget
-import WeatherWidGet from "../../utils/WeatherWidGet";
+import WeatherWidGet from "../../../utils/WeatherWidGet";
 class Header extends Component {
   state = {
     isAuthenticated: false
@@ -55,8 +55,13 @@ class Header extends Component {
             <nav className="navbar navbar-dark bg-dark navbar-expand-lg ml-auto ">
               {!isEmpty(user) ? (
                 <ul className="nav justify-content-end">
+                  {/* {Post Envelope} */}
+                  <li className="nav-item active ">
+                    <Link to="/post">
+                      <i className="fas fa-envelope text-white mr-2" />
+                    </Link>
+                  </li>
                   <li className="nav-item active">
-                    <span className="text-white">Welcome</span>{" "}
                     <Link to={`/userCard/${user.id}`}>
                       <span className="text-info ml-2 ">{user.name}</span>
                     </Link>
@@ -121,8 +126,8 @@ class Header extends Component {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link text-white" href="/">
-                    Link
+                  <a className="nav-link text-white" href="/users">
+                    Users
                   </a>
                 </li>
                 <li className="nav-item">

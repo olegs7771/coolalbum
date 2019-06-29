@@ -233,6 +233,16 @@ router.get(
   }
 );
 
+//get all users
+router.get("/all", (req, res) => {
+  User.find().then(user => {
+    if (!user) {
+      res.status(200).json({ message: "No users" });
+    }
+    res.status(200).json(user);
+  });
+});
+
 //auth with facebook
 
 router.post(

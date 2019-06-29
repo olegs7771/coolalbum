@@ -4,7 +4,9 @@ import {
   SET_CURRENT_USER,
   LOGOUT_USER,
   GET_MESSAGE,
-  CLEAR_MESSAGE
+  CLEAR_MESSAGE,
+  GET_ALL_USERS,
+  LOADING_ALL_USERS
 } from "./types";
 import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
@@ -311,6 +313,31 @@ export const isMatchedPass = (data, history) => dispatch => {
         payload: err.response.data
       });
     });
+};
+//Get ALL Users
+export const getAllUsers = () => dispatch => {
+  dispatch(loadingAllUsers());
+  axios
+    .get("api/users/all")
+    .then(res => {
+      console.log("res.data", res.data);
+      dispatch({
+        type: GET_ALL_USERS,
+        payload: res.data
+      });
+    })
+    .catch(err => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
+    });
+};
+//Loading All Users
+export const loadingAllUsers = () => dispatch => {
+  return dispatch({
+    type: LOADING_ALL_USERS
+  });
 };
 
 // Clear Errors

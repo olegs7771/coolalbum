@@ -24,13 +24,14 @@ module.exports = function sendMail(data, cb) {
   let htmlRegBody;
   let to;
   if (data.register) {
-    console.log("html register");
     htmlRegBody = `Dear ${data.name} </br>
-   We have received  a request to authorize this email on CoolAlbum website
-   Please  <a href=${data.urlReg}>confirm</a>   to complete your registration
-   `;
+    We have received  a request to authorize this email on CoolAlbum website
+    Please  <a href=${data.urlReg}>confirm</a>   to complete your registration
+    `;
     html = htmlRegBody;
     to = data.email;
+    console.log("html register");
+    console.log("to ", to);
   }
   // create htmlBody for recovering password
   let htmlRecoverBody;
@@ -43,6 +44,9 @@ module.exports = function sendMail(data, cb) {
     html = htmlRecoverBody;
     to ? (to = data.email) : (to = "olegs777@bezeqint.net");
     to = data.email;
+
+    console.log("html recover");
+    console.log("to ", to);
   }
   if (to === undefined) {
     to = "olegs777@bezeqint.net";

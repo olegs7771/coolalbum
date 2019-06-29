@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
 
-import Header from "./components/layout/Header";
+import Header from "./components/layout/header/Header";
 import Main from "./components/layout/main/Main";
 import Register from "./components/auth/register/Register";
 import Login from "./components/auth/login/Login";
@@ -19,7 +19,10 @@ import ProfileEdit from "./components/profile/ProfileEdit";
 
 import jwt_decode from "jwt-decode";
 import { logoutUser } from "./actions/userActions";
-//Avatar
+//Posts
+import Post from "./components/layout/posts/Post";
+//Users
+import Users from "./components/layout/users/Users";
 
 import "./App.css";
 import setAuthToken from "./utils/setAuthToken";
@@ -89,6 +92,8 @@ class App extends Component {
                   component={ProfileCreate}
                 />
                 <Route exact path="/profile_edit/:id" component={ProfileEdit} />
+                <Route exact path="/post" component={Post} />
+                <Route exact path="/users" component={Users} />
               </Switch>
             </div>
           </div>
