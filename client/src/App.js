@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 
 import Header from "./components/layout/header/Header";
 import Main from "./components/layout/main/Main";
+import Footer from "./components/layout/footer/Footer";
 import Register from "./components/auth/register/Register";
 import Login from "./components/auth/login/Login";
 import RecoverPassword from "./components/auth/login/RecoverPassword";
@@ -96,6 +97,7 @@ class App extends Component {
                 <Route exact path="/users" component={Users} />
               </Switch>
             </div>
+            <Footer />
           </div>
         </Router>
       </Provider>

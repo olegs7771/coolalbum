@@ -24,3 +24,5 @@ export const SEND_SMS = "SEND_SMS";
 //Weather
 export const LOADING_CURRENT_WEATHER = "LOADING_CURRENT_WEATHER ";
 export const GET_CURRENT_WEATHER = "GET_CURRENT_WEATHER ";
+//Posts
+export const SEND_POST = "SEND_POST";
