@@ -49,7 +49,7 @@ class WeatherWidGet extends Component {
       //sky condition (scattered clouds)
       if (data1.description === "scattered clouds" && dayTime) {
         skyCon = <i className="fas fa-cloud-sun" />;
-        console.log("day");
+        // console.log("day");
       }
       if (data1.description === "scattered clouds" && dayTime === false) {
         skyCon = <i className="fas fa-cloud-moon" />;

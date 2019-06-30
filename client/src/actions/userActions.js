@@ -320,7 +320,6 @@ export const getAllUsers = () => dispatch => {
   axios
     .get("api/users/all")
     .then(res => {
-      console.log("res.data", res.data);
       dispatch({
         type: GET_ALL_USERS,
         payload: res.data

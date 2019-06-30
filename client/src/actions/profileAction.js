@@ -10,11 +10,11 @@ import {
   // GET_PROFILES
 } from "./types";
 import axios from "axios";
-import configureStore from "../store/configureStore";
+// import configureStore from "../store/configureStore";
 import setAuthToken from "../utils/setAuthToken";
 
 import jwt_decode from "jwt-decode";
-const store = configureStore();
+// const store = configureStore();
 
 // Create new Profile or Update profile
 export const createProfile = (data, history) => dispatch => {

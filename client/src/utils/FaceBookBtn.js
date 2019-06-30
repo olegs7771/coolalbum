@@ -3,8 +3,9 @@ import FacebookLogin from "react-facebook-login";
 import { connect } from "react-redux";
 import { authFacebook } from "../actions/userActions";
 import { withRouter } from "react-router-dom";
-import Spinner from "./Spinner";
-import styled from "styled-components";
+// import Spinner from "./Spinner";
+// import styled from "styled-components";
+import "../App.css";
 
 class FaceBookBtn extends Component {
   state = {
@@ -42,8 +43,7 @@ class FaceBookBtn extends Component {
             fields="name,email,picture"
             onClick={this.componentClicked}
             callback={this.responseFacebook}
-            icon="fa-facebook"
-            cssClass="my-facebook-button-class"
+            cssClass="my-facebook-button"
           />
         </div>
       ));
@@ -51,12 +51,7 @@ class FaceBookBtn extends Component {
       loginContent = null;
     }
 
-    return (
-      <div className="my-4">
-        {loginContent}
-        <Spinner />
-      </div>
-    );
+    return <div className="my-4">{loginContent}</div>;
   }
 }
 export default connect(

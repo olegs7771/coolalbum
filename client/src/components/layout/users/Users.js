@@ -23,8 +23,6 @@ class Users extends Component {
   }
 
   render() {
-    console.log("this.props", this.props);
-    console.log("this.state", this.state);
     let userContent;
     const { users, loading } = this.state;
     if (users === null || loading) {
@@ -47,7 +45,7 @@ class Users extends Component {
       );
     }
 
-    return <div className=" row my-4">{userContent}</div>;
+    return <div className="  my-4 mx-auto">{userContent}</div>;
   }
 }
 

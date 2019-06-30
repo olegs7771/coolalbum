@@ -19,7 +19,7 @@ class UserItems extends Component {
             src={this.props.avatar}
             className="card-img-top"
             alt="..."
-            style={{ height: "245px" }}
+            style={{ width: "75%" }}
           />
         </div>
       );
@@ -47,12 +47,12 @@ class UserItems extends Component {
     }
     //Styles
     const Card = styled.section`
-      background: papayawhip;
+      background: rgb(179, 215, 255, 0.11);
     `;
     return (
       <div className="col-md-4 my-2">
         <Card className="card container">
-          <h5 className="card-title">{name}</h5>
+          <h5 className="card-title my-1">{name}</h5>
           {avatarResizes}
           <div className="card-body">
             <span
