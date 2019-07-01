@@ -6,7 +6,16 @@ import styled from "styled-components";
 class UserItems extends Component {
   state = {
     showCreds: false,
-    showPostForm: false
+    showPostForm: false,
+    toEmail: ""
+  };
+
+  showPostForm = email => {
+    // here we bind email of each userCard
+    this.setState({
+      showPostForm: true,
+      toEmail: email
+    });
   };
 
   render() {
@@ -30,7 +39,7 @@ class UserItems extends Component {
     }
 
     const { name, email, phone, location, date } = this.props;
-    const { showCreds, showPostForm } = this.state;
+    const { showCreds, showPostForm, toEmail } = this.state;
     //button show toggle
     let button;
     if (showCreds) {
@@ -41,7 +50,7 @@ class UserItems extends Component {
     //messageForm toggle
     let postForm;
     if (showPostForm) {
-      postForm = <Post />;
+      postForm = <Post toEmail={toEmail} />;
     } else {
       postForm = null;
     }
@@ -81,11 +90,7 @@ class UserItems extends Component {
             <div className="btn-group">
               <div
                 className="btn btn-light btn-link"
-                onClick={() =>
-                  this.setState({
-                    showPostForm: !this.state.showPostForm
-                  })
-                }
+                onClick={this.showPostForm.bind(this, email)}
               >
                 Message
               </div>

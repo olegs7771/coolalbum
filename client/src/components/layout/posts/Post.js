@@ -55,6 +55,7 @@ class Post extends Component {
     console.log("this.props.auth", this.props.auth);
     console.log("this.state", this.state);
     console.log("this.props.email", this.props.email);
+    console.log("this.props", this.props);
 
     let btnContent;
     let avatarContent;
@@ -91,7 +92,7 @@ class Post extends Component {
             <TextAreaFormGroup
               name="text"
               value={text}
-              onChange={this.onChange.bind(this, this.props.email)}
+              onChange={this.onChange}
             />
             {btnContent}
           </form>
