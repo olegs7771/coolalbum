@@ -33,7 +33,8 @@ class Post extends Component {
     if (auth.user) {
       this.setState({
         avatar: auth.user.avatar,
-        name: auth.user.name
+        name: auth.user.name,
+        email: auth.user.email
       });
     }
   }
@@ -46,16 +47,18 @@ class Post extends Component {
   };
   sendPost = e => {
     e.preventDefault();
-    const { text, name, avatar, toEmail, toID } = this.state;
+    const { text, name, email, avatar, toEmail, toID } = this.state;
     const senderText = text; //text of post
     const senderAvatar = avatar; //sender avatar
     const senderName = name; //sender name
+    const senderEmail = email; //sender name
     const toId = toID; // receiver ID
 
     const data = {
       senderText,
       senderAvatar,
       senderName,
+      senderEmail,
       toEmail,
       toId
     };

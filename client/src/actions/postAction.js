@@ -14,3 +14,9 @@ export const sendPost = data => dispatch => {
       console.log("err", err);
     });
 };
+
+//Get Posts by logged user's ID from jwt
+// Private Route
+export const getPosts = () => dispatch => {
+  axios.post();
+};

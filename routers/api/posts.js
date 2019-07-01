@@ -13,9 +13,12 @@ router.post(
     console.log("req.body", req.body);
     //Create new Post
     const newPost = new Post({
-      text: req.body.text,
-      toID: req.body.toID,
-      avatar: req.body.avatar
+      text: req.body.senderText,
+      toID: req.body.toId,
+      senderAvatar: req.body.senderAvatar,
+      senderEmail: req.body.senderEmail,
+      senderName: req.body.senderName,
+      toEmail: req.body.toEmail
     });
     newPost
       .save()
@@ -25,6 +28,20 @@ router.post(
       .catch(err => {
         res.status(400).json(err);
       });
+  }
+);
+
+router.post(
+  "/get_posts",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Post.findOne({ toID: req.user._id }).then(post => {
+      if (!post) {
+        res.status(200).json({ post: "no posts" });
+      } else {
+        res.status(200).json(post);
+      }
+    });
   }
 );
 

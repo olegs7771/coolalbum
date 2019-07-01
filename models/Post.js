@@ -13,7 +13,13 @@ const PostSchema = new Schema({
   toID: {
     type: String
   },
-  avatar: {
+  senderAvatar: {
+    type: String
+  },
+  senderEmail: {
+    type: String
+  },
+  senderName: {
     type: String
   },
   date: {
