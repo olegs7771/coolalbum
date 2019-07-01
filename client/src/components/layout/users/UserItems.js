@@ -7,20 +7,23 @@ class UserItems extends Component {
   state = {
     showCreds: false,
     showPostForm: false,
-    toEmail: ""
+    toEmail: "",
+    toID: ""
   };
 
-  showPostForm = email => {
+  showPostForm = (email, id) => {
     // here we bind email of each userCard
     this.setState({
       showPostForm: true,
-      toEmail: email
+      toEmail: email,
+      toID: id
     });
   };
 
   render() {
     //resize avatar if it includes gravatar
     let avatarResizes;
+
     if (this.props.avatar.includes("www.gravatar.com")) {
       avatarResizes = (
         <div>
@@ -38,8 +41,8 @@ class UserItems extends Component {
       );
     }
 
-    const { name, email, phone, location, date } = this.props;
-    const { showCreds, showPostForm, toEmail } = this.state;
+    const { id, name, email, phone, location, date } = this.props;
+    const { showCreds, showPostForm, toEmail, toID } = this.state;
     //button show toggle
     let button;
     if (showCreds) {
@@ -50,7 +53,8 @@ class UserItems extends Component {
     //messageForm toggle
     let postForm;
     if (showPostForm) {
-      postForm = <Post toEmail={toEmail} />;
+      //binds email of clicked user and going to Post
+      postForm = <Post toEmail={toEmail} toID={toID} />;
     } else {
       postForm = null;
     }
@@ -90,7 +94,7 @@ class UserItems extends Component {
             <div className="btn-group">
               <div
                 className="btn btn-light btn-link"
-                onClick={this.showPostForm.bind(this, email)}
+                onClick={this.showPostForm.bind(this, email, id)}
               >
                 Message
               </div>

@@ -11,9 +11,18 @@ class Post extends Component {
     avatar: "",
     name: "",
     showBtn: false,
-    isAuthenticated: false
+    isAuthenticated: false,
+    toEmail: "",
+    toID: ""
   };
+
   componentDidMount() {
+    //get toMail from changing props
+    this.setState({
+      toEmail: this.props.toEmail,
+      toID: this.props.toID
+    });
+
     const { auth } = this.props;
     if (auth.isAuthenticated) {
       this.setState({
@@ -37,25 +46,25 @@ class Post extends Component {
   };
   sendPost = e => {
     e.preventDefault();
-    const { text, name, avatar } = this.state;
+    const { text, name, avatar, toEmail, toID } = this.state;
     const senderText = text; //text of post
     const senderAvatar = avatar; //sender avatar
     const senderName = name; //sender name
+    const toId = toID; // receiver ID
 
     const data = {
       senderText,
       senderAvatar,
-      senderName
+      senderName,
+      toEmail,
+      toId
     };
 
     this.props.sendPost(data);
   };
 
   render() {
-    console.log("this.props.auth", this.props.auth);
     console.log("this.state", this.state);
-    console.log("this.props.email", this.props.email);
-    console.log("this.props", this.props);
 
     let btnContent;
     let avatarContent;

@@ -39,6 +39,7 @@ class Users extends Component {
               location={item.location}
               avatar={item.avatar}
               date={item.date}
+              id={item._id}
             />
           ))}
         </div>
