@@ -6,6 +6,7 @@ import errorsReducer from "./errorsReducer";
 import mailReducer from "./mailReducer";
 import messageReducer from "./messageReducer";
 import weatherReducer from "./weatherReducer";
+import postReducer from "./postReducer";
 
 export default combineReducers({
   auth: authReducer,
@@ -14,5 +15,6 @@ export default combineReducers({
   errors: errorsReducer,
   message: messageReducer,
   mail: mailReducer,
-  weather: weatherReducer
+  weather: weatherReducer,
+  post: postReducer
 });

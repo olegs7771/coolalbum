@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { setCurrentUser, logoutUser } from "../../../actions/userActions";
+import { getPosts } from "../../../actions/postAction";
 import { getWeather } from "../../../actions/weatherAction";
 import { reactLocalStorage } from "reactjs-localstorage";
 import jwtDecode from "jwt-decode";
@@ -10,7 +11,8 @@ import { isEmpty } from "../../../utils/isEmpty";
 import WeatherWidGet from "../../../utils/WeatherWidGet";
 class Header extends Component {
   state = {
-    isAuthenticated: false
+    isAuthenticated: false,
+    posts: null
   };
 
   //Logout
@@ -35,10 +37,29 @@ class Header extends Component {
     // Fetch Weather API from OPEN WEATHER MAP
 
     this.props.getWeather();
+    this.props.getPosts();
+
+    console.log("cdm this.props", this.props);
+  }
+  componentDidUpdate(prevProps) {
+    if (prevProps.post !== this.props.post) {
+      this.setState({
+        posts: this.props.post.post
+      });
+    }
   }
 
   render() {
     const { user } = this.props.auth;
+    const { posts } = this.state;
+
+    let postCountcontent;
+    if (posts) {
+      console.log("posts", posts.length);
+      postCountcontent = <span className="text-white">{posts.length}</span>;
+    } else {
+      postCountcontent = null;
+    }
 
     if (user) {
       return (
@@ -58,7 +79,8 @@ class Header extends Component {
                   {/* {Post Envelope} */}
                   <li className="nav-item active ">
                     <Link to="/post">
-                      <i className="fas fa-envelope text-white mr-2" />
+                      <i className="fas fa-envelope fa-2x text-white mr-2" />
+                      {postCountcontent}
                     </Link>
                   </li>
                   <li className="nav-item active">
@@ -145,10 +167,11 @@ class Header extends Component {
 }
 
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: state.auth,
+  post: state.post
 });
 
 export default connect(
   mapStateToProps,
-  { setCurrentUser, logoutUser, getWeather }
+  { setCurrentUser, logoutUser, getWeather, getPosts }
 )(withRouter(Header));

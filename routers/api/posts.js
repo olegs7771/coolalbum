@@ -31,11 +31,13 @@ router.post(
   }
 );
 
+//Get posts by ID (for logged user)
+
 router.post(
   "/get_posts",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    Post.findOne({ toID: req.user._id }).then(post => {
+    Post.find({ toID: req.user._id }).then(post => {
       if (!post) {
         res.status(200).json({ post: "no posts" });
       } else {
