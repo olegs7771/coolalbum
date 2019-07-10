@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { setCurrentUser, logoutUser } from "../../../actions/userActions";
 import { getPosts } from "../../../actions/postAction";
 import { getWeather } from "../../../actions/weatherAction";
-import { getPosts } from "../../../actions/postAction";
+
 import { reactLocalStorage } from "reactjs-localstorage";
 import jwtDecode from "jwt-decode";
 import { isEmpty } from "../../../utils/isEmpty";
