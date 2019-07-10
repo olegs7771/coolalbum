@@ -71,7 +71,7 @@ class Post extends Component {
 
     let btnContent;
     let avatarContent;
-    const { showBtn, isAuthenticated, text, avatar, name } = this.state;
+    const { showBtn, isAuthenticated, text, avatar } = this.state;
     if (showBtn) {
       if (isAuthenticated) {
         btnContent = (

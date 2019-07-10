@@ -58,43 +58,43 @@ class WeatherWidGet extends Component {
       //sky condition (	clear sky)
       if (data1.description === "clear sky" && dayTime) {
         skyCon = <i className="far fa-sun" />;
-        console.log("1");
+        // console.log("1");
       }
       if (data1.description === "clear sky" && dayTime === false) {
         skyCon = <i className="fas fa-moon" />;
-        console.log("2");
+        // console.log("2");
       }
 
       //sky condition (	few clouds)
       if (data1.description === "few clouds" && dayTime) {
-        console.log("3");
+        // console.log("3");
 
         skyCon = <i className="fas fa-cloud" />;
       }
       if (data1.description === "few clouds" && dayTime === false) {
-        console.log("4");
+        // console.log("4");
 
         skyCon = <i className="fas fa-cloud" />;
       }
       //sky condition (	rain)
       if (data1.description === "rain" && dayTime) {
-        console.log("5");
+        // console.log("5");
 
         skyCon = <i className="fas fa-cloud-rain" />;
       }
       if (data1.description === "rain") {
-        console.log("6");
+        // console.log("6");
 
         skyCon = <i className="fas fa-cloud-rain" />;
       }
       //sky condition (	thunderstorm)
       if (data1.description === "thunderstorm" && dayTime) {
-        console.log("7");
+        // console.log("7");
 
         skyCon = <i className="fas fa-poo-storm" />;
       }
       if (data1.description === "thunderstorm") {
-        console.log("8");
+        // console.log("8");
 
         skyCon = <i className="fas fa-poo-storm" />;
       }

@@ -3,6 +3,7 @@ import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { setCurrentUser, logoutUser } from "../../../actions/userActions";
 import { getWeather } from "../../../actions/weatherAction";
+import { getPosts } from "../../../actions/postAction";
 import { reactLocalStorage } from "reactjs-localstorage";
 import jwtDecode from "jwt-decode";
 import { isEmpty } from "../../../utils/isEmpty";
@@ -10,7 +11,8 @@ import { isEmpty } from "../../../utils/isEmpty";
 import WeatherWidGet from "../../../utils/WeatherWidGet";
 class Header extends Component {
   state = {
-    isAuthenticated: false
+    isAuthenticated: false,
+    posts: null
   };
 
   //Logout
@@ -28,18 +30,38 @@ class Header extends Component {
     if (token) {
       //decode token with jwt-decode
       const decodedToken = jwtDecode(token);
-
       //  putting it into redux state
       this.props.setCurrentUser(decodedToken);
     }
     // Fetch Weather API from OPEN WEATHER MAP
-
     this.props.getWeather();
+    //get posts for authenticated user
+    this.props.getPosts();
+    //load posts
+  }
+  componentDidUpdate(prevProps) {
+    if (prevProps.post !== this.props.post) {
+      this.setState({
+        posts: this.props.post
+      });
+    }
   }
 
   render() {
     const { user } = this.props.auth;
-
+    const { posts } = this.state;
+    //Posts
+    let postCountContent;
+    if (posts) {
+      postCountContent = (
+        <div className="d-inline  ml-1" style={{ width: "40px" }}>
+          <span className="text-white " style={{ fontSize: "12px" }}>
+            {posts.posts.length}
+          </span>
+        </div>
+      );
+    }
+    //User
     if (user) {
       return (
         <div className="pos-f-t">
@@ -57,8 +79,9 @@ class Header extends Component {
                 <ul className="nav justify-content-end">
                   {/* {Post Envelope} */}
                   <li className="nav-item active ">
-                    <Link to="/post">
-                      <i className="fas fa-envelope text-white mr-2" />
+                    <Link to="/inbox">
+                      <i className="fas fa-envelope fa-2x text-white  d-inline" />
+                      {postCountContent}
                     </Link>
                   </li>
                   <li className="nav-item active">
@@ -145,10 +168,11 @@ class Header extends Component {
 }
 
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: state.auth,
+  post: state.post
 });
 
 export default connect(
   mapStateToProps,
-  { setCurrentUser, logoutUser, getWeather }
+  { setCurrentUser, logoutUser, getWeather, getPosts }
 )(withRouter(Header));
