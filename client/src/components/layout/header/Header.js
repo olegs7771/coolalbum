@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { setCurrentUser, logoutUser } from "../../../actions/userActions";
+import { getPosts } from "../../../actions/postAction";
 import { getWeather } from "../../../actions/weatherAction";
 import { getPosts } from "../../../actions/postAction";
 import { reactLocalStorage } from "reactjs-localstorage";
@@ -35,14 +36,14 @@ class Header extends Component {
     }
     // Fetch Weather API from OPEN WEATHER MAP
     this.props.getWeather();
-    //get posts for authenticated user
     this.props.getPosts();
-    //load posts
+
+    console.log("cdm this.props", this.props);
   }
   componentDidUpdate(prevProps) {
     if (prevProps.post !== this.props.post) {
       this.setState({
-        posts: this.props.post
+        posts: this.props.post.post
       });
     }
   }
@@ -50,18 +51,15 @@ class Header extends Component {
   render() {
     const { user } = this.props.auth;
     const { posts } = this.state;
-    //Posts
-    let postCountContent;
+
+    let postCountcontent;
     if (posts) {
-      postCountContent = (
-        <div className="d-inline  ml-1" style={{ width: "40px" }}>
-          <span className="text-white " style={{ fontSize: "12px" }}>
-            {posts.posts.length}
-          </span>
-        </div>
-      );
+      console.log("posts", posts.length);
+      postCountcontent = <span className="text-white">{posts.length}</span>;
+    } else {
+      postCountcontent = null;
     }
-    //User
+
     if (user) {
       return (
         <div className="pos-f-t">
@@ -79,9 +77,9 @@ class Header extends Component {
                 <ul className="nav justify-content-end">
                   {/* {Post Envelope} */}
                   <li className="nav-item active ">
-                    <Link to="/inbox">
-                      <i className="fas fa-envelope fa-2x text-white  d-inline" />
-                      {postCountContent}
+                    <Link to="/post">
+                      <i className="fas fa-envelope fa-2x text-white mr-2" />
+                      {postCountcontent}
                     </Link>
                   </li>
                   <li className="nav-item active">

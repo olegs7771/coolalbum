@@ -31,6 +31,8 @@ router.post(
   }
 );
 
+//Get posts by ID (for logged user)
+
 router.post(
   "/get_posts",
   passport.authenticate("jwt", { session: false }),
