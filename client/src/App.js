@@ -25,7 +25,7 @@ import Post from "./components/layout/posts/Post";
 //Users
 import Users from "./components/layout/users/Users";
 //Inbox Posts
-import PostInbox from "./components/layout/inbox/PostInbox";
+import Inbox from "./components/layout/inbox/Inbox";
 
 import "./App.css";
 import setAuthToken from "./utils/setAuthToken";
@@ -97,7 +97,7 @@ class App extends Component {
                 <Route exact path="/profile_edit/:id" component={ProfileEdit} />
                 <Route exact path="/post" component={Post} />
                 <Route exact path="/users" component={Users} />
-                <Route exact path="/inbox" component={PostInbox} />
+                <Route exact path="/inbox" component={Inbox} />
               </Switch>
             </div>
             <Footer />

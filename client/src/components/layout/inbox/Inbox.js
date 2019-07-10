@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getPosts } from "../../../actions/postAction";
+import InboxItems from "./InboxItems";
 
-class PostInbox extends Component {
+class Inbox extends Component {
   state = {
     loading: false,
     posts: null
@@ -26,14 +27,14 @@ class PostInbox extends Component {
       console.log("posts", posts);
     }
 
-    return <div>here inbox</div>;
+    return <InboxItems />;
   }
 }
 const mapStateToProps = state => ({
   auth: state.auth,
-  post: state.post
+  post: state.post.post
 });
 export default connect(
   mapStateToProps,
   { getPosts }
-)(PostInbox);
+)(Inbox);

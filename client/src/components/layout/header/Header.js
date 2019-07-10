@@ -37,8 +37,6 @@ class Header extends Component {
     // Fetch Weather API from OPEN WEATHER MAP
     this.props.getWeather();
     this.props.getPosts();
-
-    console.log("cdm this.props", this.props);
   }
   componentDidUpdate(prevProps) {
     if (prevProps.post !== this.props.post) {
@@ -54,7 +52,6 @@ class Header extends Component {
 
     let postCountcontent;
     if (posts) {
-      console.log("posts", posts.length);
       postCountcontent = <span className="text-white">{posts.length}</span>;
     } else {
       postCountcontent = null;
@@ -77,7 +74,7 @@ class Header extends Component {
                 <ul className="nav justify-content-end">
                   {/* {Post Envelope} */}
                   <li className="nav-item active ">
-                    <Link to="/post">
+                    <Link to="/inbox">
                       <i className="fas fa-envelope fa-2x text-white mr-2" />
                       {postCountcontent}
                     </Link>

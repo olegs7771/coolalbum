@@ -21,7 +21,6 @@ export const getPosts = () => dispatch => {
   axios
     .post("/api/posts/get_posts")
     .then(res => {
-      console.log("res.data", res.data);
       dispatch({
         type: GET_POSTS,
         payload: res.data
