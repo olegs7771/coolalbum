@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getPosts } from "../../../actions/postAction";
 import InboxItems from "./InboxItems";
+import Spinner from "../../../utils/Spinner";
 
 class Inbox extends Component {
   state = {
@@ -22,12 +23,30 @@ class Inbox extends Component {
   }
 
   render() {
-    const { posts } = this.state;
-    if (posts) {
-      console.log("posts", posts);
+    const { posts, loading } = this.state;
+    let content;
+    if (posts === null || loading) {
+      content = (
+        <div className="row my-4 ">
+          <Spinner />
+        </div>
+      );
+    } else {
+      content = (
+        <div className="row my-4 ">
+          {posts.map((item, index) => (
+            <InboxItems
+              key={index}
+              name={item.senderName}
+              avatar={item.senderAvatar}
+              date={item.date}
+            />
+          ))}
+        </div>
+      );
     }
 
-    return <InboxItems />;
+    return <div>{content}</div>;
   }
 }
 const mapStateToProps = state => ({

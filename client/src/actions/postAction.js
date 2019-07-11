@@ -1,4 +1,4 @@
-import { SEND_POST, GET_POSTS, GET_ERRORS } from "./types";
+import { SEND_POST, GET_POSTS, GET_ERRORS, LOADING_POSTS } from "./types";
 import axios from "axios";
 
 //Send post to another user
@@ -18,6 +18,7 @@ export const sendPost = data => dispatch => {
 //Get Posts by logged user's ID from jwt
 // Private Route
 export const getPosts = () => dispatch => {
+  dispatch(loadingPost());
   axios
     .post("/api/posts/get_posts")
     .then(res => {
@@ -32,4 +33,10 @@ export const getPosts = () => dispatch => {
         payload: err.response.data
       });
     });
+};
+
+export const loadingPost = () => {
+  return {
+    type: LOADING_POSTS
+  };
 };
