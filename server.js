@@ -41,7 +41,7 @@ const db = require("./config/keys").mongoDB;
 
 mongoose
   .connect(db, { useNewUrlParser: true })
-  .then(() => console.log(`connected to  ${db}`))
+  .then(() => console.log(``))
   .catch(err => console.log(err));
 
 //Use routes
@@ -64,18 +64,16 @@ if (process.env.NODE_ENV === "production") {
 console.log("process.env.PORT server ", process.env.PORT);
 
 const port = process.env.PORT;
-const server = app.listen(port, () =>
-  console.log(`Server running on port ${port}`)
-);
+const server = app.listen(port);
 
 // Connect to socket.io
 const io = require("socket.io")(server);
 app.io = io;
 
 io.on("connection", socket => {
-  console.log("connected to server socket", socket.id);
+  // console.log("connected to server socket", socket.id);
   io.on("disconnect", () => {
-    console.log("disconnected");
+    // console.log("disconnected");
   });
 });
 
@@ -83,4 +81,3 @@ app.use((req, res, next) => {
   res.locals["socketio"] = io;
   next();
 });
-//test

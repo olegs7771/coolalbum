@@ -192,7 +192,7 @@ router.post("/login", (req, res) => {
       return res.status(400).json({ email: "something wrong.." });
     }
     //user found , we can delete tempToken form db
-    User.update({ email }, { $unset: { token: "" } }).then(() => {
+    User.updateOne({ email }, { $unset: { token: "" } }).then(() => {
       bcrypt.compare(password, user.password).then(isMatch => {
         if (isMatch) {
           //password from form compared to password from db(user matched)

@@ -92,7 +92,7 @@ router.post(
           //fire up compressor
           compressImg(cb => {
             if (cb) {
-              // console.log("cb[0]['path']", cb[0]["path"]);
+              console.log("cb", cb);
               //find previous file in db to be deleted
               User.findOne({ _id: req.user.id }).then(user => {
                 const toDeleteImg = user.avatar; //"\\uploads\\myImage-000000000000.jpg"
@@ -113,7 +113,7 @@ router.post(
                       "public\\img",
                       "\\uploads"
                     );
-                    User.update(
+                    User.updateOne(
                       { _id: req.user.id },
                       {
                         $set: {
@@ -133,7 +133,7 @@ router.post(
                       "public\\img",
                       "\\uploads"
                     );
-                    User.update(
+                    User.updateOne(
                       { _id: req.user.id },
                       {
                         $set: {
@@ -149,7 +149,9 @@ router.post(
 
                         //Delete previouse file from /uploads || remove raw file from public/img
                         fse.unlink(pathToDeleteImg_in_uploads, err => {
-                          if (err) throw err;
+                          if (err) {
+                            console.log("error delete file:", err);
+                          }
                           console.log(
                             pathToDeleteImg_in_uploads,
                             "was deleted"
@@ -157,7 +159,7 @@ router.post(
                         });
                       })
                       .catch(err => {
-                        console.log(err);
+                        console.log("error update avatar", err);
                       });
                   }
                 });
@@ -171,20 +173,18 @@ router.post(
                 );
 
                 console.log("pathToDeleteImg_in_img", pathToDeleteImg_in_img);
-                //Delete previouse file from /img
+                // Delete previouse file from /img
                 fse
                   .remove(req.file.path)
                   .then(() => {
-                    console.log("deleted in img");
+                    console.log("deleted in /img");
                   })
                   .catch(err => {
-                    console.log(err);
+                    console.log("error to delete in /img", err);
                   });
               });
             }
           });
-
-          //Delete previous Avatar in /public/uploads
         }
       }
     });

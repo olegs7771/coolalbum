@@ -131,7 +131,7 @@ router.delete(
           return res.status(401).json({ msg: "No Profile for this user" });
         }
         profile
-          .remove()
+          .deleteOne()
           .then(() => {
             res.status(200).json({ msg: "Profile successefully been deleted" });
           })

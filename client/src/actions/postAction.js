@@ -1,4 +1,4 @@
-import { SEND_POST, GET_POSTS, GET_ERRORS, LOADING_POSTS } from "./types";
+import { GET_POSTS, GET_ERRORS, LOADING_POSTS } from "./types";
 import axios from "axios";
 
 //Send post to another user

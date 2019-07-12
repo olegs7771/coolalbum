@@ -27,4 +27,5 @@ const PostSchema = new Schema({
     default: Date.now()
   }
 });
+// mongoose.set("useCreateIndex", true);
 module.exports = Post = mongoose.model("post", PostSchema);

@@ -33,10 +33,10 @@ class Header extends Component {
       const decodedToken = jwtDecode(token);
       //  putting it into redux state
       this.props.setCurrentUser(decodedToken);
+      this.props.getPosts();
     }
     // Fetch Weather API from OPEN WEATHER MAP
     this.props.getWeather();
-    this.props.getPosts();
   }
   componentDidUpdate(prevProps) {
     if (prevProps.post !== this.props.post) {
