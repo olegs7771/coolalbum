@@ -111,7 +111,7 @@ router.post(
                     //There is no such file in /public/uploads
                     const avatar = req.file.path.replace(
                       "public\\img",
-                      "\\uploads"
+                      "/uploads"
                     );
                     User.updateOne(
                       { _id: req.user.id },
@@ -131,7 +131,7 @@ router.post(
 
                     const avatar = req.file.path.replace(
                       "public\\img",
-                      "\\uploads"
+                      "/uploads"
                     );
                     User.updateOne(
                       { _id: req.user.id },
