@@ -92,7 +92,7 @@ router.post(
           //fire up compressor
           compressImg(cb => {
             if (cb) {
-              console.log("cb[0]['path']", cb[0]["path"]);
+              // console.log("cb[0]['path']", cb[0]["path"]);
               //find previous file in db to be deleted
               User.findOne({ _id: req.user.id }).then(user => {
                 const toDeleteImg = user.avatar; //"\\uploads\\myImage-000000000000.jpg"
@@ -123,7 +123,7 @@ router.post(
                       { new: true }
                     ).then(() => {
                       res.status(200).json({
-                        avatar: "Avatar was successfully updated."
+                        avatar: "Avatar was successfully created."
                       });
                     });
                   } else {

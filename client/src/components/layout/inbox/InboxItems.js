@@ -3,7 +3,7 @@ import moment from "moment";
 import styled from "styled-components";
 class InboxItems extends Component {
   render() {
-    const { name, avatar, date } = this.props;
+    const { name, avatar, date, text } = this.props;
 
     //style
     const Card = styled.section`
@@ -34,13 +34,8 @@ class InboxItems extends Component {
               className="rounded-circle"
             />
           </div>
-          <Text className="col-md-8">
-            <span>
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-              Praesentium nemo optio blanditiis placeat ex quia ab ipsa minima
-              soluta, velit, distinctio aliquam aspernatur repudiandae assumenda
-              esse perferendis rerum accusamus id?
-            </span>
+          <Text className="col-md-8 rounded-pill p-4 my-4">
+            <span>{text}</span>
           </Text>
         </div>
       </Card>

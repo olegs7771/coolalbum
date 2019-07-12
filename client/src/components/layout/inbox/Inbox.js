@@ -40,6 +40,7 @@ class Inbox extends Component {
               name={item.senderName}
               avatar={item.senderAvatar}
               date={item.date}
+              text={item.text}
             />
           ))}
         </div>
