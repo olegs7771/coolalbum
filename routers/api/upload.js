@@ -110,7 +110,7 @@ router.post(
                     console.log("no file in uploads");
                     //There is no such file in /public/uploads
                     const avatar = req.file.path.replace(
-                      "public\\img",
+                      "public/img",
                       "/uploads"
                     );
                     User.updateOne(
@@ -130,7 +130,7 @@ router.post(
                     console.log("there file in uploads");
 
                     const avatar = req.file.path.replace(
-                      "public\\img",
+                      "public/img",
                       "/uploads"
                     );
                     User.updateOne(
