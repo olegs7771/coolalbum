@@ -96,9 +96,9 @@ class Post extends Component {
     return (
       <div>
         <div className="row">
-          <div className="col-lg-3  col-3  border">{avatarContent}</div>
+          <div className="col-lg-3  col-3 mt-4">{avatarContent}</div>
 
-          <div className="col-md-12 col-lg-8 col-9  border">
+          <div className="col-md-12 col-lg-8 col-9  ">
             <form onSubmit={this.sendPost}>
               <TextAreaFormGroup
                 name="text"
