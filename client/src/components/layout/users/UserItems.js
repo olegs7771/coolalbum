@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import moment from "moment";
 import Post from "../posts/Post";
 import styled from "styled-components";
+import { connect } from "react-redux";
 
 class UserItems extends Component {
   state = {
@@ -114,4 +115,4 @@ class UserItems extends Component {
     );
   }
 }
-export default UserItems;
+export default connect()(UserItems);

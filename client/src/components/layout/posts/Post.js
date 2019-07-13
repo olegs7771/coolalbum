@@ -62,7 +62,7 @@ class Post extends Component {
       toEmail,
       toId
     };
-
+    //sending post data to postAction
     this.props.sendPost(data);
   };
 

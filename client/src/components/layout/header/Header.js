@@ -56,11 +56,17 @@ class Header extends Component {
 
     let postCountcontent;
     if (posts) {
-      postCountcontent = <span className="text-white">{posts.length}</span>;
-    } else {
-      postCountcontent = null;
+      if (posts.length > 0) {
+        postCountcontent = (
+          <div>
+            <i className="fas fa-envelope fa-2x text-white mr-2" />
+            <span className="text-white">{posts.length}</span>
+          </div>
+        );
+      } else {
+        postCountcontent = null;
+      }
     }
-
     if (user) {
       return (
         <div className="pos-f-t">
@@ -78,10 +84,7 @@ class Header extends Component {
                 <ul className="nav justify-content-end">
                   {/* {Post Envelope} */}
                   <li className="nav-item active ">
-                    <Link to="/inbox">
-                      <i className="fas fa-envelope fa-2x text-white mr-2" />
-                      {postCountcontent}
-                    </Link>
+                    <Link to="/inbox">{postCountcontent}</Link>
                   </li>
                   <li className="nav-item active">
                     <Link to={`/userCard/${user.id}`}>

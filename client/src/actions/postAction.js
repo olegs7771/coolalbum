@@ -1,4 +1,4 @@
-import { GET_POSTS, GET_ERRORS, LOADING_POSTS } from "./types";
+import { GET_POSTS, GET_ERRORS, LOADING_POSTS, GET_MESSAGE } from "./types";
 import axios from "axios";
 
 //Send post to another user
@@ -9,9 +9,16 @@ export const sendPost = data => dispatch => {
     .post("/api/posts/post", data)
     .then(res => {
       console.log("res.data", res.data);
+      dispatch({
+        type: GET_MESSAGE,
+        payload: res.data
+      });
     })
     .catch(err => {
-      console.log("err", err);
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
     });
 };
 

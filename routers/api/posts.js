@@ -24,10 +24,10 @@ router.post(
     newPost
       .save()
       .then(post => {
-        res.status(200).json(post);
+        res.status(200).json({ post: "Message has been sent" });
       })
       .catch(err => {
-        res.status(400).json(err);
+        res.status(400).json({ post: "Can not send message" });
       });
   }
 );
