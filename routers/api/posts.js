@@ -3,6 +3,7 @@ const router = express.Router();
 const passport = require("passport");
 const Post = require("../../models/Post");
 const User = require("../../models/User");
+const app = express();
 
 //Post Message from logged user to another user
 
@@ -42,6 +43,8 @@ router.post(
         res.status(200).json({ post: "no posts" });
       } else {
         res.status(200).json(post);
+        //emit data to the client
+        req.app.io.emit("posts", post);
       }
     });
   }

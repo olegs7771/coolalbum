@@ -41,7 +41,7 @@ const db = require("./config/keys").mongoDB;
 
 mongoose
   .connect(db, { useNewUrlParser: true })
-  .then(() => console.log(``))
+  .then(() => console.log(`connected to ${db}`))
   .catch(err => console.log(err));
 
 //Use routes
@@ -71,9 +71,9 @@ const io = require("socket.io")(server);
 app.io = io;
 
 io.on("connection", socket => {
-  // console.log("connected to server socket", socket.id);
+  console.log("connected to server socket", socket.id);
   io.on("disconnect", () => {
-    // console.log("disconnected");
+    console.log("disconnected");
   });
 });
 

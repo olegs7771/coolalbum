@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
+//Socket.io client
+import io from "socket.io-client";
+
 import { setCurrentUser, logoutUser } from "../../../actions/userActions";
 import { getPosts } from "../../../actions/postAction";
 import { getWeather } from "../../../actions/weatherAction";
@@ -10,6 +13,7 @@ import jwtDecode from "jwt-decode";
 import { isEmpty } from "../../../utils/isEmpty";
 //weather widget
 import WeatherWidGet from "../../../utils/WeatherWidGet";
+const socket = io("http://localhost:5000");
 class Header extends Component {
   state = {
     isAuthenticated: false,
@@ -89,7 +93,11 @@ class Header extends Component {
                         src={user.avatar}
                         alt=""
                         className="rounded-circle ml-2 "
-                        style={{ width: "30px", border: "2px solid white" }}
+                        style={{
+                          width: "30px",
+                          height: "30px",
+                          border: "2px solid white"
+                        }}
                       />
                     ) : (
                       <img

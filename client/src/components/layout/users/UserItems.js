@@ -61,12 +61,16 @@ class UserItems extends Component {
     //Styles
     const Card = styled.section`
       background: rgb(179, 215, 255, 0.11);
+      height: 400px;
+    `;
+    const Avatar = styled.section`
+      height: 350px;
     `;
     return (
       <div className="col-md-4 my-2">
         <Card className="card container">
-          <h5 className="card-title my-1">{name}</h5>
-          {avatarResizes}
+          <h5 className="card-title my-3">{name}</h5>
+          <Avatar>{avatarResizes}</Avatar>
           <div className="card-body">
             <span
               className="btn btn-light btn-sm ml-1"

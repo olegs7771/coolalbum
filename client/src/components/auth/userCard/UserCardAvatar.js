@@ -95,7 +95,7 @@ class UserCardAvatar extends Component {
         <div className="">
           <img
             src={selectedImage}
-            className="rounded-circle"
+            className="rounded"
             style={{ width: "150px" }}
             alt=""
           />

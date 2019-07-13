@@ -22,6 +22,9 @@ const UserSchema = new Schema({
   password: {
     type: String
   },
+  randomNum: {
+    type: String
+  },
 
   confirmed: {
     type: Boolean,

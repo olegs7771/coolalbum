@@ -55,7 +55,7 @@ class UserCardItem extends Component {
           <img
             src={avatar}
             className="my-3 rounded-circle border"
-            style={{ width: "100px" }}
+            style={{ width: "100px", height: "100px" }}
             alt=""
           />
         </div>
