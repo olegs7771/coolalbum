@@ -94,20 +94,20 @@ class Post extends Component {
     }
 
     return (
-      <div className="row">
-        <div className="col-lg-3 d-none d-lg-block   mt-4 mb-3 mr-3 rounded">
-          {avatarContent}
-        </div>
+      <div>
+        <div className="row">
+          <div className="col-lg-3  col-3  border">{avatarContent}</div>
 
-        <div className="col-md-12 col-lg-8 ">
-          <form onSubmit={this.sendPost}>
-            <TextAreaFormGroup
-              name="text"
-              value={text}
-              onChange={this.onChange}
-            />
-            {btnContent}
-          </form>
+          <div className="col-md-12 col-lg-8 col-9  border">
+            <form onSubmit={this.sendPost}>
+              <TextAreaFormGroup
+                name="text"
+                value={text}
+                onChange={this.onChange}
+              />
+              {btnContent}
+            </form>
+          </div>
         </div>
       </div>
     );

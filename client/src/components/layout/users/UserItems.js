@@ -14,7 +14,7 @@ class UserItems extends Component {
   showPostForm = (email, id) => {
     // here we bind email of each userCard
     this.setState({
-      showPostForm: true,
+      showPostForm: !this.state.showPostForm,
       toEmail: email,
       toID: id
     });
@@ -37,7 +37,12 @@ class UserItems extends Component {
       );
     } else {
       avatarResizes = (
-        <img src={this.props.avatar} className="card-img-top" alt="..." />
+        <img
+          src={this.props.avatar}
+          className="card-img-top"
+          alt="..."
+          style={{ width: "200px", height: "150px" }}
+        />
       );
     }
 
@@ -61,17 +66,15 @@ class UserItems extends Component {
     //Styles
     const Card = styled.section`
       background: rgb(179, 215, 255, 0.11);
-      height: 400px;
     `;
-    const Avatar = styled.section`
-      height: 350px;
-    `;
+    const Avatar = styled.section``;
     return (
       <div className="col-md-4 my-2">
-        <Card className="card container">
+        <Card className="card myImage-1563033419704">
           <h5 className="card-title my-3">{name}</h5>
-          <Avatar>{avatarResizes}</Avatar>
+          <Avatar className="card-img-top">{avatarResizes}</Avatar>
           <div className="card-body">
+            {/* {toggle btn} */}
             <span
               className="btn btn-light btn-sm ml-1"
               onClick={() =>
@@ -95,7 +98,7 @@ class UserItems extends Component {
           ) : null}
 
           <div className="card-body">
-            <div className="btn-group">
+            <div className="btn-group my-3">
               <div
                 className="btn btn-light btn-link"
                 onClick={this.showPostForm.bind(this, email, id)}
@@ -105,8 +108,8 @@ class UserItems extends Component {
               <div className="btn btn-light btn-link ml-4">like</div>
             </div>
           </div>
-          {postForm}
         </Card>
+        <div className="mx-auto">{postForm}</div>
       </div>
     );
   }
