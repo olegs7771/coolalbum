@@ -13,7 +13,8 @@ class Post extends Component {
     showBtn: false,
     isAuthenticated: false,
     toEmail: "",
-    toID: ""
+    toID: "",
+    message: null
   };
 
   componentDidMount() {
@@ -35,6 +36,14 @@ class Post extends Component {
         avatar: auth.user.avatar,
         name: auth.user.name,
         email: auth.user.email
+      });
+    }
+  }
+  componentDidUpdate(prevProps) {
+    if (prevProps.message !== this.props.message) {
+      console.log("this.props.message", this.props.message);
+      this.setState({
+        message: this.props.message.message.post
       });
     }
   }
@@ -68,10 +77,11 @@ class Post extends Component {
 
   render() {
     console.log("this.state", this.state);
-
+    let formContent;
     let btnContent;
     let avatarContent;
-    const { showBtn, isAuthenticated, text, avatar } = this.state;
+
+    const { showBtn, isAuthenticated, text, avatar, message } = this.state;
     if (showBtn) {
       if (isAuthenticated) {
         btnContent = (
@@ -92,9 +102,11 @@ class Post extends Component {
         avatarContent = <Avatar />;
       }
     }
-
-    return (
-      <div>
+    //show message instead of textarea form
+    if (message) {
+      formContent = <div className="text-success my-2">{message}</div>;
+    } else {
+      formContent = (
         <div className="row">
           <div className="col-lg-3  col-3 mt-4">{avatarContent}</div>
 
@@ -109,12 +121,15 @@ class Post extends Component {
             </form>
           </div>
         </div>
-      </div>
-    );
+      );
+    }
+
+    return <div>{formContent}</div>;
   }
 }
 const mapStateToprops = state => ({
-  auth: state.auth
+  auth: state.auth,
+  message: state.message
 });
 export default connect(
   mapStateToprops,

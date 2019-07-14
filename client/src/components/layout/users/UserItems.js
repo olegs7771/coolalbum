@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import moment from "moment";
 import Post from "../posts/Post";
 import styled from "styled-components";
-import { connect } from "react-redux";
 
 class UserItems extends Component {
   state = {
@@ -48,7 +47,7 @@ class UserItems extends Component {
     }
 
     const { id, name, email, phone, location, date } = this.props;
-    const { showCreds, showPostForm, toEmail, toID } = this.state;
+    const { showCreds, showPostForm, toEmail, toID, message } = this.state;
     //button show toggle
     let button;
     if (showCreds) {
@@ -57,13 +56,16 @@ class UserItems extends Component {
       button = "Show more..";
     }
     //messageForm toggle
+    //if message been sent -->this.state.message===true --->dispaly message
     let postForm;
+
     if (showPostForm) {
       //binds email of clicked user and going to Post
       postForm = <Post toEmail={toEmail} toID={toID} />;
     } else {
       postForm = null;
     }
+
     //Styles
     const Card = styled.section`
       background: rgb(179, 215, 255, 0.11);
@@ -115,4 +117,5 @@ class UserItems extends Component {
     );
   }
 }
-export default connect()(UserItems);
+
+export default UserItems;
