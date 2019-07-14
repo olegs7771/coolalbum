@@ -314,10 +314,10 @@ export const isMatchedPass = (data, history) => dispatch => {
     });
 };
 //Get ALL Users
-export const getAllUsers = () => dispatch => {
+export const getAllUsers = data => dispatch => {
   dispatch(loadingAllUsers());
   axios
-    .get("api/users/all")
+    .post("api/users/all", data)
     .then(res => {
       dispatch({
         type: GET_ALL_USERS,

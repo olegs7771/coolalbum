@@ -234,12 +234,16 @@ router.get(
 );
 
 //get all users
-router.get("/all", (req, res) => {
-  User.find().then(user => {
-    if (!user) {
+router.post("/all", (req, res) => {
+  User.find().then(users => {
+    if (!users) {
       res.status(200).json({ message: "No users" });
     }
-    res.status(200).json(user);
+    //here we create filter to exclude auth user
+    console.log("req.body", req.body.id);
+    console.log("users", users);
+
+    res.status(200).json(users);
   });
 });
 

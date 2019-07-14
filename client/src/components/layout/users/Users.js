@@ -12,7 +12,11 @@ class Users extends Component {
 
   componentDidMount() {
     //load all users
-    this.props.getAllUsers();
+    console.log("this.props.user", this.props.user.id);
+    const data = {
+      id: this.props.user.id
+    };
+    this.props.getAllUsers(data);
   }
   componentDidUpdate(prevProps) {
     if (prevProps.users !== this.props.users) {
@@ -51,7 +55,8 @@ class Users extends Component {
 }
 
 const mapStateToProps = state => ({
-  users: state.users
+  users: state.users,
+  user: state.auth.user
 });
 export default connect(
   mapStateToProps,
