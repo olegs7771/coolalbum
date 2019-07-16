@@ -235,26 +235,27 @@ router.get(
 
 //get all users
 router.post("/all", (req, res) => {
+  console.log("req.body.id", req.body.id);
   const _id = req.body.id;
-  User.find({}).then(users => {
-    if (!users) {
-      res.status(200).json({ message: "No users" });
-    }
-    //here we create filter to exclude auth user
-    console.log("req.body", req.body.id);
-    const removeId = users.map(item => {
-      return item._id.toString();
-    });
-    console.log("removeId", removeId);
-
-    for (let i = 0; i < removeId.length; i++) {
-      if (removeId[i] !== req.body.id) {
-        console.log("users id to stay", removeId.splice(i));
+  //show all exept logged user
+  User.find({
+    _id: {
+      $nin: {
+        _id
       }
     }
+  })
+    .then(users => {
+      if (!users) {
+        res.status(200).json({ message: "No users" });
+      }
+      //here we create filter to exclude auth user
 
-    console.log("users", users);
-  });
+      res.status(200).json(users);
+    })
+    .catch(err => {
+      res.status(400).json(err);
+    });
 });
 
 //auth with facebook
