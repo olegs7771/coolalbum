@@ -25,7 +25,7 @@ class InboxItems extends Component {
     let inboxContent;
     if (showMore) {
       inboxContent = (
-        <div className="card px-3  py-2">
+        <div className="card px-4  py-2">
           <i
             className="fas fa-sort-up ml-auto"
             onClick={() => {
@@ -34,25 +34,26 @@ class InboxItems extends Component {
               });
             }}
           />
-          <div className="row">
-            <div className="col-md-4 ">
-              <h6 className="card-title"> {name}</h6>
-              <div className="card-title">
-                <Font>
-                  <span className="text-muted">Received on: </span>
-                  {moment(date).format("DD/MM/YYYY")}
-                </Font>
+          <div>
+            <span className="card-title"> From {name} </span>
+
+            <Font>
+              <span className="text-muted">Received on: </span>
+              {moment(date).format("DD/MM/YYYY")}
+            </Font>
+            <div className="row">
+              <div className="col-md-4 ">
+                <img
+                  src={avatar}
+                  alt="avatar"
+                  style={{ width: "80px", height: "80px" }}
+                  className="rounded-circle mt-3"
+                />
               </div>
-              <img
-                src={avatar}
-                alt="avatar"
-                style={{ width: "100px", height: "100px" }}
-                className="rounded-circle"
-              />
+              <Text className="col-md-8 rounded-pill p-5 my-4 ">
+                <TextFont>{text}</TextFont>
+              </Text>
             </div>
-            <Text className="col-md-8 rounded-pill p-4 my-4">
-              <TextFont>{text}</TextFont>
-            </Text>
           </div>
         </div>
       );
@@ -69,7 +70,7 @@ class InboxItems extends Component {
           />
           <div className="row">
             <div className="col-md-4 ">
-              <h6 className="card-title"> From {name}</h6>
+              <span className="card-title"> From {name}</span>
             </div>
             <div className="col-md-8 ">
               <div className="card-title">
