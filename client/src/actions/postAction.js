@@ -42,6 +42,14 @@ export const getPosts = () => dispatch => {
     });
 };
 
+//Delete post by id
+export const deletePost = data => dispatch => {
+  console.log("data", data);
+  axios.post("/api/posts/delete", data).then(res => {
+    console.log("res.data", res.data);
+  });
+};
+
 export const loadingPost = () => {
   return {
     type: LOADING_POSTS

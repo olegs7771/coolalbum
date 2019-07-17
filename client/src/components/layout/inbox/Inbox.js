@@ -41,6 +41,7 @@ class Inbox extends Component {
               avatar={item.senderAvatar}
               date={item.date}
               text={item.text}
+              id={item._id}
             />
           ))}
         </div>

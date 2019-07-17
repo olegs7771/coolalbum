@@ -1,10 +1,22 @@
 import React, { Component } from "react";
 import moment from "moment";
 import styled from "styled-components";
+import { connect } from "react-redux";
+import { deletePost } from "../../../actions/postAction";
 class InboxItems extends Component {
   state = {
     showMore: false
   };
+
+  //delete post
+  delPostHandle = id => {
+    console.log("delete id post", id);
+    const data = {
+      id
+    };
+    this.props.deletePost(data);
+  };
+
   render() {
     //style
     const Card = styled.section`
@@ -19,8 +31,17 @@ class InboxItems extends Component {
     const TextFont = styled.span`
       font-size: 14px;
     `;
-    const { name, avatar, date, text } = this.props;
+    const { name, avatar, date, text, id } = this.props;
     const { showMore } = this.state;
+
+    //Delete Btn
+    let deleteBtnContent;
+    deleteBtnContent = (
+      <i
+        className="fas fa-trash-alt ml-auto my-2"
+        onClick={this.delPostHandle.bind(this, id)}
+      />
+    );
 
     let inboxContent;
     if (showMore) {
@@ -55,6 +76,7 @@ class InboxItems extends Component {
               </Text>
             </div>
           </div>
+          {deleteBtnContent}
         </div>
       );
     } else {
@@ -81,6 +103,7 @@ class InboxItems extends Component {
               </div>
             </div>
           </div>
+          {deleteBtnContent}
         </div>
       );
     }
@@ -88,4 +111,7 @@ class InboxItems extends Component {
     return <Card className="  my-1 col-md-7 mr-1 mx-auto">{inboxContent}</Card>;
   }
 }
-export default InboxItems;
+export default connect(
+  null,
+  { deletePost }
+)(InboxItems);

@@ -49,5 +49,13 @@ router.post(
     });
   }
 );
+//Delete post by id
+router.post(
+  "/delete",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    console.log("req.body", req.body);
+  }
+);
 
 module.exports = router;
