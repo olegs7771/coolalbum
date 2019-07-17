@@ -47,7 +47,7 @@ class UserItems extends Component {
     }
 
     const { id, name, email, phone, location, date } = this.props;
-    const { showCreds, showPostForm, toEmail, toID, message } = this.state;
+    const { showCreds, showPostForm, toEmail, toID } = this.state;
     //button show toggle
     let button;
     if (showCreds) {

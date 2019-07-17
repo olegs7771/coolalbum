@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import moment from "moment";
+import styled from "styled-components";
 
 class WeatherWidGet extends Component {
   state = {
@@ -16,18 +17,16 @@ class WeatherWidGet extends Component {
   }
 
   render() {
+    //styles
+    const FontSize = styled.span`
+      font-size: 12px;
+    `;
     const { weather } = this.state;
     let weatherContent;
     let dayTime;
     let skyCon;
     if (weather.weather) {
       const { data1, data2, location, daytime } = weather.weather;
-      // console.log("sunrise", daytime.sunrise / 1000);
-      // console.log("sunset", daytime.sunset / 1000);
-      // console.log("Date.now()", Math.trunc(Date.now() / 1000) / 1000);
-
-      //description
-      // console.log("data1.description", data1.description);
 
       if (
         daytime.sunrise < Math.trunc(Date.now() / 1000) &&
@@ -101,14 +100,15 @@ class WeatherWidGet extends Component {
 
       weatherContent = (
         <div className="row">
-          <div className="col-md-6 col-sm-12">
+          <div className="col-md-6 col-12 ">
             <div className="text-success ">
-              {location} {""}
-              <span className="text-white">
-                {" "}
-                {Math.trunc(data2.temp)}
-                {""}&#176;
-              </span>
+              {location}{" "}
+              <FontSize>
+                <span className="text-white">
+                  {Math.trunc(data2.temp)}
+                  {""}&#176;
+                </span>
+              </FontSize>
               <span className="text-white">
                 {""} {skyCon}
               </span>
@@ -116,9 +116,11 @@ class WeatherWidGet extends Component {
           </div>
           <div className="col-md-6 col-sm-12">
             {/* {Show current time} */}
-            <span className="text-white">
-              {moment(Date.now()).format("DD/MM/YYYY")}
-            </span>
+            <FontSize>
+              <span className="text-white">
+                {moment(Date.now()).format("DD/MM/YYYY")}
+              </span>
+            </FontSize>
           </div>
         </div>
       );

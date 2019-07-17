@@ -123,7 +123,15 @@ class InboxItems extends Component {
       );
     }
 
-    return <Card className="  my-1 col-md-7 mr-1 mx-auto">{inboxContent}</Card>;
+    return (
+      <div className="mx-auto">
+        <div className="text-success my-2">
+          {Object.keys(message).length > 0 ? message.post : null}
+        </div>
+
+        <Card className="  my-1 col-md-7 mr-1 ">{inboxContent}</Card>
+      </div>
+    );
   }
 }
 const mapStateToProps = state => ({

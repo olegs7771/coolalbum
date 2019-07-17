@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-//Socket.io client
-import io from "socket.io-client";
 
 import { setCurrentUser, logoutUser } from "../../../actions/userActions";
 import { getPosts } from "../../../actions/postAction";
@@ -13,7 +11,7 @@ import jwtDecode from "jwt-decode";
 import { isEmpty } from "../../../utils/isEmpty";
 //weather widget
 import WeatherWidGet from "../../../utils/WeatherWidGet";
-const socket = io("http://localhost:5000");
+
 class Header extends Component {
   state = {
     isAuthenticated: false,
@@ -75,11 +73,11 @@ class Header extends Component {
       return (
         <div className="pos-f-t">
           <nav className="navbar navbar-dark bg-dark">
-            <a className="navbar-brand" href="/">
+            <a className="navbar-brand mr-5" href="/">
               CoolAlbum
             </a>
-            <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
-              <li className="nav-item">
+            <ul className="navbar-nav ml-auto mt-2 ">
+              <li className="nav-item ">
                 <WeatherWidGet />
               </li>
             </ul>
