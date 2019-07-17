@@ -5,7 +5,8 @@ import { connect } from "react-redux";
 import { deletePost } from "../../../actions/postAction";
 class InboxItems extends Component {
   state = {
-    showMore: false
+    showMore: false,
+    message: {}
   };
 
   //delete post
@@ -16,8 +17,18 @@ class InboxItems extends Component {
     };
     this.props.deletePost(data);
   };
+  componentDidUpdate(prevProps) {
+    if (prevProps.message !== this.props.message) {
+      this.setState({
+        message: this.props.message
+      });
+    }
+  }
 
   render() {
+    console.log("this.props.message", this.props.message);
+    console.log("this.state.message", this.state.message);
+
     //style
     const Card = styled.section`
       background: rgb(0, 0, 0, 0);
@@ -32,7 +43,7 @@ class InboxItems extends Component {
       font-size: 14px;
     `;
     const { name, avatar, date, text, id } = this.props;
-    const { showMore } = this.state;
+    const { showMore, message } = this.state;
 
     //Delete Btn
     let deleteBtnContent;
@@ -76,6 +87,9 @@ class InboxItems extends Component {
               </Text>
             </div>
           </div>
+          <div className="text-success my-2">
+            {Object.keys(message).length > 0 ? message.post : null}
+          </div>
           {deleteBtnContent}
         </div>
       );
@@ -103,6 +117,7 @@ class InboxItems extends Component {
               </div>
             </div>
           </div>
+
           {deleteBtnContent}
         </div>
       );
@@ -111,7 +126,10 @@ class InboxItems extends Component {
     return <Card className="  my-1 col-md-7 mr-1 mx-auto">{inboxContent}</Card>;
   }
 }
+const mapStateToProps = state => ({
+  message: state.message.message
+});
 export default connect(
-  null,
+  mapStateToProps,
   { deletePost }
 )(InboxItems);

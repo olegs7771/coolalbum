@@ -48,6 +48,10 @@ class Header extends Component {
         posts: this.props.post.post
       });
     }
+    //get posts after user logged
+    if (prevProps.auth !== this.props.auth) {
+      this.props.getPosts();
+    }
   }
 
   render() {
