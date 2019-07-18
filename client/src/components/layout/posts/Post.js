@@ -4,6 +4,7 @@ import FaceBookBtn from "../../../utils/FaceBookBtn";
 import { connect } from "react-redux";
 import { sendPost } from "../../../actions/postAction";
 import Avatar from "../../../utils/Avatar";
+import styled from "styled-components";
 
 class Post extends Component {
   state = {
@@ -76,6 +77,10 @@ class Post extends Component {
   };
 
   render() {
+    //styles
+    const FontSize = styled.span`
+      font-size: 12px;
+    `;
     console.log("this.state", this.state);
     let formContent;
     let btnContent;
@@ -90,7 +95,7 @@ class Post extends Component {
           </div>
         );
         avatarContent = (
-          <img src={avatar} alt="user" style={{ width: "5rem" }} />
+          <img src={avatar} alt="user" style={{ width: "2.7rem" }} />
         );
       } else {
         btnContent = (
@@ -104,13 +109,24 @@ class Post extends Component {
     }
     //show message instead of textarea form
     if (message) {
-      formContent = <div className="text-success my-2">{message}</div>;
+      formContent = (
+        <div className="text-success my-2">
+          <FontSize>
+            <span>{message}</span>
+          </FontSize>
+        </div>
+      );
     } else {
       formContent = (
-        <div className="row">
-          <div className="col-lg-3  col-3 mt-4">{avatarContent}</div>
+        <div className="row ">
+          <div className="col-lg-3  col-3 mt-1  ">{avatarContent}</div>
 
-          <div className="col-md-12 col-lg-8 col-9  ">
+          <div
+            className="col-md-12 col-lg-8 col-9
+          
+            "
+            style={{ marginTop: "-20px" }}
+          >
             <form onSubmit={this.sendPost}>
               <TextAreaFormGroup
                 name="text"

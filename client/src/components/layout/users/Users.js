@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { getAllUsers } from "../../../actions/userActions";
 import Spinner from "../../../utils/Spinner";
 import UserItems from "./UserItems";
+// import styled from "styled-components";
 
 class Users extends Component {
   state = {
@@ -27,6 +28,8 @@ class Users extends Component {
   }
 
   render() {
+    //styles
+
     console.log("this.props.avatar", this.props.avatar);
     let userContent;
     const { users, loading } = this.state;

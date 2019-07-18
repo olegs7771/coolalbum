@@ -16,7 +16,7 @@ class Footer extends Component {
     return (
       <div>
         <Footer>
-          <div className="mx-auto my-4">
+          <div className="mx-auto ">
             <a href="https://pngtree.com/">
               <Span>Graphics from pngtree.com</Span>
             </a>

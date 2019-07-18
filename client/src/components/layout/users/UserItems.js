@@ -21,6 +21,14 @@ class UserItems extends Component {
   };
 
   render() {
+    //Styles
+    const Card = styled.section`
+      background: rgb(179, 215, 255, 0);
+    `;
+    const FontSize = styled.span`
+      font-size: 12px;
+    `;
+
     //resize avatar if it includes gravatar
     let avatarResizes;
 
@@ -31,7 +39,7 @@ class UserItems extends Component {
             src={this.props.avatar}
             className="card-img-top"
             alt="..."
-            style={{ width: "200px", height: "150px" }}
+            style={{ width: "100%", height: "110px" }}
           />
         </div>
       );
@@ -41,7 +49,7 @@ class UserItems extends Component {
           src={this.props.avatar}
           className="card-img-top"
           alt="..."
-          style={{ width: "200px", height: "150px" }}
+          style={{ width: "100%", height: "110px" }}
         />
       );
     }
@@ -51,9 +59,27 @@ class UserItems extends Component {
     //button show toggle
     let button;
     if (showCreds) {
-      button = "Show less..";
+      button = (
+        <FontSize>
+          <span
+            className="p-1 text-white "
+            style={{ backgroundColor: "rgb(126, 140, 145)" }}
+          >
+            Show less..
+          </span>
+        </FontSize>
+      );
     } else {
-      button = "Show more..";
+      button = (
+        <FontSize>
+          <span
+            className="p-1 text-white "
+            style={{ backgroundColor: "rgb(126, 140, 145)" }}
+          >
+            Show more..
+          </span>
+        </FontSize>
+      );
     }
     //messageForm toggle
     //if message been sent -->this.state.message===true --->dispaly message
@@ -66,52 +92,99 @@ class UserItems extends Component {
       postForm = null;
     }
 
-    //Styles
-    const Card = styled.section`
-      background: rgb(179, 215, 255, 0.11);
-    `;
-    const Avatar = styled.section``;
     return (
-      <div className="col-md-4 my-2">
-        <Card className="card myImage-1563033419704">
-          <h5 className="card-title my-3">{name}</h5>
-          <Avatar className="card-img-top">{avatarResizes}</Avatar>
-          <div className="card-body">
-            {/* {toggle btn} */}
-            <span
-              className="btn btn-light btn-sm ml-1"
-              onClick={() =>
-                this.setState({
-                  showCreds: !this.state.showCreds
-                })
-              }
-            >
-              {button}
-            </span>
+      <div className="col-md-2 col-4 my-1">
+        <Card className="card ">
+          <div
+            className="py-1 border"
+            style={{ backgroundColor: "rgb(60, 72, 77)" }}
+          >
+            <span className="card-title mt-1 text-white ">{name}</span>
           </div>
+
+          <div className="card-img-top">{avatarResizes}</div>
+          {/* {toggle btn} */}
+          <span
+            onClick={() =>
+              this.setState({
+                showCreds: !this.state.showCreds
+              })
+            }
+          >
+            <div className="div my-2">{button}</div>
+          </span>
+
           {showCreds ? (
             <ul className="list-group list-group-flush">
-              <li className="list-group-item">Email:{email}</li>
-              <li className="list-group-item">Phone:{phone}</li>
-              <li className="list-group-item">Location:{location}</li>
-              <li className="list-group-item">
-                Registered at: {moment(date).format("DD/MM/YYYY")}
+              <li
+                className="list-group-item"
+                style={{ backgroundColor: "rgb(60, 72, 77,0.5)" }}
+              >
+                <FontSize>
+                  <span className="text-white">{email}</span>
+                </FontSize>
+              </li>
+              <li
+                className="list-group-item"
+                style={{ backgroundColor: "rgb(60, 72, 77,0.5)" }}
+              >
+                <FontSize>
+                  <span className="text-white">{phone}</span>
+                </FontSize>
+              </li>
+              <li
+                className="list-group-item"
+                style={{ backgroundColor: "rgb(60, 72, 77,0.5)" }}
+              >
+                <FontSize>
+                  <span className="text-white">{location}</span>
+                </FontSize>
+              </li>
+              <li
+                className="list-group-item"
+                style={{ backgroundColor: "rgb(60, 72, 77,0.5)" }}
+              >
+                <FontSize>
+                  <span className="text-white">
+                    Registered on
+                    <br />
+                    {moment(date).format("DD/MM/YYYY")}
+                  </span>
+                </FontSize>
               </li>
             </ul>
           ) : null}
 
-          <div className="card-body">
-            <div className="btn-group my-3">
-              <div
-                className="btn btn-light btn-link"
-                onClick={this.showPostForm.bind(this, email, id)}
-              >
-                Message
-              </div>
-              <div className="btn btn-light btn-link ml-4">like</div>
+          <div
+            className="btn-group border "
+            style={{
+              backgroundColor: "rgb(60, 72, 77)"
+            }}
+          >
+            <div
+              className="btn btn-sm "
+              onClick={this.showPostForm.bind(this, email, id)}
+            >
+              <FontSize>
+                <span
+                  className="p-1 text-white  "
+                  style={{
+                    marginLeft: "-6px"
+                  }}
+                >
+                  Message
+                </span>
+              </FontSize>
+            </div>
+
+            <div className="btn   btn-sm">
+              <FontSize>
+                <span className="p-1 text-white  ">Like</span>
+              </FontSize>
             </div>
           </div>
         </Card>
+
         <div className="mx-auto">{postForm}</div>
       </div>
     );
