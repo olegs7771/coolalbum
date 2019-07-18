@@ -12,7 +12,7 @@ class Users extends Component {
 
   componentDidMount() {
     //load all users
-    console.log("this.props.user", this.props.user.id);
+
     const data = {
       id: this.props.user.id
     };
@@ -27,6 +27,7 @@ class Users extends Component {
   }
 
   render() {
+    console.log("this.props.avatar", this.props.avatar);
     let userContent;
     const { users, loading } = this.state;
     if (users === null || loading) {

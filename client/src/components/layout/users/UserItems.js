@@ -31,7 +31,7 @@ class UserItems extends Component {
             src={this.props.avatar}
             className="card-img-top"
             alt="..."
-            style={{ width: "75%" }}
+            style={{ width: "200px", height: "150px" }}
           />
         </div>
       );

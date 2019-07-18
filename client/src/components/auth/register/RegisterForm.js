@@ -70,7 +70,7 @@ class RegisterForm extends Component {
 
       password: this.state.password
     };
-    console.log(this.props);
+    console.log("this.props", this.props);
 
     const { history } = this.props;
     this.props.registerUser(newUser, history);
