@@ -51,13 +51,25 @@ module.exports = function sendMail(data, cb) {
   if (to === undefined) {
     to = "olegs777@bezeqint.net";
   }
+  // let transporter = nodemailer.createTransport({
+  //   host: "185.197.74.181",
+  //   port: 465,
+  //   secure: true, // true for 465, false for other ports
+  //   auth: {
+  //     user: "coolalbum@coolalbum.info", // generated ethereal user
+  //     pass: mailPass // generated ethereal password
+  //   },
+  //   tls: {
+  //     rejectUnauthorized: false
+  //   }
+  // });
   let transporter = nodemailer.createTransport({
-    host: "185.197.74.181",
-    port: 587,
-    secure: false, // true for 465, false for other ports
+    host: "smtp.googlemail.com",
+    port: 465,
+    secure: true, // true for 465, false for other ports
     auth: {
-      user: "coolalbum@coolalbum.info", // generated ethereal user
-      pass: mailPass // generated ethereal password
+      user: "olegs7771", // generated ethereal user
+      pass: "maspena307236448" // generated ethereal password
     },
     tls: {
       rejectUnauthorized: false
