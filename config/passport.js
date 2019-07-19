@@ -47,6 +47,7 @@ module.exports = passport => {
               newUser.avatar = profile.photos[0].value;
               newUser.confirmed = true;
               newUser.location = "";
+              newUser.createdAt = null;
 
               newUser
                 .save()
