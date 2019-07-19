@@ -7,7 +7,8 @@ import Spinner from "../../../utils/Spinner";
 class Inbox extends Component {
   state = {
     loading: false,
-    posts: null
+    posts: null,
+    message: {}
   };
 
   componentDidMount() {
@@ -20,10 +21,15 @@ class Inbox extends Component {
         posts: this.props.post
       });
     }
+    if (prevProps.message !== this.props.message) {
+      this.setState({
+        message: this.props.message
+      });
+    }
   }
 
   render() {
-    const { posts, loading } = this.state;
+    const { posts, loading, message } = this.state;
     let content;
     if (posts === null || loading) {
       content = (
@@ -33,7 +39,7 @@ class Inbox extends Component {
       );
     } else {
       content = (
-        <div className="row my-4 ">
+        <div className="row">
           {posts.map((item, index) => (
             <InboxItems
               key={index}
@@ -48,12 +54,18 @@ class Inbox extends Component {
       );
     }
 
-    return <div>{content}</div>;
+    return (
+      <div className=" my-2">
+        {message.post ? <div className="text-success my-2">Deleted</div> : null}
+        {content}
+      </div>
+    );
   }
 }
 const mapStateToProps = state => ({
   auth: state.auth,
-  post: state.post.post
+  post: state.post.post,
+  message: state.message.message
 });
 export default connect(
   mapStateToProps,

@@ -5,8 +5,7 @@ import { connect } from "react-redux";
 import { deletePost } from "../../../actions/postAction";
 class InboxItems extends Component {
   state = {
-    showMore: false,
-    message: {}
+    showMore: false
   };
 
   //delete post
@@ -17,13 +16,6 @@ class InboxItems extends Component {
     };
     this.props.deletePost(data);
   };
-  componentDidUpdate(prevProps) {
-    if (prevProps.message !== this.props.message) {
-      this.setState({
-        message: this.props.message
-      });
-    }
-  }
 
   render() {
     console.log("this.props.message", this.props.message);
@@ -43,13 +35,13 @@ class InboxItems extends Component {
       font-size: 14px;
     `;
     const { name, avatar, date, text, id } = this.props;
-    const { showMore, message } = this.state;
+    const { showMore } = this.state;
 
     //Delete Btn
     let deleteBtnContent;
     deleteBtnContent = (
       <i
-        className="fas fa-trash-alt ml-auto my-2"
+        className="fas fa-trash-alt ml-auto "
         onClick={this.delPostHandle.bind(this, id)}
       />
     );
@@ -57,7 +49,7 @@ class InboxItems extends Component {
     let inboxContent;
     if (showMore) {
       inboxContent = (
-        <div className="card px-4  py-2">
+        <div className="card card-body px-4">
           <i
             className="fas fa-sort-up ml-auto"
             onClick={() => {
@@ -87,51 +79,40 @@ class InboxItems extends Component {
               </Text>
             </div>
           </div>
-          <div className="text-success my-2">
-            {Object.keys(message).length > 0 ? message.post : null}
-          </div>
+
           {deleteBtnContent}
         </div>
       );
     } else {
       inboxContent = (
-        <div className="card px-3 ">
-          <i
-            className="fas fa-sort-down ml-auto"
-            onClick={() => {
-              this.setState({
-                showMore: !this.state.showMore
-              });
-            }}
-          />
+        <div className="card  px-4 ">
           <div className="row">
-            <div className="col-md-4 ">
-              <span className="card-title"> From {name}</span>
-            </div>
-            <div className="col-md-8 ">
-              <div className="card-title">
+            <div className="col-10">
+              <span className="text-center"> From {name}</span>
+              <div className="text-center">
                 <Font>
                   <span className="text-muted">Received on: </span>
                   {moment(date).format("DD/MM/YYYY")}
                 </Font>
               </div>
             </div>
+            <div className="col-2">
+              <i
+                className="fas fa-sort-down  ml-auto"
+                onClick={() => {
+                  this.setState({
+                    showMore: !this.state.showMore
+                  });
+                }}
+              />
+              {deleteBtnContent}
+            </div>
           </div>
-
-          {deleteBtnContent}
         </div>
       );
     }
 
-    return (
-      <div className="mx-auto">
-        <div className="text-success my-2">
-          {Object.keys(message).length > 0 ? message.post : null}
-        </div>
-
-        <Card className="  my-1 col-md-7 mr-1 ">{inboxContent}</Card>
-      </div>
-    );
+    return <div className=" col-md-6 my-1">{inboxContent}</div>;
   }
 }
 const mapStateToProps = state => ({
