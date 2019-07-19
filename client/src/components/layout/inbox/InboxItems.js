@@ -104,7 +104,8 @@ class InboxItems extends Component {
                     showMore: !this.state.showMore
                   });
                 }}
-              />
+              />{" "}
+              <br />
               {deleteBtnContent}
             </div>
           </div>

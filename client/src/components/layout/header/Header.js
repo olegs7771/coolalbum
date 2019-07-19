@@ -74,7 +74,7 @@ class Header extends Component {
           </li>
           <li className="nav-item">
             <a className="nav-link text-white" href="/">
-              Link
+              Chat
             </a>
           </li>
         </ul>
