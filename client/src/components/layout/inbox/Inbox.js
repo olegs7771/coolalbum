@@ -33,7 +33,7 @@ class Inbox extends Component {
     let content;
     if (posts === null || loading) {
       content = (
-        <div className="row my-4 ">
+        <div className=" my-4 mx-auto ">
           <Spinner />
         </div>
       );

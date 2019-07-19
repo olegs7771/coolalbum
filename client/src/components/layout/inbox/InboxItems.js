@@ -85,31 +85,35 @@ class InboxItems extends Component {
       );
     } else {
       inboxContent = (
-        <div className="card  px-4 ">
-          <div className="row">
-            <div className="col-10">
-              <span className="text-center"> From {name}</span>
-              <div className="text-center">
-                <Font>
-                  <span className="text-muted">Received on: </span>
-                  {moment(date).format("DD/MM/YYYY")}
-                </Font>
+        <a
+          href="#!"
+          onClick={() => {
+            this.setState({
+              showMore: !this.state.showMore
+            });
+          }}
+        >
+          <div
+            className="card  px-4 "
+            style={{ backgroundColor: "rgb(192, 187, 196,0.7)" }}
+          >
+            <div className="row">
+              <div className="col-10">
+                <span className="text-center text-white"> From {name}</span>
+                <div className="text-center">
+                  <Font>
+                    <span className="text-white">Received on </span>
+                    {moment(date).format("DD/MM/YYYY")}
+                  </Font>
+                </div>
+              </div>
+              <div className="col-2">
+                <br />
+                {deleteBtnContent}
               </div>
             </div>
-            <div className="col-2">
-              <i
-                className="fas fa-sort-down  ml-auto"
-                onClick={() => {
-                  this.setState({
-                    showMore: !this.state.showMore
-                  });
-                }}
-              />{" "}
-              <br />
-              {deleteBtnContent}
-            </div>
           </div>
-        </div>
+        </a>
       );
     }
 
