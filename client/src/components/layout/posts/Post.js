@@ -11,7 +11,7 @@ class Post extends Component {
     text: "",
     avatar: "",
     name: "",
-    showBtn: false,
+    showBtn: true,
     isAuthenticated: false,
     toEmail: "",
     toID: "",

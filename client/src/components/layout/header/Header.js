@@ -14,7 +14,6 @@ import WeatherWidGet from "../../../utils/WeatherWidGet";
 
 class Header extends Component {
   state = {
-    isAuthenticated: false,
     posts: null
   };
 
@@ -46,6 +45,7 @@ class Header extends Component {
         posts: this.props.post.post
       });
     }
+
     //get posts after user logged
     if (prevProps.auth !== this.props.auth) {
       this.props.getPosts();
@@ -53,8 +53,35 @@ class Header extends Component {
   }
 
   render() {
-    const { user } = this.props.auth;
+    const { user, isAuthenticated } = this.props.auth;
     const { posts } = this.state;
+    console.log("this.props", this.props);
+
+    //Show links for auth user
+    let linksContent;
+    if (isAuthenticated) {
+      linksContent = (
+        <ul className="nav justify-content-end">
+          <li className="nav-item">
+            <Link className="nav-link text-white" to="/contact">
+              Contact Us
+            </Link>
+          </li>
+          <li className="nav-item">
+            <a className="nav-link text-white" href="/users">
+              Users
+            </a>
+          </li>
+          <li className="nav-item">
+            <a className="nav-link text-white" href="/">
+              Link
+            </a>
+          </li>
+        </ul>
+      );
+    } else {
+      linksContent = null;
+    }
 
     let postCountcontent;
     if (posts) {
@@ -149,25 +176,7 @@ class Header extends Component {
             </button>
           </nav>
           <div className="collapse" id="navbarToggleExternalContent">
-            <div className="bg-dark p-4">
-              <ul className="nav justify-content-end">
-                <li className="nav-item">
-                  <Link className="nav-link text-white" to="/contact">
-                    Contact Us
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link text-white" href="/users">
-                    Users
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link text-white" href="/">
-                    Link
-                  </a>
-                </li>
-              </ul>
-            </div>
+            <div className="bg-dark p-4">{linksContent}</div>
           </div>
         </div>
       );

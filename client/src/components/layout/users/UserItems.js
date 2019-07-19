@@ -93,7 +93,7 @@ class UserItems extends Component {
     }
 
     return (
-      <div className="col-md-2 col-4 my-1">
+      <div className="col-md-2 col-6 my-1">
         <Card className="card ">
           <div
             className="py-1 border"
