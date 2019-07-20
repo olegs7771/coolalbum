@@ -14,7 +14,8 @@ export default function(state = initialState, actions) {
     case GET_ALL_USERS:
       return {
         ...state,
-        users: actions.payload
+        users: actions.payload,
+        loading: false
       };
 
     default:

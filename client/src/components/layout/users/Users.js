@@ -30,7 +30,6 @@ class Users extends Component {
   render() {
     //styles
 
-    console.log("this.props.avatar", this.props.avatar);
     let userContent;
     const { users, loading } = this.state;
     if (users === null || loading) {

@@ -67,13 +67,21 @@ const port = process.env.PORT;
 const server = app.listen(port);
 
 // Connect to socket.io
+const connections = [];
+const connectedUsers = [];
 const io = require("socket.io")(server);
 app.io = io;
 
 io.on("connection", socket => {
   console.log("connected to server socket", socket.id);
-  io.on("disconnect", () => {
-    console.log("disconnected");
+
+  connections.push(socket);
+
+  console.log("Connected: %s sockets connected", connections.length);
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+    connections.splice(connections.indexOf(socket));
+    console.log("Disconnected: %s sockets connected", connections.length);
   });
 });
 

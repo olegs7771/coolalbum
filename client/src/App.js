@@ -26,7 +26,8 @@ import Post from "./components/layout/posts/Post";
 import Users from "./components/layout/users/Users";
 //Inbox Posts
 import Inbox from "./components/layout/inbox/Inbox";
-
+//Chat
+import Chat from "./components/layout/chat/Chat";
 import "./App.css";
 import setAuthToken from "./utils/setAuthToken";
 import { setCurrentUser } from "./actions/userActions";
@@ -112,6 +113,7 @@ class App extends Component {
                   <Route exact path="/post" component={Post} />
                   <Route exact path="/users" component={Users} />
                   <Route exact path="/inbox" component={Inbox} />
+                  <Route exact path="/chat" component={Chat} />
                 </Switch>
               </div>
               <Footer />

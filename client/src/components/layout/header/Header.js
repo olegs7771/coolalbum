@@ -55,7 +55,6 @@ class Header extends Component {
   render() {
     const { user, isAuthenticated } = this.props.auth;
     const { posts } = this.state;
-    console.log("this.props", this.props);
 
     //Show links for auth user
     let linksContent;
@@ -73,9 +72,9 @@ class Header extends Component {
             </a>
           </li>
           <li className="nav-item">
-            <a className="nav-link text-white" href="/">
+            <Link className="nav-link text-white" to="/chat">
               Chat
-            </a>
+            </Link>
           </li>
         </ul>
       );

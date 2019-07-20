@@ -22,9 +22,9 @@ class InboxItems extends Component {
     console.log("this.state.message", this.state.message);
 
     //style
-    const Card = styled.section`
-      background: rgb(0, 0, 0, 0);
-    `;
+    // const Card = styled.section`
+    //   background: rgb(0, 0, 0, 0);
+    // `;
     const Text = styled.section`
       background: rgb(240, 241, 242, 0.61);
     `;
