@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import TextAreaFormGroup from "../../textFormGroup/TextAreaFormGroup";
-import ChatUsersItem from "./ChatUsersItem";
+import ChatUsers from "./ChatUsers";
 
 class Chat extends Component {
   messageSendHandler = e => {
@@ -15,7 +15,7 @@ class Chat extends Component {
         <div className="row">
           <div className="col-md-4 col-4 border">
             <h5 className="h5">Online Users</h5>
-            <ChatUsersItem />
+            <ChatUsers />
           </div>
           <div className="col-md-8 col-8 border">
             <h5 className="mt-2">Chat</h5>

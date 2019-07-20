@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getAllUsers } from "../../../actions/userActions";
 import Spinner from "../../../utils/Spinner";
+import ChatUsersItem from "./ChatUsersItem";
 
 class ChatUsers extends Component {
   componentDidMount() {
@@ -16,12 +17,9 @@ class ChatUsers extends Component {
     if (users === null || loading) {
       chatUsersContent = <Spinner />;
     } else {
-      chatUsersContent = (
-        users.map(item=>(
-           
-        ))
-
-      )
+      chatUsersContent = users.map((item, index) => (
+        <ChatUsersItem key={index} name={item.name} />
+      ));
     }
     return (
       <div>
