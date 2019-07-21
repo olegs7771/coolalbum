@@ -10,9 +10,7 @@ const socket = io("http://localhost:5000");
 class Chat extends Component {
   state = {
     text: "",
-    name: "",
-    date: Date.now(),
-    chatMessage: ""
+    chatMessages: ""
   };
 
   onChange = e => {
@@ -32,19 +30,30 @@ class Chat extends Component {
     this.props.chatMessage(data);
   };
   componentDidMount() {
-    socket.on("chatMsg", this.handleData);
+    this.props.loadChatMessages();
+    socket.on("all", this.handleData);
   }
-  handleData = chatMsg => {
-    console.log("chatMsg", chatMsg);
+  handleData = all => {
+    console.log("all", all);
     this.setState({
-      chatMessage: chatMsg.text,
-      name: chatMsg.name
+      chatMessages: all
     });
   };
 
   render() {
-    const { name, text, date, chatMessage } = this.state;
-    console.log("this.state", this.state);
+    const { name, text, date, chatMessages } = this.state;
+    console.log("this.state", this.state.chatMessages);
+    let chatMessagesContent;
+    if (chatMessages) {
+      chatMessagesContent = chatMessages.map((item, index) => (
+        <ChatItem
+          key={index}
+          name={item.name}
+          text={item.text}
+          date={item.date}
+        />
+      ));
+    }
 
     return (
       <div className=" my-4 mx-auto ">
@@ -57,9 +66,7 @@ class Chat extends Component {
           <div className="col-md-8 col-8 ">
             <h5 className="mt-2">Chat</h5>
             <div className="container">
-              <ul className="my-2  p-2">
-                <ChatItem name={name} date={date} chatMessage={chatMessage} />
-              </ul>
+              <ul className="my-2  p-2">{chatMessagesContent}</ul>
               <form onSubmit={this.messageSendHandler}>
                 <TextAreaFormGroup
                   onChange={this.onChange}

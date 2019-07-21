@@ -34,9 +34,8 @@ router.post(
   (req, res) => {
     ChatMessage.find().then(msgs => {
       console.log("msgs", msgs);
+      req.app.io.emit("all", msgs);
     });
-
-    req.app.io.emit("all", data);
   }
 );
 module.exports = router;

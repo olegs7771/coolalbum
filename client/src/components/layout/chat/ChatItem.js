@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 class ChatItem extends Component {
   render() {
-    const { name, date, chatMessage } = this.props;
+    const { name, date, text } = this.props;
     return (
       <div>
         <li className="list-group-item ">
@@ -14,7 +14,7 @@ class ChatItem extends Component {
               </span>
             </div>
             <div className="col-md-8 ">
-              <span style={{ fontSize: "0.9em" }}>{chatMessage}</span>
+              <span style={{ fontSize: "0.9em" }}>{text}</span>
             </div>
           </div>
         </li>
