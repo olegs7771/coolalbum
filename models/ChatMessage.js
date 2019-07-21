@@ -9,7 +9,7 @@ const ChatMessage = new Schema({
     type: String
   },
 
-  senderName: {
+  name: {
     type: String
   },
   date: {
@@ -18,4 +18,4 @@ const ChatMessage = new Schema({
   }
 });
 // mongoose.set("useCreateIndex", true);
-module.exports = ChatMessage = mongoose.model("chatMessage", ChatMessage);
+module.exports = ChatMsg = mongoose.model("chatMsg", ChatMessage);

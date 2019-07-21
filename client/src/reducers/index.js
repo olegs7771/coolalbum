@@ -7,6 +7,7 @@ import mailReducer from "./mailReducer";
 import messageReducer from "./messageReducer";
 import weatherReducer from "./weatherReducer";
 import postReducer from "./postReducer";
+import chatReducer from "./chatReducer";
 
 export default combineReducers({
   auth: authReducer,
@@ -16,5 +17,6 @@ export default combineReducers({
   message: messageReducer,
   mail: mailReducer,
   weather: weatherReducer,
-  post: postReducer
+  post: postReducer,
+  chat: chatReducer
 });

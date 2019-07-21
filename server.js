@@ -13,6 +13,7 @@ const upload = require("./routers/api/upload");
 const phone = require("./routers/api/phone");
 const weather = require("./routers/api/weather");
 const posts = require("./routers/api/posts");
+const chat = require("./routers/api/chat");
 
 const app = express();
 
@@ -52,6 +53,7 @@ app.use("/api/uploads", upload);
 app.use("/api/phone", phone);
 app.use("/api/weather", weather);
 app.use("/api/posts", posts);
+app.use("/api/chat", chat);
 
 // Server Static Assets while in production
 if (process.env.NODE_ENV === "production") {
@@ -73,11 +75,10 @@ const io = require("socket.io")(server);
 app.io = io;
 
 io.on("connection", socket => {
+  connections.push(socket);
+  console.log("Connected: %s sockets connected", connections.length);
   console.log("connected to server socket", socket.id);
 
-  connections.push(socket);
-
-  console.log("Connected: %s sockets connected", connections.length);
   socket.on("disconnect", () => {
     console.log("user disconnected");
     connections.splice(connections.indexOf(socket));

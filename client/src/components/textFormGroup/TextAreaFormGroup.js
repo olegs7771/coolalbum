@@ -21,7 +21,7 @@ const TextAreaFormGroup = ({
         value={value}
         type={type}
         cols="10"
-        rows="2"
+        rows="1"
         onChange={onChange}
         className={classnames("form-control", { "is-invalid": error })}
       />

@@ -25,6 +25,8 @@ export const SEND_SMS = "SEND_SMS";
 export const LOADING_CURRENT_WEATHER = "LOADING_CURRENT_WEATHER ";
 export const GET_CURRENT_WEATHER = "GET_CURRENT_WEATHER ";
 //Posts
-
 export const GET_POSTS = "GET_POSTS";
 export const LOADING_POSTS = "LOADING_POSTS";
+//Chat
+export const CHAT_MESSAGE = "CHAT_MESSAGE";
+export const LOAD_CHAT_MESSAGES = "LOAD_CHAT_MESSAGES";
