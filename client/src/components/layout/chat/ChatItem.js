@@ -21,7 +21,7 @@ class ChatItem extends Component {
       userColorContent = "rgb(243, 247, 242)";
       marginContent = "50px";
     }
-
+    //test
     return (
       <ul className="list-group ">
         <li
