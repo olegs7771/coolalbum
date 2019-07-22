@@ -20,17 +20,17 @@ class Chat extends Component {
   };
   messageSendHandler = e => {
     e.preventDefault();
-
     const { text } = this.state;
-
     console.log("submitted");
     const data = {
       text
     };
+    console.log("data", data);
+
     this.props.chatMessage(data);
   };
   componentDidMount() {
-    this.props.loadChatMessages();
+    // this.props.loadChatMessages();
     socket.on("all", this.handleData);
   }
   handleData = all => {

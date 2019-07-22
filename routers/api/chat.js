@@ -1,4 +1,7 @@
 const express = require("express");
+require("dotenv").config();
+const app = express();
+
 const router = express.Router();
 const passport = require("passport");
 const ChatMessage = require("../../models/ChatMessage");
@@ -9,6 +12,7 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     console.log("req.user.name", req.user.name);
+    console.log("req.body", req.body);
     //Emit Data to the Client
 
     const newMessage = new ChatMessage({
@@ -16,26 +20,12 @@ router.post(
       name: req.user.name
     });
 
-    newMessage.save().then(msg => {
-      const data = {
-        text: msg.text,
-        name: msg.name
-      };
-      req.app.io.emit("chatMsg", data);
+    newMessage.save().then(() => {
+      ChatMessage.find().then(chatMsgs => {
+        req.app.io.emit("all", chatMsgs);
+      });
     });
   }
 );
 
-//Fetch all chat messages
-
-router.post(
-  "/all",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    ChatMessage.find().then(msgs => {
-      console.log("msgs", msgs);
-      req.app.io.emit("all", msgs);
-    });
-  }
-);
 module.exports = router;

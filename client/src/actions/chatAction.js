@@ -1,9 +1,9 @@
 import { CHAT_MESSAGE } from "./types";
 import Axios from "axios";
 //send chatMsg
-export const chatMessage = () => dispatch => {
+export const chatMessage = data => dispatch => {
   // console.log("data", data);
-  Axios.post("/api/chat/message")
+  Axios.post("/api/chat/message", data)
     .then(res => {
       console.log("res.data", res.data);
     })

@@ -14,10 +14,10 @@ const phone = require("./routers/api/phone");
 const weather = require("./routers/api/weather");
 const posts = require("./routers/api/posts");
 const chat = require("./routers/api/chat");
-
 const app = express();
 
-//set storage engine
+//bring model for chat db
+const ChatMessage = require("./models/ChatMessage");
 
 // Public folder
 app.use(express.static(path.join(__dirname, "public")));
@@ -90,3 +90,12 @@ app.use((req, res, next) => {
   res.locals["socketio"] = io;
   next();
 });
+//chat socket
+// const data = {
+//   oleg: 3
+// };
+// io.on("connection", socket => {
+//   ChatMessage.find().then(chatMsgs => {
+//     io.emit("all", chatMsgs);
+//   });
+// });
