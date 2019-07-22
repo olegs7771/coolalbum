@@ -36,13 +36,13 @@ class ChatItem extends Component {
           }}
         >
           <div className="row ">
-            <div className="col-md-4 col-4" style={{ textAlign: "left" }}>
+            <div className="col-md-4 " style={{ textAlign: "left" }}>
               <span className="text-success">{name}</span>{" "}
               <span className="text-warning" style={{ fontSize: "0.7em" }}>
                 {moment(date).format("LLL")}
               </span>
             </div>
-            <div className="col-md-7 col-7">
+            <div className="col-md-7 ">
               <span style={{ fontSize: "0.9em" }}>{text}</span>
             </div>
             <div className="col-md-1 col-1">{dltBtnContent}</div>

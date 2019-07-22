@@ -38,5 +38,13 @@ router.get(
     });
   }
 );
+//delete Chat Message by ID
+router.post(
+  "/delete",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    //here we delete
+  }
+);
 
 module.exports = router;
