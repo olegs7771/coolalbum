@@ -30,7 +30,11 @@ class Chat extends Component {
 
       this.props.chatMessage(data);
     }
+    this.setState({
+      text: ""
+    });
   };
+
   componentDidMount() {
     this.props.loadChatMessages();
     socket.on("all", this.handleData);
@@ -59,7 +63,6 @@ class Chat extends Component {
 
     return (
       <div className=" my-4 mx-auto ">
-        <div className="h4 text-center"> Here Chat</div>
         <div className="row">
           <div className="col-md-3 col-12 ">
             <h5 className=" mt-2">Online Users</h5>
