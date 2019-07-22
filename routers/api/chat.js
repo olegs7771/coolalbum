@@ -28,4 +28,15 @@ router.post(
   }
 );
 
+//Show All Chat Messages
+router.get(
+  "/get_all",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    ChatMessage.find().then(chatMsgs => {
+      req.app.io.emit("all", chatMsgs);
+    });
+  }
+);
+
 module.exports = router;

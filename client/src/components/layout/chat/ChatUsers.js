@@ -22,9 +22,9 @@ class ChatUsers extends Component {
       ));
     }
     return (
-      <div>
+      <ul className="list-group">
         <span>{chatUsersContent}</span>
-      </div>
+      </ul>
     );
   }
 }

@@ -6,9 +6,12 @@ class ChatUsersItem extends Component {
 
     const { name } = this.props;
     return (
-      <ul className=" list-group">
-        <li className="list-group-item">{name}</li>
-      </ul>
+      <li
+        className="list-group-item"
+        style={{ lineHeight: "0.5rem", textAlign: "left" }}
+      >
+        {name}
+      </li>
     );
   }
 }

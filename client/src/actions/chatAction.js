@@ -14,7 +14,7 @@ export const chatMessage = data => dispatch => {
 
 //load all chatMessages
 export const loadChatMessages = () => dispatch => {
-  Axios.post("/api/chat/all")
+  Axios.get("/api/chat/get_all")
     .then(res => {
       console.log("all chat fetched", res.data);
     })

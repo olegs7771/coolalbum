@@ -25,12 +25,14 @@ class Chat extends Component {
     const data = {
       text
     };
-    console.log("data", data);
+    if (data.text) {
+      console.log("data", data);
 
-    this.props.chatMessage(data);
+      this.props.chatMessage(data);
+    }
   };
   componentDidMount() {
-    // this.props.loadChatMessages();
+    this.props.loadChatMessages();
     socket.on("all", this.handleData);
   }
   handleData = all => {
@@ -41,7 +43,7 @@ class Chat extends Component {
   };
 
   render() {
-    const { name, text, date, chatMessages } = this.state;
+    const { text, chatMessages } = this.state;
     console.log("this.state", this.state.chatMessages);
     let chatMessagesContent;
     if (chatMessages) {
@@ -59,29 +61,28 @@ class Chat extends Component {
       <div className=" my-4 mx-auto ">
         <div className="h4 text-center"> Here Chat</div>
         <div className="row">
-          <div className="col-md-4 col-4 border">
-            <h5 className="h5">Online Users</h5>
+          <div className="col-md-3 col-12 ">
+            <h5 className=" mt-2">Online Users</h5>
             <ChatUsers />
           </div>
-          <div className="col-md-8 col-8 ">
+          <div className="col-md-9 col-12 ">
             <h5 className="mt-2">Chat</h5>
-            <div className="container">
-              <ul className="my-2  p-2">{chatMessagesContent}</ul>
-              <form onSubmit={this.messageSendHandler}>
-                <TextAreaFormGroup
-                  onChange={this.onChange}
-                  value={text}
-                  name="text"
-                  placeholder="write something.."
-                />
+            <div>{chatMessagesContent}</div>
 
-                <input
-                  type="submit"
-                  value="send"
-                  className="btn btn-light mx-auto mb-2"
-                />
-              </form>
-            </div>
+            <form onSubmit={this.messageSendHandler}>
+              <TextAreaFormGroup
+                onChange={this.onChange}
+                value={text}
+                name="text"
+                placeholder="write something.."
+              />
+
+              <input
+                type="submit"
+                value="send"
+                className="btn btn-light mx-auto mb-2"
+              />
+            </form>
           </div>
         </div>
       </div>
