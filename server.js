@@ -63,10 +63,10 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
   });
 }
-console.log("process.env.PORT server ", process.env.PORT);
-
-const port = process.env.PORT;
-const server = app.listen(port);
+// console.log("process.env.PORT server ", process.env.PORT);
+// server.listen(process.env.PORT || 3000);
+// const port = process.env.PORT;
+const server = app.listen(process.env.PORT || 5000);
 
 // Connect to socket.io
 const connections = [];
