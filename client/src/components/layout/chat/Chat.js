@@ -47,6 +47,8 @@ class Chat extends Component {
   };
 
   render() {
+    console.log("socket", socket);
+
     const { text, chatMessages } = this.state;
     console.log("this.state", this.state.chatMessages);
     let chatMessagesContent;

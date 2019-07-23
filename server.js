@@ -90,12 +90,3 @@ app.use((req, res, next) => {
   res.locals["socketio"] = io;
   next();
 });
-//chat socket
-// const data = {
-//   oleg: 3
-// };
-// io.on("connection", socket => {
-//   ChatMessage.find().then(chatMsgs => {
-//     io.emit("all", chatMsgs);
-//   });
-// });
