@@ -5,7 +5,8 @@ import ChatItem from "./ChatItem";
 import { connect } from "react-redux";
 import { chatMessage, loadChatMessages } from "../../../actions/chatAction";
 import io from "socket.io-client";
-const socket = io("http://localhost:5000");
+
+const socket = io("https://infinite-everglades-47869.herokuapp.com");
 
 class Chat extends Component {
   state = {
