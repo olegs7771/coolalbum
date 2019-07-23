@@ -8,6 +8,8 @@ import io from "socket.io-client";
 
 const socket = io("https://infinite-everglades-47869.herokuapp.com");
 
+// const socket = io("http://localhost:5000");
+
 class Chat extends Component {
   state = {
     text: "",
@@ -22,13 +24,11 @@ class Chat extends Component {
   messageSendHandler = e => {
     e.preventDefault();
     const { text } = this.state;
-    console.log("submitted");
+
     const data = {
       text
     };
     if (data.text) {
-      console.log("data", data);
-
       this.props.chatMessage(data);
     }
     this.setState({
@@ -39,20 +39,16 @@ class Chat extends Component {
   componentDidMount() {
     this.props.loadChatMessages();
     socket.on("all", this.handleData);
-    console.log("cdm all", socket.on("all", this.handleData));
   }
   handleData = all => {
-    console.log("all", all);
     this.setState({
       chatMessages: all
     });
   };
 
   render() {
-    console.log("socket", socket);
-
     const { text, chatMessages } = this.state;
-    console.log("this.state", this.state.chatMessages);
+
     let chatMessagesContent;
     if (chatMessages) {
       chatMessagesContent = chatMessages.map((item, index) => (
@@ -61,6 +57,7 @@ class Chat extends Component {
           name={item.name}
           text={item.text}
           date={item.date}
+          id={item._id}
         />
       ));
     }

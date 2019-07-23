@@ -34,7 +34,7 @@ router.get(
   (req, res) => {
     ChatMessage.find().then(chatMsgs => {
       req.app.io.emit("all", chatMsgs);
-      console.log("chatMsgs", chatMsgs);
+
       res.status(200).json({
         all: "All chat messages"
       });
@@ -46,7 +46,19 @@ router.post(
   "/delete",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    //here we delete
+    console.log("req.body", req.body);
+    const _id = req.body.id;
+
+    ChatMessage.findOneAndRemove({ _id })
+      .then(chatMsg => {
+        res.status(200).json({ message: "Deleted" });
+        ChatMessage.find().then(chatMsgs => {
+          req.app.io.emit("all", chatMsgs);
+        });
+      })
+      .catch(err => {
+        res.status(400).json(err);
+      });
   }
 );
 

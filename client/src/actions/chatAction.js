@@ -22,3 +22,14 @@ export const loadChatMessages = () => dispatch => {
       console.log("err", err.response.data);
     });
 };
+
+//Delete Chat Message by ID
+export const deleteChatMessage = data => dispatch => {
+  Axios.post("/api/chat/delete", data)
+    .then(res => {
+      console.log("res.data", res.data);
+    })
+    .catch(err => {
+      console.log("err.response.data", err.response.data);
+    });
+};

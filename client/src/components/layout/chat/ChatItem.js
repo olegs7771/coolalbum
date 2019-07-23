@@ -1,13 +1,21 @@
 import React, { Component } from "react";
 import moment from "moment";
 import { connect } from "react-redux";
+import { deleteChatMessage } from "../../../actions/chatAction";
 
 class ChatItem extends Component {
+  deleteChatMessage = id => {
+    const data = {
+      id
+    };
+    this.props.deleteChatMessage(data);
+  };
+
   render() {
     const authName = this.props.auth.user.name;
     console.log("authName", authName);
 
-    const { name, date, text } = this.props;
+    const { name, date, text, id } = this.props;
 
     //backgroundColor for User(auth/rest)
     let userColorContent;
@@ -24,7 +32,12 @@ class ChatItem extends Component {
 
     //delete button
     let dltBtnContent;
-    dltBtnContent = <i className="fas fa-trash-alt" />;
+    dltBtnContent = (
+      <i
+        className="fas fa-trash-alt"
+        onClick={this.deleteChatMessage.bind(this, id)}
+      />
+    );
     return (
       <ul className="list-group col-md-12  col-12">
         <li
@@ -56,4 +69,7 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps)(ChatItem);
+export default connect(
+  mapStateToProps,
+  { deleteChatMessage }
+)(ChatItem);
