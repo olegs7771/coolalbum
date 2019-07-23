@@ -20,6 +20,7 @@ router.post(
 
     newMessage.save().then(() => {
       ChatMessage.find().then(chatMsgs => {
+        res.status(200).json({ all: "Chat messages all" });
         req.app.io.emit("all", chatMsgs);
       });
     });
@@ -33,6 +34,10 @@ router.get(
   (req, res) => {
     ChatMessage.find().then(chatMsgs => {
       req.app.io.emit("all", chatMsgs);
+      console.log("chatMsgs", chatMsgs);
+      res.status(200).json({
+        all: "All chat messages"
+      });
     });
   }
 );

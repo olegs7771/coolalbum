@@ -38,6 +38,7 @@ class Chat extends Component {
   componentDidMount() {
     this.props.loadChatMessages();
     socket.on("all", this.handleData);
+    console.log("cdm all", socket.on("all", this.handleData));
   }
   handleData = all => {
     console.log("all", all);
