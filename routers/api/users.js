@@ -213,10 +213,14 @@ router.post("/login", (req, res) => {
           jwt.sign(payload, keys, { expiresIn: 36000 }, (err, token) => {
             res.json({ success: true, token: "bearer  " + token });
           });
-          //populate sess object
-          sess = req.session;
-          sess.uname = user.name;
-          console.log("sess", sess);
+
+          console.log("user.name", user.name);
+          const onlineUsers = [];
+          onlineUsers.push(user.name);
+
+          console.log("onlineUsers", onlineUsers);
+
+          req.app.io.emit("online", onlineUsers);
         } else {
           return res.status(400).json({ password: "passport wrong" });
         }

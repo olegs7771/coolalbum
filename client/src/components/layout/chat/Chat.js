@@ -13,7 +13,8 @@ const socket = io("https://infinite-everglades-47869.herokuapp.com");
 class Chat extends Component {
   state = {
     text: "",
-    chatMessages: ""
+    chatMessages: "",
+    onlineUsers: []
   };
 
   onChange = e => {
@@ -39,15 +40,22 @@ class Chat extends Component {
   componentDidMount() {
     this.props.loadChatMessages();
     socket.on("all", this.handleData);
+    socket.on("online", this.handleOnlineUsers);
   }
   handleData = all => {
     this.setState({
       chatMessages: all
     });
   };
+  handleOnlineUsers = online => {
+    this.setState({
+      onlineUsers: online
+    });
+  };
 
   render() {
-    const { text, chatMessages } = this.state;
+    const { text, chatMessages, onlineUsers } = this.state;
+    console.log("this.state", this.state);
 
     let chatMessagesContent;
     if (chatMessages) {
@@ -67,7 +75,7 @@ class Chat extends Component {
         <div className="row">
           <div className="col-md-3 col-12 ">
             <h5 className=" mt-2">Online Users</h5>
-            <ChatUsers />
+            <ChatUsers onlineUsers={onlineUsers} />
           </div>
           <div className="col-md-9 col-12 ">
             <h5 className="mt-2">Chat</h5>
