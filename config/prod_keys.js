@@ -1,6 +1,6 @@
 module.exports = {
   mongoDB: process.env.MONGO_URI,
   secredOrKey: process.env.SECRET_KEY,
-  mailPass: process.env.MAIL_PASS
+  mailPass: process.env.MAIL_PASS,
+  sessionSecret: process.env.SESSION_SECRET
 };
-// console.log("process.env.MONGO_URI prod", process.env.MONGO_URI);

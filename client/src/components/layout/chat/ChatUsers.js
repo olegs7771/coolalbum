@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getAllUsers } from "../../../actions/userActions";
+import { getOnlineUsers } from "../../../actions/chatAction";
 import Spinner from "../../../utils/Spinner";
 import ChatUsersItem from "./ChatUsersItem";
 
 class ChatUsers extends Component {
   componentDidMount() {
-    this.props.getAllUsers();
+    this.props.getOnlineUsers();
   }
 
   render() {
@@ -33,5 +33,5 @@ const mapStateToProps = state => ({
 });
 export default connect(
   mapStateToProps,
-  { getAllUsers }
+  { getOnlineUsers }
 )(ChatUsers);

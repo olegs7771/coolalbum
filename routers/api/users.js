@@ -168,7 +168,7 @@ router.post("/confirmRegistration", (req, res) => {
 // // @desc /Login User
 // // @route POST /api/users/register
 // // @access Public
-
+let sess; //session object
 router.post("/login", (req, res) => {
   //First line of validation
 
@@ -213,6 +213,10 @@ router.post("/login", (req, res) => {
           jwt.sign(payload, keys, { expiresIn: 36000 }, (err, token) => {
             res.json({ success: true, token: "bearer  " + token });
           });
+          //populate sess object
+          sess = req.session;
+          sess.uname = user.name;
+          console.log("sess", sess);
         } else {
           return res.status(400).json({ password: "passport wrong" });
         }

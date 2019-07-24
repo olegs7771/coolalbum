@@ -1,4 +1,5 @@
 const express = require("express");
+const session = require("express-session");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const passport = require("passport");
@@ -15,9 +16,22 @@ const weather = require("./routers/api/weather");
 const posts = require("./routers/api/posts");
 const chat = require("./routers/api/chat");
 const app = express();
+//initiat session
+//bring in secret key
+const sessionSecretKey = require("./config/keys").sessionSecret;
 
-//bring model for chat db
-const ChatMessage = require("./models/ChatMessage");
+//define lifetime for session
+
+const TWO_HOURS = 1000 * 60 * 60 * 2;
+
+app.use(
+  session({
+    secret: sessionSecretKey,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: true, maxAge: TWO_HOURS }
+  })
+);
 
 // Public folder
 app.use(express.static(path.join(__dirname, "public")));
@@ -32,6 +46,13 @@ app.use(bodyParser.json());
 
 //passport middleware
 app.use(passport.initialize());
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(user, done) {
+  done(null, user);
+});
 
 //Passport Config  JWT Strategy
 require("./config/passport")(passport);
@@ -63,10 +84,9 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
   });
 }
-// console.log("process.env.PORT server ", process.env.PORT);
-// server.listen(process.env.PORT || 3000);
-// const port = process.env.PORT;
-const server = app.listen(process.env.PORT || 5000);
+console.log("process.env.PORT server ", process.env.PORT);
+
+const server = app.listen(process.env.PORT || PORT);
 
 // Connect to socket.io
 const connections = [];

@@ -1,5 +1,17 @@
 import { CHAT_MESSAGE } from "./types";
 import Axios from "axios";
+
+//Get All Online Users
+export const getOnlineUsers = () => dispatch => {
+  Axios.get("/api/chat/online")
+    .then(res => {
+      res.status(200).json({ msg: "All online" });
+    })
+    .catch(err => {
+      console.log("err", err.response.data);
+    });
+};
+
 //send chatMsg
 export const chatMessage = data => dispatch => {
   // console.log("data", data);

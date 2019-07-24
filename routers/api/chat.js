@@ -61,5 +61,12 @@ router.post(
       });
   }
 );
+//show all online users
+let sess;
+
+router.get("/online", passport.authenticate("jwt"), (req, res) => {
+  sess = req.session;
+  console.log("sess", sess);
+});
 
 module.exports = router;
