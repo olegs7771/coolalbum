@@ -13,7 +13,6 @@ class ChatItem extends Component {
 
   render() {
     const authName = this.props.auth.user.name;
-    console.log("authName", authName);
 
     const { name, date, text, id } = this.props;
 

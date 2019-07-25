@@ -98,6 +98,7 @@ io.on("connection", socket => {
   connections.push(socket);
   console.log("Connected: %s sockets connected", connections.length);
   console.log("connected to server socket", socket.id);
+  console.log("io.engine.clients", io.engine.clients);
 
   socket.on("disconnect", () => {
     console.log("user disconnected");

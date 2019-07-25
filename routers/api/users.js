@@ -215,12 +215,11 @@ router.post("/login", (req, res) => {
           });
 
           console.log("user.name", user.name);
-          const onlineUsers = [];
-          onlineUsers.push(user.name);
+          const onlineUser = user.name;
 
-          console.log("onlineUsers", onlineUsers);
+          // console.log("req.app.io", req.app.io);
 
-          req.app.io.emit("online", onlineUsers);
+          req.app.io.emit("online", onlineUser);
         } else {
           return res.status(400).json({ password: "passport wrong" });
         }

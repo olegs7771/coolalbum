@@ -12,10 +12,7 @@ import PhoneInput from "react-phone-number-input";
 import TextFormGroup from "../../textFormGroup/TextFormGroup";
 import "react-phone-number-input/style.css";
 
-//Socket.io client
-import io from "socket.io-client";
-
-const socket = io("http://localhost:5000");
+import Socket_io from "../../../utils/Socket_io";
 
 class SmsLogin extends Component {
   state = {
@@ -40,7 +37,7 @@ class SmsLogin extends Component {
     };
     //sending phone number from form to phoneAction
     this.props.sendSmsCode(data, this.props.history);
-    socket.on("smsStatus", data => {
+    Socket_io().on("smsStatus", data => {
       console.log("data from api", data);
       this.setState({
         number: data.number

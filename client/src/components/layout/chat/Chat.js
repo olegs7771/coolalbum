@@ -4,11 +4,7 @@ import ChatUsers from "./ChatUsers";
 import ChatItem from "./ChatItem";
 import { connect } from "react-redux";
 import { chatMessage, loadChatMessages } from "../../../actions/chatAction";
-import io from "socket.io-client";
-
-const socket = io("https://infinite-everglades-47869.herokuapp.com");
-
-// const socket = io("http://localhost:5000");
+import Socket_io from "../../../utils/Socket_io";
 
 class Chat extends Component {
   state = {
@@ -39,22 +35,19 @@ class Chat extends Component {
 
   componentDidMount() {
     this.props.loadChatMessages();
-    socket.on("all", this.handleData);
-    socket.on("online", this.handleOnlineUsers);
+    Socket_io().on("all", data => {
+      this.setState({
+        chatMessages: data
+      });
+    });
   }
-  handleData = all => {
-    this.setState({
-      chatMessages: all
-    });
-  };
-  handleOnlineUsers = online => {
-    this.setState({
-      onlineUsers: online
-    });
-  };
+
+  // handleOnlineUsers = online => {
+  //   console.log("online", online);
+  // };
 
   render() {
-    const { text, chatMessages, onlineUsers } = this.state;
+    const { text, chatMessages } = this.state;
     console.log("this.state", this.state);
 
     let chatMessagesContent;
@@ -75,7 +68,7 @@ class Chat extends Component {
         <div className="row">
           <div className="col-md-3 col-12 ">
             <h5 className=" mt-2">Online Users</h5>
-            <ChatUsers onlineUsers={onlineUsers} />
+            <ChatUsers />
           </div>
           <div className="col-md-9 col-12 ">
             <h5 className="mt-2">Chat</h5>
