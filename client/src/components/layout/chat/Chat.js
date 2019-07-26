@@ -35,7 +35,7 @@ class Chat extends Component {
 
   componentDidMount() {
     const socket = Socket_io();
-    const data = "Oleg";
+    const data = this.props.auth.user.name;
     socket.emit("user", data);
     socket.on("online", data => {
       console.log("data", data);
