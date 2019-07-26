@@ -1,4 +1,4 @@
-import { CHAT_MESSAGE, CHAT_TYPING_LOADER } from "./types";
+import { CHAT_TYPING_LOADER } from "./types";
 import Axios from "axios";
 
 //Get All Online Users

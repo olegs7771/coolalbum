@@ -46,17 +46,13 @@ class Chat extends Component {
 
   componentDidMount() {
     const socket = Socket_io();
-    const { name } = this.props.auth.user;
-    let users = [];
-    users.push(name);
-    socket.emit("user", users);
-    socket.on("online", users => {
-      console.log("users", users);
+    console.log("socket", socket);
 
-      this.setState({
-        onlineUsers: users
-      });
-    });
+    const { name } = this.props.auth.user;
+
+    socket.emit("user", name);
+    const anotherName = "alice";
+    socket.emit("anotherUser", anotherName);
 
     this.props.loadChatMessages();
     socket.on("all", data => {
@@ -67,17 +63,11 @@ class Chat extends Component {
   }
 
   render() {
-    const socket = Socket_io();
-    const { text, chatMessages, onlineUsers, typing } = this.state;
+    const { text, chatMessages, typing } = this.state;
     console.log("this.state", this.state);
     let typingContent;
     if (typing) {
       typingContent = <div className="mx-auto">Typing...</div>;
-      const data = {
-        html: typingContent,
-        uname: this.props.auth.user.name
-      };
-      socket.emit("typing", data);
     } else {
       typingContent = null;
     }
@@ -100,7 +90,7 @@ class Chat extends Component {
         <div className="row">
           <div className="col-md-3 col-12 ">
             <h5 className=" mt-2">Online Users</h5>
-            <ChatUsers onlineUsers={onlineUsers} />
+            <ChatUsers />
           </div>
           <div className="col-md-9 col-12 ">
             <h5 className="mt-2">Chat</h5>

@@ -99,9 +99,13 @@ io.on("connection", socket => {
   console.log("Connected: %s sockets connected", connections.length);
   console.log("connected to server socket", socket.id);
   //show online
-  socket.on("user", users => {
-    console.log("users", users);
-    socket.emit("online", users);
+  socket.on("user", user => {
+    socket.user = user;
+    console.log("user", socket.user);
+  });
+  socket.on("anotherUser", anotherName => {
+    socket.user1 = anotherName;
+    console.log("user1", socket.user);
   });
 
   const online = Object.keys(io.engine.clients);
