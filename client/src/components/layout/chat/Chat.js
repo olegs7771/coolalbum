@@ -34,6 +34,19 @@ class Chat extends Component {
   };
 
   componentDidMount() {
+    const socket = Socket_io();
+    const data = "Oleg";
+    socket.emit("user", data);
+    socket.on("online", data => {
+      console.log("data", data);
+
+      let onlineUsers = [];
+      onlineUsers.push(data);
+      this.setState({
+        onlineUsers
+      });
+    });
+
     this.props.loadChatMessages();
     Socket_io().on("all", data => {
       this.setState({
@@ -42,12 +55,8 @@ class Chat extends Component {
     });
   }
 
-  // handleOnlineUsers = online => {
-  //   console.log("online", online);
-  // };
-
   render() {
-    const { text, chatMessages } = this.state;
+    const { text, chatMessages, onlineUsers } = this.state;
     console.log("this.state", this.state);
 
     let chatMessagesContent;
@@ -68,7 +77,7 @@ class Chat extends Component {
         <div className="row">
           <div className="col-md-3 col-12 ">
             <h5 className=" mt-2">Online Users</h5>
-            <ChatUsers />
+            <ChatUsers onlineUsers={onlineUsers} />
           </div>
           <div className="col-md-9 col-12 ">
             <h5 className="mt-2">Chat</h5>

@@ -98,7 +98,15 @@ io.on("connection", socket => {
   connections.push(socket);
   console.log("Connected: %s sockets connected", connections.length);
   console.log("connected to server socket", socket.id);
-  console.log("io.engine.clients", io.engine.clients);
+  socket.on("user", data => {
+    console.log("data", data);
+    socket.emit("online", data);
+  });
+
+  const online = Object.keys(io.engine.clients);
+  console.log("JSON.stringify(online)", JSON.stringify(online));
+
+  io.emit("server message", JSON.stringify(online));
 
   socket.on("disconnect", () => {
     console.log("user disconnected");
