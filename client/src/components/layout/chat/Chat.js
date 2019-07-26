@@ -3,19 +3,29 @@ import TextAreaFormGroup from "../../textFormGroup/TextAreaFormGroup";
 import ChatUsers from "./ChatUsers";
 import ChatItem from "./ChatItem";
 import { connect } from "react-redux";
-import { chatMessage, loadChatMessages } from "../../../actions/chatAction";
+import {
+  chatMessage,
+  loadChatMessages,
+  chatLoader
+} from "../../../actions/chatAction";
 import Socket_io from "../../../utils/Socket_io";
 
 class Chat extends Component {
   state = {
     text: "",
     chatMessages: "",
-    onlineUsers: []
+    onlineUsers: [],
+    typing: false
   };
 
   onChange = e => {
     this.setState({
       [e.target.name]: e.target.value
+    });
+    this.props.chatLoader();
+    // console.log("loading");
+    this.setState({
+      typing: true
     });
   };
   messageSendHandler = e => {
@@ -29,26 +39,27 @@ class Chat extends Component {
       this.props.chatMessage(data);
     }
     this.setState({
-      text: ""
+      text: "",
+      typing: false
     });
   };
 
   componentDidMount() {
     const socket = Socket_io();
-    const data = this.props.auth.user.name;
-    socket.emit("user", data);
-    socket.on("online", data => {
-      console.log("data", data);
+    const { name } = this.props.auth.user;
+    let users = [];
+    users.push(name);
+    socket.emit("user", users);
+    socket.on("online", users => {
+      console.log("users", users);
 
-      let onlineUsers = [];
-      onlineUsers.push(data);
       this.setState({
-        onlineUsers
+        onlineUsers: users
       });
     });
 
     this.props.loadChatMessages();
-    Socket_io().on("all", data => {
+    socket.on("all", data => {
       this.setState({
         chatMessages: data
       });
@@ -56,8 +67,20 @@ class Chat extends Component {
   }
 
   render() {
-    const { text, chatMessages, onlineUsers } = this.state;
+    const socket = Socket_io();
+    const { text, chatMessages, onlineUsers, typing } = this.state;
     console.log("this.state", this.state);
+    let typingContent;
+    if (typing) {
+      typingContent = <div className="mx-auto">Typing...</div>;
+      const data = {
+        html: typingContent,
+        uname: this.props.auth.user.name
+      };
+      socket.emit("typing", data);
+    } else {
+      typingContent = null;
+    }
 
     let chatMessagesContent;
     if (chatMessages) {
@@ -82,7 +105,7 @@ class Chat extends Component {
           <div className="col-md-9 col-12 ">
             <h5 className="mt-2">Chat</h5>
             <div>{chatMessagesContent}</div>
-
+            {typingContent}
             <form onSubmit={this.messageSendHandler}>
               <TextAreaFormGroup
                 onChange={this.onChange}
@@ -108,5 +131,5 @@ const mapStateToProps = state => ({
 });
 export default connect(
   mapStateToProps,
-  { chatMessage, loadChatMessages }
+  { chatMessage, loadChatMessages, chatLoader }
 )(Chat);
