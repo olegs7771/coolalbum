@@ -7,7 +7,7 @@ class Main extends Component {
       header: {
         backgroundImage: `url(${BlueBG})`,
         height: "100vh",
-        // backgroundPosition: "center",
+        backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover"
       },
