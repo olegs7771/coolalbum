@@ -92,7 +92,11 @@ class RegisterForm extends Component {
 
     return (
       <div className="col-md-6 my-3  mx-auto">
-        <div className="text-center h3 ">Register Here</div>
+        <div className="mx-auto" style={{ marginTop: "-1rem" }}>
+          <FaceBookBtn />
+        </div>
+        <div className="mx-auto">Or fill out the forms</div>
+
         <div className="card card-body">
           <div className="container">
             <form onSubmit={this.onSubmit}>
@@ -122,7 +126,7 @@ class RegisterForm extends Component {
                   onChange={phone => this.setState({ phone })}
                 />{" "}
                 <br />
-                <div className="">
+                <div className="mb-2" style={{ fontSize: "0.9rem" }}>
                   Your number needed for login with SMS (Optinal)
                 </div>
               </div>
@@ -143,19 +147,6 @@ class RegisterForm extends Component {
               />
               <button className="btn btn-dark">Join Now</button>
             </form>
-          </div>
-        </div>
-
-        <div className="row my-2">
-          <div className="col-md-5">
-            <hr />
-          </div>
-          <div className="col-md-2">or</div>
-          <div className="col-md-5">
-            <hr />
-          </div>
-          <div className="mx-auto">
-            <FaceBookBtn />
           </div>
         </div>
       </div>

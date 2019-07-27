@@ -116,7 +116,7 @@ class SmsLogin extends Component {
     if (!number) {
       return (
         <div className="col-md-12 my-5 border">
-          <div className="h3 text-center text-info">Login with SMS</div>
+          <div className="h5 text-center text-info">Login with SMS</div>
           <div className="container">
             <form onSubmit={this.onSubmitCodeRequest}>
               <TextFormGroup
@@ -129,8 +129,8 @@ class SmsLogin extends Component {
                 message={messages.message}
               />
 
-              <span className="text-left h5">Enter your phone number</span>
-              <div className="form-group my-3 ">
+              <span className="text-left h6">Enter your phone number</span>
+              <div className="form-group  ">
                 <PhoneInput
                   placeholder="Enter phone number"
                   value={phone}

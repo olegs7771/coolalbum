@@ -67,12 +67,10 @@ class LoginForm extends Component {
 
   render() {
     const { email, password, errors, message } = this.state;
-    console.log("this.props", this.props);
-    console.log("this.state", this.state);
 
     return (
       <div>
-        <div className="text-center h3">Login Into Your Account</div>
+        <div className="text-center h6">Login Into Your Account</div>
         <div className="card card-body">
           <div className="container">
             <form onSubmit={this.onSubmit}>
@@ -93,9 +91,9 @@ class LoginForm extends Component {
                 error={errors.password}
               />
 
-              <div className="form-check form-check-inline my-4">
+              <div className="form-check form-check-inline ">
                 <div className="row">
-                  <div className="col-md-4">
+                  <div className="col-md-4 ">
                     {" "}
                     <input
                       className="form-check-input"
@@ -114,7 +112,7 @@ class LoginForm extends Component {
                 </div>
               </div>
 
-              <button className="btn btn-dark">Login</button>
+              <button className="btn btn-dark btn-sm">Login</button>
             </form>
           </div>
         </div>

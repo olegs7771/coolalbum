@@ -95,28 +95,25 @@ const io = require("socket.io")(server);
 app.io = io;
 
 io.on("connection", socket => {
+  //show online user connected
+  socket.on("new_user", name => {
+    socket.broadcast.emit("online", name);
+  });
+
   connections.push(socket);
   console.log("Connected: %s sockets connected", connections.length);
   console.log("connected to server socket", socket.id);
   //show online
-  socket.on("user", user => {
-    socket.user = user;
-    console.log("user", socket.user);
-  });
-  socket.on("anotherUser", anotherName => {
-    socket.user1 = anotherName;
-    console.log("user1", socket.user);
-  });
-
-  const online = Object.keys(io.engine.clients);
-  console.log("JSON.stringify(online)", JSON.stringify(online));
-
-  io.emit("server message", JSON.stringify(online));
+  io.sockets.emit("hi", socket.id);
 
   socket.on("disconnect", () => {
-    console.log("user disconnected");
     connections.splice(connections.indexOf(socket));
     console.log("Disconnected: %s sockets connected", connections.length);
+  });
+
+  socket.join("room 237", () => {
+    let rooms = Object.keys(socket.rooms);
+    console.log(rooms); // [ <socket.id>, 'room 237' ]
   });
 });
 

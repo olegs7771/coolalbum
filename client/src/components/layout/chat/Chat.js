@@ -14,16 +14,16 @@ class Chat extends Component {
   state = {
     text: "",
     chatMessages: "",
-    onlineUsers: [],
-    typing: false
+
+    onlineUserMessage: null,
+    userIsTyping: null
   };
 
   onChange = e => {
     this.setState({
       [e.target.name]: e.target.value
     });
-    this.props.chatLoader();
-    // console.log("loading");
+    // this.props.chatLoader();
     this.setState({
       typing: true
     });
@@ -46,13 +46,19 @@ class Chat extends Component {
 
   componentDidMount() {
     const socket = Socket_io();
-    console.log("socket", socket);
-
     const { name } = this.props.auth.user;
 
-    socket.emit("user", name);
-    const anotherName = "alice";
-    socket.emit("anotherUser", anotherName);
+    //emit new user to all
+    socket.emit("new_user", name);
+    socket.on("online", name => {
+      this.setState({
+        onlineUserMessage: name + " online"
+      });
+    });
+
+    socket.on("connected", message => {
+      console.log("message", message);
+    });
 
     this.props.loadChatMessages();
     socket.on("all", data => {
@@ -63,14 +69,8 @@ class Chat extends Component {
   }
 
   render() {
-    const { text, chatMessages, typing } = this.state;
+    const { text, chatMessages, onlineUserMessage } = this.state;
     console.log("this.state", this.state);
-    let typingContent;
-    if (typing) {
-      typingContent = <div className="mx-auto">Typing...</div>;
-    } else {
-      typingContent = null;
-    }
 
     let chatMessagesContent;
     if (chatMessages) {
@@ -95,7 +95,8 @@ class Chat extends Component {
           <div className="col-md-9 col-12 ">
             <h5 className="mt-2">Chat</h5>
             <div>{chatMessagesContent}</div>
-            {typingContent}
+
+            {onlineUserMessage ? onlineUserMessage : null}
             <form onSubmit={this.messageSendHandler}>
               <TextAreaFormGroup
                 onChange={this.onChange}
