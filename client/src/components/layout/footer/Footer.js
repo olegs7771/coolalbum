@@ -5,7 +5,8 @@ class Footer extends Component {
     //Styles
     const Footer = styled.section`
       background-color: #212529;
-      height: 50px;
+      height: 70px;
+      padding-top: 1rem;
     `;
 
     const Span = styled.span`
