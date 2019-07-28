@@ -90,7 +90,8 @@ const server = app.listen(process.env.PORT || PORT);
 
 // Connect to socket.io
 const connections = [];
-const connectedUsers = [];
+const connected_users = [];
+
 const io = require("socket.io")(server);
 app.io = io;
 
@@ -109,11 +110,6 @@ io.on("connection", socket => {
   socket.on("disconnect", () => {
     connections.splice(connections.indexOf(socket));
     console.log("Disconnected: %s sockets connected", connections.length);
-  });
-
-  socket.join("room 237", () => {
-    let rooms = Object.keys(socket.rooms);
-    console.log(rooms); // [ <socket.id>, 'room 237' ]
   });
 });
 

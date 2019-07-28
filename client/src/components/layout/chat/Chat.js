@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import TextAreaFormGroup from "../../textFormGroup/TextAreaFormGroup";
-import ChatUsers from "./ChatUsers";
+
 import ChatItem from "./ChatItem";
+
 import { connect } from "react-redux";
 import {
   chatMessage,
@@ -13,10 +14,9 @@ import Socket_io from "../../../utils/Socket_io";
 class Chat extends Component {
   state = {
     text: "",
-    chatMessages: "",
-
-    onlineUserMessage: null,
-    userIsTyping: null
+    chatMessages: null,
+    onlineUsers: null,
+    onlineUserMessage: ""
   };
 
   onChange = e => {
@@ -52,12 +52,13 @@ class Chat extends Component {
     socket.emit("new_user", name);
     socket.on("online", name => {
       this.setState({
-        onlineUserMessage: name + " intered the chat"
+        onlineUserMessage: name + "  online"
       });
-    });
-
-    socket.on("connected", message => {
-      console.log("message", message);
+      setTimeout(() => {
+        this.setState({
+          onlineUserMessage: ""
+        });
+      }, 10000);
     });
 
     this.props.loadChatMessages();
@@ -90,13 +91,11 @@ class Chat extends Component {
         <div className="row">
           <div className="col-md-3 col-12 ">
             <h5 className=" mt-2">Online Users</h5>
-            <ChatUsers />
           </div>
           <div className="col-md-9 col-12 ">
             <h5 className="mt-2">Chat</h5>
             <div>{chatMessagesContent}</div>
-
-            {onlineUserMessage ? onlineUserMessage : null}
+            <div className="mx-auto text-success">{onlineUserMessage}</div>
             <form onSubmit={this.messageSendHandler}>
               <TextAreaFormGroup
                 onChange={this.onChange}

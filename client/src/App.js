@@ -33,6 +33,8 @@ import setAuthToken from "./utils/setAuthToken";
 import { setCurrentUser } from "./actions/userActions";
 import configureStore from "./store/configureStore";
 import styled from "styled-components";
+
+//
 const store = configureStore();
 //check for token
 if (localStorage.jwtToken) {
