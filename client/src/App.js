@@ -33,6 +33,13 @@ import setAuthToken from "./utils/setAuthToken";
 import { setCurrentUser } from "./actions/userActions";
 import configureStore from "./store/configureStore";
 import styled from "styled-components";
+//socket.io
+
+import Socket_io from "./utils/Socket_io";
+import { reactLocalStorage } from "reactjs-localstorage";
+import jwtDecode from "jwt-decode";
+
+//
 const store = configureStore();
 //check for token
 if (localStorage.jwtToken) {
@@ -65,6 +72,20 @@ if (localStorage.jwtToken) {
 }
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    //get logged user from token
+    const token = reactLocalStorage.get("jwtToken");
+    if (token) {
+      //decode token with jwt-decode
+      const decodedToken = jwtDecode(token);
+      console.log("decodedToken", decodedToken.name);
+      const uname = decodedToken.name;
+      const socket = Socket_io();
+      socket.emit("liveuser", uname);
+    }
+  }
+
   render() {
     //styles
     const Body = styled.section`

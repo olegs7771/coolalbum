@@ -98,6 +98,12 @@ io.on("connection", socket => {
   //show online user connected
   socket.on("new_user", name => {
     socket.broadcast.emit("online", name);
+    console.log("user came online", socket.id);
+  });
+  socket.on("liveuser", uname => {
+    console.log("getting live");
+
+    socket.broadcast.emit("liveuser", uname);
   });
 
   connections.push(socket);
@@ -109,11 +115,6 @@ io.on("connection", socket => {
   socket.on("disconnect", () => {
     connections.splice(connections.indexOf(socket));
     console.log("Disconnected: %s sockets connected", connections.length);
-  });
-
-  socket.join("room 237", () => {
-    let rooms = Object.keys(socket.rooms);
-    console.log(rooms); // [ <socket.id>, 'room 237' ]
   });
 });
 

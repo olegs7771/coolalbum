@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import TextAreaFormGroup from "../../textFormGroup/TextAreaFormGroup";
 import ChatUsers from "./ChatUsers";
 import ChatItem from "./ChatItem";
+import ChatOnlineItem from "./ChatOnlineItem";
 import { connect } from "react-redux";
 import {
   chatMessage,
@@ -13,10 +14,9 @@ import Socket_io from "../../../utils/Socket_io";
 class Chat extends Component {
   state = {
     text: "",
-    chatMessages: "",
-
-    onlineUserMessage: null,
-    userIsTyping: null
+    chatMessages: null,
+    onlineUsers: null,
+    onlineUserMessage: ""
   };
 
   onChange = e => {
@@ -52,8 +52,14 @@ class Chat extends Component {
     socket.emit("new_user", name);
     socket.on("online", name => {
       this.setState({
-        onlineUserMessage: name + " online"
+        onlineUserMessage: name + "  online"
       });
+      setTimeout(() => {
+        this.setState({
+          onlineUserMessage: ""
+        });
+      }, 5000);
+      console.log("user online");
     });
 
     socket.on("connected", message => {
@@ -66,10 +72,17 @@ class Chat extends Component {
         chatMessages: data
       });
     });
+    socket.on("liveuser", uname => {
+      let users = [];
+      users.push(uname);
+      this.setState({
+        onlineUsers: users
+      });
+    });
   }
 
   render() {
-    const { text, chatMessages, onlineUserMessage } = this.state;
+    const { text, chatMessages, onlineUsers, onlineUserMessage } = this.state;
     console.log("this.state", this.state);
 
     let chatMessagesContent;
@@ -84,6 +97,12 @@ class Chat extends Component {
         />
       ));
     }
+    let chatUsersContent;
+    if (onlineUsers) {
+      chatUsersContent = onlineUsers.map((item, index) => (
+        <ChatOnlineItem key={index} uname={item.name} />
+      ));
+    }
 
     return (
       <div className=" my-4 mx-auto ">
@@ -95,8 +114,8 @@ class Chat extends Component {
           <div className="col-md-9 col-12 ">
             <h5 className="mt-2">Chat</h5>
             <div>{chatMessagesContent}</div>
-
-            {onlineUserMessage ? onlineUserMessage : null}
+            <ul className="list-group">{chatUsersContent}</ul>
+            <div className="mx-auto text-success">{onlineUserMessage}</div>
             <form onSubmit={this.messageSendHandler}>
               <TextAreaFormGroup
                 onChange={this.onChange}
