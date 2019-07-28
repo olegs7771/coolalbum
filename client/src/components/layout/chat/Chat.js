@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import TextAreaFormGroup from "../../textFormGroup/TextAreaFormGroup";
-import ChatUsers from "./ChatUsers";
+
 import ChatItem from "./ChatItem";
-import ChatOnlineItem from "./ChatOnlineItem";
+
 import { connect } from "react-redux";
 import {
   chatMessage,
@@ -58,12 +58,7 @@ class Chat extends Component {
         this.setState({
           onlineUserMessage: ""
         });
-      }, 5000);
-      console.log("user online");
-    });
-
-    socket.on("connected", message => {
-      console.log("message", message);
+      }, 10000);
     });
 
     this.props.loadChatMessages();
@@ -72,17 +67,10 @@ class Chat extends Component {
         chatMessages: data
       });
     });
-    socket.on("liveuser", uname => {
-      let users = [];
-      users.push(uname);
-      this.setState({
-        onlineUsers: users
-      });
-    });
   }
 
   render() {
-    const { text, chatMessages, onlineUsers, onlineUserMessage } = this.state;
+    const { text, chatMessages, onlineUserMessage } = this.state;
     console.log("this.state", this.state);
 
     let chatMessagesContent;
@@ -97,24 +85,16 @@ class Chat extends Component {
         />
       ));
     }
-    let chatUsersContent;
-    if (onlineUsers) {
-      chatUsersContent = onlineUsers.map((item, index) => (
-        <ChatOnlineItem key={index} uname={item.name} />
-      ));
-    }
 
     return (
       <div className=" my-4 mx-auto ">
         <div className="row">
           <div className="col-md-3 col-12 ">
             <h5 className=" mt-2">Online Users</h5>
-            <ChatUsers />
           </div>
           <div className="col-md-9 col-12 ">
             <h5 className="mt-2">Chat</h5>
             <div>{chatMessagesContent}</div>
-            <ul className="list-group">{chatUsersContent}</ul>
             <div className="mx-auto text-success">{onlineUserMessage}</div>
             <form onSubmit={this.messageSendHandler}>
               <TextAreaFormGroup

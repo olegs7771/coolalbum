@@ -90,7 +90,8 @@ const server = app.listen(process.env.PORT || PORT);
 
 // Connect to socket.io
 const connections = [];
-const connectedUsers = [];
+const connected_users = [];
+
 const io = require("socket.io")(server);
 app.io = io;
 
@@ -98,12 +99,6 @@ io.on("connection", socket => {
   //show online user connected
   socket.on("new_user", name => {
     socket.broadcast.emit("online", name);
-    console.log("user came online", socket.id);
-  });
-  socket.on("liveuser", uname => {
-    console.log("getting live");
-
-    socket.broadcast.emit("liveuser", uname);
   });
 
   connections.push(socket);
