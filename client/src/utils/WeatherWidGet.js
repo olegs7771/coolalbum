@@ -100,7 +100,7 @@ class WeatherWidGet extends Component {
 
       weatherContent = (
         <div className="row">
-          <div className="col-md-6 col-12 ">
+          <div className="col-md-6 col-6 ">
             <div className="text-success ">
               {location}{" "}
               <FontSize>
@@ -114,7 +114,7 @@ class WeatherWidGet extends Component {
               </span>
             </div>
           </div>
-          <div className="col-md-6 col-sm-12">
+          <div className="col-md-6 col-6">
             {/* {Show current time} */}
             <FontSize>
               <span className="text-white">

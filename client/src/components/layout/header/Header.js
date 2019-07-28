@@ -87,7 +87,7 @@ class Header extends Component {
       if (posts.length > 0) {
         postCountcontent = (
           <div>
-            <i className="fas fa-envelope fa-2x text-white mr-2" />
+            <i className="fas fa-envelope  text-white mr-2" />
             <span className="text-white">{posts.length}</span>
           </div>
         );

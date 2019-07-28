@@ -52,7 +52,7 @@ class Chat extends Component {
     socket.emit("new_user", name);
     socket.on("online", name => {
       this.setState({
-        onlineUserMessage: name + " online"
+        onlineUserMessage: name + " intered the chat"
       });
     });
 
