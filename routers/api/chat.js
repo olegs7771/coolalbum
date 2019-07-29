@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const ChatMessage = require("../../models/ChatMessage");
+const moment = require("moment");
 
 //Add new message
 router.post(
@@ -31,8 +32,8 @@ router.get(
   "/get_all",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    ChatMessage.find().then(chatMsgs => {
-      req.app.io.emit("all", chatMsgs);
+    ChatMessage.find().then(messages => {
+      req.app.io.emit("all", messages);
 
       res.status(200).json({
         all: "All chat messages"
@@ -40,6 +41,7 @@ router.get(
     });
   }
 );
+
 //delete Chat Message by ID
 router.post(
   "/delete",

@@ -1,4 +1,3 @@
-import { CHAT_TYPING_LOADER } from "./types";
 import Axios from "axios";
 
 //Get All Online Users
@@ -44,11 +43,4 @@ export const deleteChatMessage = data => dispatch => {
     .catch(err => {
       console.log("err.response.data", err.response.data);
     });
-};
-
-//chat typing loader image
-export const chatLoader = () => dispatch => {
-  dispatch({
-    type: CHAT_TYPING_LOADER
-  });
 };

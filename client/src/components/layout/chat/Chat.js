@@ -1,14 +1,9 @@
 import React, { Component } from "react";
 import TextAreaFormGroup from "../../textFormGroup/TextAreaFormGroup";
-
 import ChatItem from "./ChatItem";
-
+import TextFormSelect from "../../textFormGroup/TextFormSelect";
 import { connect } from "react-redux";
-import {
-  chatMessage,
-  loadChatMessages,
-  chatLoader
-} from "../../../actions/chatAction";
+import { chatMessage, loadChatMessages } from "../../../actions/chatAction";
 import Socket_io from "../../../utils/Socket_io";
 
 class Chat extends Component {
@@ -16,7 +11,8 @@ class Chat extends Component {
     text: "",
     chatMessages: null,
     onlineUsers: null,
-    onlineUserMessage: ""
+    onlineUserMessage: "",
+    chatDate: []
   };
 
   onChange = e => {
@@ -59,14 +55,15 @@ class Chat extends Component {
     this.props.loadChatMessages();
     socket.on("all", data => {
       this.setState({
-        chatMessages: data
+        chatMessages: data,
+        chatDate: data
       });
     });
   }
 
   render() {
-    const { text, chatMessages, onlineUserMessage } = this.state;
-    console.log("this.state", this.state);
+    const { text, chatMessages, onlineUserMessage, chatDate } = this.state;
+    // console.log("this.state", this.state);
 
     let chatMessagesContent;
     if (chatMessages) {
@@ -85,7 +82,10 @@ class Chat extends Component {
     return (
       <div className=" my-4  ">
         <div className="row ">
-          <div className=" mx-auto col-md-9 col-12 ">
+          <div className="col-md-3 mb-1">
+            <TextFormSelect option={chatDate} />
+          </div>
+          <div className="  col-md-9 col-12 ">
             <div>{chatMessagesContent}</div>
             <div className="mx-auto text-success">{onlineUserMessage}</div>
             <form onSubmit={this.messageSendHandler}>
@@ -113,5 +113,5 @@ const mapStateToProps = state => ({
 });
 export default connect(
   mapStateToProps,
-  { chatMessage, loadChatMessages, chatLoader }
+  { chatMessage, loadChatMessages }
 )(Chat);
