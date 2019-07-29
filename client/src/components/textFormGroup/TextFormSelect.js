@@ -10,12 +10,11 @@ const TextFormSelect = ({
   options,
   type
 }) => {
-  // const selectOptions = options.map(option => (
-
-  //   // <option key={option.label} value={option.value} defaultValue={option.value}>
-  //   //   {option.label}
-  //   // </option>
-  // ));
+  const selectOptions = options.map((option, index) => (
+    <option key={index} value={option} defaultValue={option}>
+      {option}
+    </option>
+  ));
 
   return (
     <div className="group-control mt-2 ">
@@ -29,7 +28,7 @@ const TextFormSelect = ({
         onChange={onChange}
         placeholder={placeholder}
       >
-        {/* {selectOptions} */}
+        {/* {{ selectOptions }} */}
         <option value="1">1</option>
       </select>
 

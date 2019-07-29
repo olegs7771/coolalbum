@@ -5,6 +5,7 @@ import TextFormSelect from "../../textFormGroup/TextFormSelect";
 import { connect } from "react-redux";
 import { chatMessage, loadChatMessages } from "../../../actions/chatAction";
 import Socket_io from "../../../utils/Socket_io";
+import moment from "moment";
 
 class Chat extends Component {
   state = {
@@ -63,7 +64,7 @@ class Chat extends Component {
 
   render() {
     const { text, chatMessages, onlineUserMessage, chatDate } = this.state;
-    // console.log("this.state", this.state);
+    console.log("this.state", this.state);
 
     let chatMessagesContent;
     if (chatMessages) {
@@ -83,7 +84,7 @@ class Chat extends Component {
       <div className=" my-4  ">
         <div className="row ">
           <div className="col-md-3 mb-1">
-            <TextFormSelect option={chatDate} />
+            <TextFormSelect options={chatDate} />
           </div>
           <div className="  col-md-9 col-12 ">
             <div>{chatMessagesContent}</div>
