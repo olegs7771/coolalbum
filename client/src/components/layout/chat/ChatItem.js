@@ -12,9 +12,10 @@ class ChatItem extends Component {
   };
 
   render() {
-    const authName = this.props.auth.user.name;
+    const authName = this.props.auth.user.name; //to differ messages of logged user and the rest
+    const authID = this.props.auth.user.id; //logged uid for filter delete btn
 
-    const { name, date, text, id } = this.props;
+    const { name, date, text, id, uid } = this.props;
 
     //backgroundColor for User(auth/rest)
     let userColorContent;
@@ -31,12 +32,14 @@ class ChatItem extends Component {
 
     //delete button
     let dltBtnContent;
+
     dltBtnContent = (
       <i
         className="fas fa-trash-alt mr-auto"
         onClick={this.deleteChatMessage.bind(this, id)}
       />
     );
+
     return (
       <ul className="list-group ">
         <li
@@ -60,7 +63,9 @@ class ChatItem extends Component {
             <div className="col-md-11  col-10">
               <span style={{ fontSize: "0.9em" }}>{text}</span>
             </div>
-            <div className="col-md-1 col-2">{dltBtnContent}</div>
+            <div className="col-md-1 col-2">
+              {uid === authID ? <div>{dltBtnContent}</div> : null}
+            </div>
           </div>
         </li>
       </ul>

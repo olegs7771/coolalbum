@@ -9,13 +9,12 @@ router.post(
   "/message",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    console.log("req.user.name", req.user.name);
-    console.log("req.body", req.body);
     //Emit Data to the Client
 
     const newMessage = new ChatMessage({
       text: req.body.text,
-      name: req.user.name
+      name: req.user.name,
+      uid: req.user._id
     });
 
     newMessage.save().then(() => {

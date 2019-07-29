@@ -54,11 +54,6 @@ class Chat extends Component {
       this.setState({
         onlineUserMessage: name + "  online"
       });
-      setTimeout(() => {
-        this.setState({
-          onlineUserMessage: ""
-        });
-      }, 10000);
     });
 
     this.props.loadChatMessages();
@@ -82,18 +77,15 @@ class Chat extends Component {
           text={item.text}
           date={item.date}
           id={item._id}
+          uid={item.uid}
         />
       ));
     }
 
     return (
-      <div className=" my-4 mx-auto ">
-        <div className="row">
-          <div className="col-md-3 col-12 ">
-            <h5 className=" mt-2">Online Users</h5>
-          </div>
-          <div className="col-md-9 col-12 ">
-            <h5 className="mt-2">Chat</h5>
+      <div className=" my-4  ">
+        <div className="row ">
+          <div className=" mx-auto col-md-9 col-12 ">
             <div>{chatMessagesContent}</div>
             <div className="mx-auto text-success">{onlineUserMessage}</div>
             <form onSubmit={this.messageSendHandler}>

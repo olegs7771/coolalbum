@@ -8,6 +8,9 @@ const ChatMessage = new Schema({
   text: {
     type: String
   },
+  uid: {
+    type: String
+  },
 
   name: {
     type: String
