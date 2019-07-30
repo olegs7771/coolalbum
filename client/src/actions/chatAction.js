@@ -22,6 +22,18 @@ export const loadChatMessages = () => dispatch => {
       console.log("err", err.response.data);
     });
 };
+//load chatMessages by Date
+export const loadChatMessagesByDate = data => dispatch => {
+  console.log("data", data);
+
+  Axios.post("/api/chat/date", data)
+    .then(res => {
+      console.log("all chat fetched", res.data);
+    })
+    .catch(err => {
+      console.log("err", err.response.data);
+    });
+};
 
 //Delete Chat Message by ID
 export const deleteChatMessage = data => dispatch => {

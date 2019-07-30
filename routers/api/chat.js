@@ -45,12 +45,19 @@ router.post(
   "/date",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    ChatMessage.find()
-      .then(messages => {
-        res.status(200).json(messages);
+    console.log("req.body.date", req.body.date);
+
+    ChatMessage.find({
+      date: {
+        $gte: req.body.date
+      }
+    })
+      .then(messagesByDate => {
+        res.status(200).json({ message: "all messages for this date" });
+        req.app.io.emit("bydate", messagesByDate);
       })
       .catch(err => {
-        res.status(400).json(err);
+        console.log("err", err);
       });
   }
 );
