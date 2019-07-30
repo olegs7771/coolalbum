@@ -40,6 +40,20 @@ router.get(
     });
   }
 );
+//Show All Chat Messages byDate
+router.post(
+  "/date",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    ChatMessage.find()
+      .then(messages => {
+        res.status(200).json(messages);
+      })
+      .catch(err => {
+        res.status(400).json(err);
+      });
+  }
+);
 
 //delete Chat Message by ID
 router.post(
@@ -61,12 +75,5 @@ router.post(
       });
   }
 );
-//show all online users
-let sess;
-
-router.get("/online", passport.authenticate("jwt"), (req, res) => {
-  sess = req.session;
-  console.log("sess", sess);
-});
 
 module.exports = router;

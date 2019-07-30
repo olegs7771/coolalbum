@@ -13,17 +13,18 @@ class Chat extends Component {
     chatMessages: null,
     onlineUsers: null,
     onlineUserMessage: "",
-    chatDate: []
+    chatDates: [],
+    select: ""
   };
 
   onChange = e => {
     this.setState({
       [e.target.name]: e.target.value
     });
-    // this.props.chatLoader();
-    this.setState({
-      typing: true
-    });
+  };
+  //select date to show chat messages
+  onChangeSelect = e => {
+    console.log("e.target.value", e.target.value);
   };
   messageSendHandler = e => {
     e.preventDefault();
@@ -44,7 +45,6 @@ class Chat extends Component {
   componentDidMount() {
     const socket = Socket_io();
     const { name } = this.props.auth.user;
-
     //emit new user to all
     socket.emit("new_user", name);
     socket.on("online", name => {
@@ -52,18 +52,23 @@ class Chat extends Component {
         onlineUserMessage: name + "  online"
       });
     });
-
     this.props.loadChatMessages();
     socket.on("all", data => {
       this.setState({
         chatMessages: data,
-        chatDate: data
+        chatDates: data
       });
     });
   }
 
   render() {
-    const { text, chatMessages, onlineUserMessage, chatDate } = this.state;
+    const {
+      text,
+      chatMessages,
+      onlineUserMessage,
+      chatDates,
+      select
+    } = this.state;
     console.log("this.state", this.state);
 
     let chatMessagesContent;
@@ -84,7 +89,12 @@ class Chat extends Component {
       <div className=" my-4  ">
         <div className="row ">
           <div className="col-md-3 mb-1">
-            <TextFormSelect options={chatDate} />
+            <TextFormSelect
+              options={chatDates}
+              name="select"
+              onChange={this.onChangeSelect}
+              value={select}
+            />
           </div>
           <div className="  col-md-9 col-12 ">
             <div>{chatMessagesContent}</div>
