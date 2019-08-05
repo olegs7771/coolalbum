@@ -3,9 +3,12 @@ import TextAreaFormGroup from "../../textFormGroup/TextAreaFormGroup";
 import ChatItem from "./ChatItem";
 import TextFormSelect from "../../textFormGroup/TextFormSelect";
 import { connect } from "react-redux";
-import { chatMessage, loadChatMessages } from "../../../actions/chatAction";
+import {
+  chatMessage,
+  loadChatMessages,
+  loadChatMessagesByDate
+} from "../../../actions/chatAction";
 import Socket_io from "../../../utils/Socket_io";
-import moment from "moment";
 
 class Chat extends Component {
   state = {
@@ -24,7 +27,19 @@ class Chat extends Component {
   };
   //select date to show chat messages
   onChangeSelect = e => {
+    const socket = Socket_io();
     console.log("e.target.value", e.target.value);
+    const data = {
+      date: e.target.value
+    };
+    this.props.loadChatMessagesByDate(data);
+    socket.on("bydate", messagesByDate => {
+      console.log("messagesByDate", messagesByDate);
+
+      this.setState({
+        chatMessages: messagesByDate
+      });
+    });
   };
   messageSendHandler = e => {
     e.preventDefault();
@@ -97,7 +112,9 @@ class Chat extends Component {
             />
           </div>
           <div className="  col-md-9 col-12 ">
+            {/* {Chat Here} */}
             <div>{chatMessagesContent}</div>
+            {/* {End Chat} */}
             <div className="mx-auto text-success">{onlineUserMessage}</div>
             <form onSubmit={this.messageSendHandler}>
               <TextAreaFormGroup
@@ -124,5 +141,5 @@ const mapStateToProps = state => ({
 });
 export default connect(
   mapStateToProps,
-  { chatMessage, loadChatMessages }
+  { chatMessage, loadChatMessages, loadChatMessagesByDate }
 )(Chat);

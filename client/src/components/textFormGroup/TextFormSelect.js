@@ -11,10 +11,17 @@ const TextFormSelect = ({
   options,
   type
 }) => {
-  const selectOptions = options.map((option, index) => (
-    <option key={index} value={moment(option.date).format("DD/MM/YYYY")}>
+  let newArray = [];
+
+  options.map(option => {
+    return newArray.push(moment(option.date).format("YYYY-MM-DD"));
+  });
+  const distinctDate = [...new Set(newArray)];
+
+  const selectOptions = distinctDate.map((option, index) => (
+    <option key={index} value={option}>
       {" "}
-      {moment(option.date).format("DD/MM/YYYY")}{" "}
+      {option}{" "}
     </option>
   ));
 
@@ -28,7 +35,7 @@ const TextFormSelect = ({
         onChange={onChange}
         placeholder={placeholder}
       >
-        <option>Choose Date</option>
+        <option>Choose By Date</option>
         {selectOptions}
       </select>
     </div>
