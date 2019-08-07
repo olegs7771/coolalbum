@@ -115,7 +115,7 @@ class App extends Component {
                   <Route exact path="/post" component={Post} />
                   <Route exact path="/users" component={Users} />
                   <Route exact path="/inbox" component={Inbox} />
-                  {/* <Route exact path="/chat" component={Chat} /> */}
+                  <Route exact path="/chat" component={Chat} />
                 </Switch>
               </div>
               <Footer />
