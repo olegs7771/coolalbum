@@ -24,6 +24,12 @@ class Main extends Component {
         <div style={styles.content}>
           <div className=" pt-4 ">
             <span className="text-white h4 ">Welcome to CoolAlbum</span>
+            <br />
+            <br />
+            <span className="text-white  ">
+              This Site in the Development , some features will not work
+              properly
+            </span>
           </div>
         </div>
       </div>

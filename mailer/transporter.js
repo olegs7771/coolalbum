@@ -37,9 +37,7 @@ module.exports = function sendMail(data, cb) {
   let htmlRecoverBody;
   if (data.recover) {
     console.log("html recover");
-    htmlRecoverBody = `Dear ${data.name}, please <a href=${
-      data.urlReg
-    }>follow this</a>  link to create your new password.
+    htmlRecoverBody = `Dear ${data.name}, please <a href=${data.urlReg}>follow this</a>  link to create your new password.
    `;
     html = htmlRecoverBody;
     to ? (to = data.email) : (to = "olegs777@bezeqint.net");
@@ -69,7 +67,7 @@ module.exports = function sendMail(data, cb) {
     secure: true, // true for 465, false for other ports
     auth: {
       user: "olegs7771", // generated ethereal user
-      pass: "maspena5168335" // generated ethereal password
+      pass: "reactnative2019" // generated ethereal password
     },
     tls: {
       rejectUnauthorized: false

@@ -86,7 +86,7 @@ if (process.env.NODE_ENV === "production") {
 }
 console.log("process.env.PORT server ", process.env.PORT);
 
-const server = app.listen(process.env.PORT || PORT);
+const server = app.listen(process.env.PORT || 5000);
 
 // Connect to socket.io
 const connections = [];
