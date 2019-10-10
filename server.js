@@ -1,5 +1,5 @@
 const express = require("express");
-// const session = require("express-session");
+const session = require("express-session");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const passport = require("passport");
@@ -18,20 +18,20 @@ const chat = require("./routers/api/chat");
 const app = express();
 //initiat session
 //bring in secret key
-// const sessionSecretKey = require("./config/keys").sessionSecret;
+const sessionSecretKey = require("./config/keys").sessionSecret;
 
 //define lifetime for session
 
-// const TWO_HOURS = 1000 * 60 * 60 * 2;
+const TWO_HOURS = 1000 * 60 * 60 * 2;
 
-// app.use(
-//   session({
-//     secret: sessionSecretKey,
-//     resave: false,
-//     saveUninitialized: true,
-//     cookie: { secure: true, maxAge: TWO_HOURS }
-//   })
-// );
+app.use(
+  session({
+    secret: sessionSecretKey,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: true, maxAge: TWO_HOURS }
+  })
+);
 
 // Public folder
 app.use(express.static(path.join(__dirname, "public")));
@@ -58,7 +58,7 @@ passport.deserializeUser(function(user, done) {
 require("./config/passport")(passport);
 
 //db config
-const db = require("./config/keys").mongoDB;
+const db = "mongodb://olegs7777:olegs7777@ds139167.mlab.com:39167";
 //connect to mongoDB
 
 mongoose
@@ -85,6 +85,7 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 console.log("process.env.PORT server ", process.env.PORT);
+console.log("process.env.NODE_ENV ", process.env.NODE_ENV);
 
 const server = app.listen(process.env.PORT || 5000);
 
@@ -117,4 +118,3 @@ app.use((req, res, next) => {
   res.locals["socketio"] = io;
   next();
 });
-//test
