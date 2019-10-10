@@ -58,7 +58,8 @@ passport.deserializeUser(function(user, done) {
 require("./config/passport")(passport);
 
 //db config
-const db = "mongodb://olegs7777:olegs7777@ds139167.mlab.com:39167";
+const db =
+  "mongodb://olegs7777:olegs7777@ds139167.mlab.com:39167/coolalbum_production";
 //connect to mongoDB
 
 mongoose
