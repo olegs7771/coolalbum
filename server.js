@@ -16,7 +16,7 @@ const weather = require("./routers/api/weather");
 const posts = require("./routers/api/posts");
 const chat = require("./routers/api/chat");
 const app = express();
-const port = 3000;
+
 //initiat session
 //bring in secret key
 const sessionSecretKey = require("./config/keys").sessionSecret;
@@ -86,9 +86,9 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
   });
 }
-console.log("process.env.PORT server ", process.env.PORT);
-console.log("process.env.NODE_ENV ", process.env.NODE_ENV);
-
+// console.log("process.env.PORT server ", process.env.PORT);
+// console.log("process.env.NODE_ENV ", process.env.NODE_ENV);
+const port = process.env.PORT || 5000;
 const server = app.listen(port, () =>
   console.log(`App is listening on port ${port}`)
 );
