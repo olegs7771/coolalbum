@@ -21,7 +21,7 @@ class UserCardAvatar extends Component {
       uploadImage: ""
     };
     this.fileSelectedHandlert = this.fileSelectedHandler.bind(this);
-    this.fileUploadHandler = this.fileUploadHandler.bind(this);
+    // this.fileUploadHandler = this.fileUploadHandler.bind(this);
   }
   componentDidMount() {
     this.setState({
@@ -58,7 +58,7 @@ class UserCardAvatar extends Component {
   };
 
   //Upload Avatar from browser to db
-  fileUploadHandler = e => {
+  _avatarUpload = e => {
     e.preventDefault();
     const { token } = this.state;
     const decoded = jwt_decode(token);
@@ -109,7 +109,7 @@ class UserCardAvatar extends Component {
             ) : null}
           </div>
 
-          <form onSubmit={this.fileUploadHandler}>
+          <form onSubmit={this._avatarUpload}>
             <div className="custom-file my-2">
               <input
                 type="file"

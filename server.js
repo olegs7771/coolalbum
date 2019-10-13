@@ -59,8 +59,8 @@ passport.deserializeUser(function(user, done) {
 require("./config/passport")(passport);
 
 //db config
-const db =
-  "mongodb://olegs7777:olegs7777@ds139167.mlab.com:39167/coolalbum_production";
+const db = require("./config/keys").mongoDB;
+
 //connect to mongoDB
 
 mongoose
@@ -88,7 +88,7 @@ if (process.env.NODE_ENV === "production") {
 }
 // console.log("process.env.PORT server ", process.env.PORT);
 // console.log("process.env.NODE_ENV ", process.env.NODE_ENV);
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || PORT;
 const server = app.listen(port, () =>
   console.log(`App is listening on port ${port}`)
 );
