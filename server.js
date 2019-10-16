@@ -64,7 +64,7 @@ const db = require("./config/keys").mongoDB;
 //connect to mongoDB
 
 mongoose
-  .connect(db, { useNewUrlParser: true })
+  .connect(db, { useNewUrlParser: true, useFindAndModify: false })
   .then(() => console.log(`connected to ${db}`))
   .catch(err => console.log(err));
 
@@ -122,4 +122,3 @@ app.use((req, res, next) => {
   res.locals["socketio"] = io;
   next();
 });
-//test

@@ -29,6 +29,11 @@ class Users extends Component {
 
   render() {
     //styles
+    const styles = {
+      container: {
+        height: "300px"
+      }
+    };
 
     let userContent;
     const { users, loading } = this.state;
@@ -53,7 +58,11 @@ class Users extends Component {
       );
     }
 
-    return <div className="  my-4 mx-auto">{userContent}</div>;
+    return (
+      <div className="my-4 mx-auto" style={styles.container}>
+        {userContent}
+      </div>
+    );
   }
 }
 

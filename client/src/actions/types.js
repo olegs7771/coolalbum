@@ -7,6 +7,7 @@ export const LOGOUT_USER = "LOGOUT_USER";
 export const GET_PROFILE = "GET_PROFILE ";
 export const GET_PROFILES = "GET_PROFILES ";
 export const LOADING_PROFILE = "LOADING_PROFILE";
+
 //Users
 export const GET_ALL_USERS = "GET_ALL_USERS";
 export const LOADING_ALL_USERS = "LOADING_ALL_USERS";

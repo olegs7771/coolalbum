@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { clearErrors, updateAvatar } from "../../../actions/profileAction";
+import {
+  clearErrors,
+  updateAvatar,
+  deleteAvatar
+} from "../../../actions/profileAction";
 
 import { withRouter } from "react-router-dom";
 import { reactLocalStorage } from "reactjs-localstorage";
@@ -10,11 +14,15 @@ class UserCardAvatar extends Component {
   constructor(props) {
     super(props);
     console.log("props", props);
+    console.log("props.user.avatar", props.user.avatar);
 
     this.state = {
       errors: {},
       message: {},
       token: "",
+      //don't show delete avatar btn if
+      // db--> avatar === ''
+      showDeleteBtn: false,
 
       //Here Avatar string update State
       selectedImage: props.avatar,
@@ -27,6 +35,15 @@ class UserCardAvatar extends Component {
     this.setState({
       token: reactLocalStorage.get("jwtToken")
     });
+    if (this.props.user.avatar.length > 0) {
+      this.setState({
+        showDeleteBtn: true
+      });
+    } else {
+      this.setState({
+        showDeleteBtn: false
+      });
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -70,19 +87,31 @@ class UserCardAvatar extends Component {
     } else {
       passwordData = decoded.password;
     }
-
-    console.log("decoded.password", decoded.password);
-
     const userData = {
       email: decoded.email,
       password: passwordData
     };
-
     const fd = new FormData();
-
     fd.append("myImage", this.state.uploadImage);
-
     this.props.updateAvatar(fd, this.props.history, userData);
+  };
+  //Delete Avatar in DB
+  _deleteAvatar = () => {
+    const { token } = this.state;
+    const decoded = jwt_decode(token);
+    console.log("decoded", decoded);
+    //if decoded.unhashedPassword
+    let passwordData;
+    if (decoded.unhashedPassword) {
+      passwordData = decoded.unhashedPassword;
+    } else {
+      passwordData = decoded.password;
+    }
+    const userData = {
+      email: decoded.email,
+      password: passwordData
+    };
+    this.props.deleteAvatar(this.props.history, userData);
   };
 
   render() {
@@ -122,10 +151,26 @@ class UserCardAvatar extends Component {
             <br />
             <div className="my-1 text-muted">max size 100k</div>
 
-            <div className="">
-              <button type="submit" className="btn btn-sm btn-info my-3">
-                Change Avatar
-              </button>
+            <div className="btn-group">
+              {this.state.showDeleteBtn ? (
+                <button type="submit" className="btn btn-sm btn-info my-3">
+                  Change Avatar
+                </button>
+              ) : (
+                <button type="submit" className="btn btn-sm btn-info my-3">
+                  Add Avatar
+                </button>
+              )}
+
+              {this.state.showDeleteBtn ? (
+                <button
+                  type="button"
+                  className="btn btn-sm btn-warning my-3 ml-1"
+                  onClick={this._deleteAvatar}
+                >
+                  Delete Avatar
+                </button>
+              ) : null}
             </div>
           </form>
         </div>
@@ -141,5 +186,5 @@ const mapStateToProps = state => ({
 });
 export default connect(
   mapStateToProps,
-  { clearErrors, updateAvatar }
+  { clearErrors, updateAvatar, deleteAvatar }
 )(withRouter(UserCardAvatar));

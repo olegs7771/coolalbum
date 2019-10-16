@@ -45,10 +45,10 @@ class UserCardItem extends Component {
             {/* { Edit userCard} */}
             <Link to="/userCard_edit">
               <div className=" btn btn-info" onClick={this.editHandle}>
-                Edit
+                Edit Profile
               </div>
             </Link>
-            <div className="a btn btn-danger ml-2">Delete</div>
+            <div className="a btn btn-danger ml-2">Delete Profile</div>
           </div>
         </div>
         <div className="col-md-4">
