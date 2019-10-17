@@ -67,7 +67,7 @@ module.exports = function sendMail(data, cb) {
     secure: true, // true for 465, false for other ports
     auth: {
       user: "olegs7771", // generated ethereal user
-      pass: "reactnative2019" // generated ethereal password
+      pass: "maspena0503054422" // generated ethereal password
     },
     tls: {
       rejectUnauthorized: false
