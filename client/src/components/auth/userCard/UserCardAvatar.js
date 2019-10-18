@@ -192,3 +192,4 @@ export default connect(
   mapStateToProps,
   { clearErrors, updateAvatar, deleteAvatar }
 )(withRouter(UserCardAvatar));
+//
