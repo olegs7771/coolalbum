@@ -104,10 +104,13 @@ router.post(
                   //if user has no avatar --> avatar === ''
                   // nothing to delete in public/compresse
                   //Check for avatar === https||http
-                  const reg = new RegExp("^(http|https)://", "i");
+
+                  console.log("user.avatar", user.avatar);
+
+                  const reg = new RegExp("^(http|https|//www)://", "i");
 
                   if (isEmpty(user.avatar) || reg.test(user.avatar)) {
-                    console.log("avatar empty string or https");
+                    console.log("avatar empty string || https||//www ");
 
                     // avatar !=='' in db
                     //update db
@@ -268,13 +271,14 @@ router.post(
 
       // nothing to delete in public/compresse
       //Check for avatar === ""  or  https||http
-      const reg = new RegExp("^(http|https)://", "i");
+      const reg = new RegExp("^(http|https|//www)://", "i");
 
       if (isEmpty(user.avatar) || reg.test(user.avatar)) {
         console.log("avatar empty string or https");
         const _id = req.user.id;
         const set = {
-          avatar: ""
+          avatar:
+            "//www.gravatar.com/avatar/d415f0e30c471dfdd9bc4f827329ef48?s=200&r=pg&d=mm"
         };
         User.findOneAndUpdate(
           { _id },
@@ -317,7 +321,8 @@ router.post(
 
         const _id = req.user.id;
         const set = {
-          avatar: ""
+          avatar:
+            "//www.gravatar.com/avatar/d415f0e30c471dfdd9bc4f827329ef48?s=200&r=pg&d=mm"
         };
         User.findOneAndUpdate(
           { _id },

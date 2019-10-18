@@ -13,8 +13,6 @@ import jwt_decode from "jwt-decode";
 class UserCardAvatar extends Component {
   constructor(props) {
     super(props);
-    console.log("props", props);
-    console.log("props.user.avatar", props.user.avatar);
 
     this.state = {
       errors: {},
@@ -35,7 +33,13 @@ class UserCardAvatar extends Component {
     this.setState({
       token: reactLocalStorage.get("jwtToken")
     });
-    if (this.props.user.avatar.length > 0) {
+
+    //Do not show deleteBtn if avatar === ' //www.gravatar.com/avatar/d415f0e30c471dfdd9bc4f827329ef48?s=200&r=pg&d=mm'  (empty user)
+
+    if (
+      this.props.user.avatar !==
+      "//www.gravatar.com/avatar/d415f0e30c471dfdd9bc4f827329ef48?s=200&r=pg&d=mm"
+    ) {
       this.setState({
         showDeleteBtn: true
       });
