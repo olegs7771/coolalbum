@@ -388,7 +388,7 @@ router.post("/recover", (req, res) => {
         //define env
         let urlReg;
         if (process.env.NODE_ENV === "production") {
-          urlReg = `https://infinite-everglades-47869.herokuapp.com/recover_newPass/${token}/${user._id}`;
+          urlReg = `https://morning-thicket-46114.herokuapp.com/recover_newPass/${token}/${user._id}`;
         } else {
           urlReg = `https://localhost:3000/recover_newPass/${token}/${user._id}`;
         }
