@@ -66,7 +66,7 @@ router.post("/register", (req, res) => {
           if (process.env.NODE_ENV !== "production") {
             urlConfirm = `https://localhost:3000/confirm_registration/${user.token}/${user._id}`;
           } else {
-            urlConfirm = `https://https://morning-thicket-46114.herokuapp.com//confirm_registration/${user.token}/${user._id}`;
+            urlConfirm = `https://morning-thicket-46114.herokuapp.com//confirm_registration/${user.token}/${user._id}`;
           }
 
           const register = true;
