@@ -64,13 +64,9 @@ router.post("/register", (req, res) => {
           //create data object for mailer trasporter
           let urlConfirm;
           if (process.env.NODE_ENV !== "production") {
-            urlConfirm = `https://localhost:3000/confirm_registration/${
-              user.token
-            }/${user._id}`;
+            urlConfirm = `https://localhost:3000/confirm_registration/${user.token}/${user._id}`;
           } else {
-            urlConfirm = `https://infinite-everglades-47869.herokuapp.com/confirm_registration/${
-              user.token
-            }/${user._id}`;
+            urlConfirm = `https://https://morning-thicket-46114.herokuapp.com//confirm_registration/${user.token}/${user._id}`;
           }
 
           const register = true;
@@ -392,13 +388,9 @@ router.post("/recover", (req, res) => {
         //define env
         let urlReg;
         if (process.env.NODE_ENV === "production") {
-          urlReg = `https://infinite-everglades-47869.herokuapp.com/recover_newPass/${token}/${
-            user._id
-          }`;
+          urlReg = `https://infinite-everglades-47869.herokuapp.com/recover_newPass/${token}/${user._id}`;
         } else {
-          urlReg = `https://localhost:3000/recover_newPass/${token}/${
-            user._id
-          }`;
+          urlReg = `https://localhost:3000/recover_newPass/${token}/${user._id}`;
         }
 
         const name = user.name;
@@ -418,9 +410,7 @@ router.post("/recover", (req, res) => {
             console.log("response from mailer", response);
 
             res.status(200).json({
-              loginEmail: `Message with a recovery instructions has been sent to ${
-                response.envelope.to
-              }. Please check Email`
+              loginEmail: `Message with a recovery instructions has been sent to ${response.envelope.to}. Please check Email`
             });
           }
         });
