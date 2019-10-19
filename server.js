@@ -25,14 +25,14 @@ const sessionSecretKey = require("./config/keys").sessionSecret;
 
 const TWO_HOURS = 1000 * 60 * 60 * 2;
 
-app.use(
-  session({
-    secret: sessionSecretKey,
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: true, maxAge: TWO_HOURS }
-  })
-);
+// app.use(
+//   session({
+//     secret: sessionSecretKey,
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: { secure: true, maxAge: TWO_HOURS }
+//   })
+// );
 
 // Public folder
 app.use(express.static(path.join(__dirname, "public")));
