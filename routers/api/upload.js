@@ -176,13 +176,11 @@ router.post(
                           { new: true }
                         )
                           .then(() => {
-                            res.status(200).json(
-                              {
-                                avatar:
-                                  "Avatar was successfully updated another avatar"
-                              },
-                              { avatar }
-                            );
+                            res.status(200).json({
+                              avatar:
+                                "Avatar was successfully updated another avatar",
+                              avatarPath: avatar
+                            });
                           })
                           .catch(err => {
                             console.log("error update avatar", err);
