@@ -253,6 +253,8 @@ router.post(
                 });
             }
           });
+        } else {
+          res.status(400).json({ msg: "Compressor doest fired" });
         }
       }
     });
