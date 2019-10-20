@@ -161,10 +161,19 @@ router.post(
                     fse.pathExists(pathAvatar).then(exists => {
                       if (!exists) {
                         console.log("no file in public/compressed_img/ ");
-                        const avatar = req.file.path.replace(
-                          "public/upload_img",
-                          "/compressed_img"
-                        );
+                        let avatar;
+
+                        if (process.env.NODE_ENV === "production") {
+                          avatar = req.file.path.replace(
+                            "public/upload_img",
+                            "/compressed_img"
+                          );
+                        } else {
+                          avatar = req.file.path.replace(
+                            "public\\upload_img",
+                            "\\compressed_img"
+                          );
+                        }
 
                         User.updateOne(
                           { _id: req.user.id },
@@ -202,10 +211,17 @@ router.post(
                         console.log("there is file in public/compressed_img/ ");
 
                         //create new avatar path for db
-                        const avatar = req.file.path.replace(
-                          "public\\upload_img",
-                          "\\compressed_img"
-                        );
+                        if (process.env.NODE_ENV === "production") {
+                          avatar = req.file.path.replace(
+                            "public/upload_img",
+                            "/compressed_img"
+                          );
+                        } else {
+                          avatar = req.file.path.replace(
+                            "public\\upload_img",
+                            "\\compressed_img"
+                          );
+                        }
 
                         User.updateOne(
                           { _id: req.user.id },
