@@ -189,37 +189,44 @@ router.post("/login", (req, res) => {
     }
     //user found , we can delete tempToken form db
     User.updateOne({ email }, { $unset: { token: "" } }).then(() => {
-      bcrypt.compare(password, user.password).then(isMatch => {
-        if (isMatch) {
-          //password from form compared to password from db(user matched)
-          // user obtains jwt
-          //1. create JWT payload with user info
-          const payload = {
-            id: user._id,
-            name: user.name,
-            email: user.email,
-            password,
-            phone: user.phone,
-            avatar: user.avatar,
-            location: user.location,
-            bio: user.bio,
-            date: user.date
-          };
-          //creating token for exp 10h
-          jwt.sign(payload, keys, { expiresIn: 36000 }, (err, token) => {
-            res.json({ success: true, token: "bearer  " + token });
+      bcrypt
+        .compare(password, user.password)
+        .then(isMatch => {
+          if (isMatch) {
+            //password from form compared to password from db(user matched)
+            // user obtains jwt
+            //1. create JWT payload with user info
+            const payload = {
+              id: user._id,
+              name: user.name,
+              email: user.email,
+              password,
+              phone: user.phone,
+              avatar: user.avatar,
+              location: user.location,
+              bio: user.bio,
+              date: user.date
+            };
+            //creating token for exp 10h
+            jwt.sign(payload, keys, { expiresIn: 36000 }, (err, token) => {
+              res.json({ success: true, token: "bearer  " + token });
+            });
+
+            console.log("user.name", user.name);
+            const onlineUser = user.name;
+
+            // console.log("req.app.io", req.app.io);
+
+            req.app.io.emit("online", onlineUser);
+          } else {
+            return res.status(400).json({ password: "passport wrong" });
+          }
+        })
+        .catch(err => {
+          res.status(401).json({
+            password: "Login with Facebook for this E-Mail"
           });
-
-          console.log("user.name", user.name);
-          const onlineUser = user.name;
-
-          // console.log("req.app.io", req.app.io);
-
-          req.app.io.emit("online", onlineUser);
-        } else {
-          return res.status(400).json({ password: "passport wrong" });
-        }
-      });
+        });
     });
   });
 });
