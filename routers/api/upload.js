@@ -113,10 +113,17 @@ router.post(
 
                     // avatar !=='' in db
                     //update db
-                    const avatar = req.file.path.replace(
-                      "public\\upload_img",
-                      "\\compressed_img"
-                    );
+                    if (process.env.NODE_ENV === "production") {
+                      avatar = req.file.path.replace(
+                        "public/upload_img",
+                        "/compressed_img"
+                      );
+                    } else {
+                      avatar = req.file.path.replace(
+                        "public\\upload_img",
+                        "\\compressed_img"
+                      );
+                    }
                     User.updateOne(
                       { _id: req.user.id },
                       {
