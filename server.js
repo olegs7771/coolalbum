@@ -19,11 +19,11 @@ const app = express();
 
 //initiat session
 //bring in secret key
-const sessionSecretKey = require("./config/keys").sessionSecret;
+// const sessionSecretKey = require("./config/keys").sessionSecret;
 
 //define lifetime for session
 
-const TWO_HOURS = 1000 * 60 * 60 * 2;
+// const TWO_HOURS = 1000 * 60 * 60 * 2;
 
 // app.use(
 //   session({

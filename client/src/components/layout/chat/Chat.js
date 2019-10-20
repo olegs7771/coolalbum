@@ -59,6 +59,8 @@ class Chat extends Component {
 
   componentDidMount() {
     const socket = Socket_io();
+    console.log("socket", socket);
+
     const { name } = this.props.auth.user;
     //emit new user to all
     socket.emit("new_user", name);
@@ -69,6 +71,8 @@ class Chat extends Component {
     });
     this.props.loadChatMessages();
     socket.on("all", data => {
+      console.log("all data", data);
+
       this.setState({
         chatMessages: data,
         chatDates: data
