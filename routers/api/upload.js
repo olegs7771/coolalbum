@@ -179,7 +179,8 @@ router.post(
                             res.status(200).json({
                               avatar:
                                 "Avatar was successfully updated another avatar",
-                              avatarPath: avatar
+                              avatarPath: avatar,
+                              reqFilePath: req.file.path
                             });
                           })
                           .catch(err => {
@@ -219,7 +220,8 @@ router.post(
                             res.status(200).json({
                               avatar:
                                 "Avatar was successfully updated anothe file",
-                              avatarPath: avatar
+                              avatarPath: avatar,
+                              reqFilePath: req.file.path
                             });
 
                             //Delete previous file from public/compressed_img/
