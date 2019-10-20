@@ -100,7 +100,6 @@ router.post(
             if (cb) {
               User.findOne({ _id: req.user.id })
                 .then(user => {
-                  console.log("user.avatar! length", user.avatar.length);
                   //if user has no avatar --> avatar === ''
                   // nothing to delete in public/compresse
                   //Check for avatar === https||http
@@ -128,9 +127,12 @@ router.post(
                       { new: true }
                     )
                       .then(() => {
-                        res.status(200).json({
-                          avatar: "Avatar was successfully updated"
-                        });
+                        res.status(200).json(
+                          {
+                            avatar: "Avatar was successfully updated https://"
+                          },
+                          { avatar }
+                        );
                       })
                       .catch(err => {
                         console.log("error update avatar", err);
@@ -174,9 +176,13 @@ router.post(
                           { new: true }
                         )
                           .then(() => {
-                            res.status(200).json({
-                              avatar: "Avatar was successfully updated"
-                            });
+                            res.status(200).json(
+                              {
+                                avatar:
+                                  "Avatar was successfully updated another avatar"
+                              },
+                              { avatar }
+                            );
                           })
                           .catch(err => {
                             console.log("error update avatar", err);
@@ -213,7 +219,9 @@ router.post(
                         )
                           .then(() => {
                             res.status(200).json({
-                              avatar: "Avatar was successfully updated"
+                              avatar:
+                                "Avatar was successfully updated anothe file",
+                              avatarPath: avatar
                             });
 
                             //Delete previous file from public/compressed_img/

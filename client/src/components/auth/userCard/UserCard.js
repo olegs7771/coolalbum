@@ -20,7 +20,6 @@ class UserCard extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.profile !== this.props.profile) {
       // this.props coming here
-      console.log("this.props", this.props);
     }
   }
 
