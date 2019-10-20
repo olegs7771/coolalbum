@@ -162,8 +162,8 @@ router.post(
                       if (!exists) {
                         console.log("no file in public/compressed_img/ ");
                         const avatar = req.file.path.replace(
-                          "public\\upload_img",
-                          "\\compressed_img"
+                          "public/upload_img",
+                          "/compressed_img"
                         );
 
                         User.updateOne(
