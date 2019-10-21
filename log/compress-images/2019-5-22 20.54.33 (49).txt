@@ -1,8 +1,0 @@
-File from: [public/img/myImage-1561226072895.jpg]
-
-File to: [public/uploads/myImage-1561226072895.jpg]
-
-Compression algorithm: [mozjpeg]
-
-Description: Error: Command failed: C:\Users\oleg\Desktop\coolalbum\node_modules\mozjpeg\vendor\cjpeg.exe -quality 60 -outfile public/uploads/myImage-1561226072895.jpg public/img/myImage-1561226072895.jpg
-C:\Users\oleg\Desktop\coolalbum\node_modules\mozjpeg\vendor\cjpeg.exe: can't open public/img/myImage-1561226072895.jpg
