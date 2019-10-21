@@ -38,6 +38,7 @@ router.post(
           User.findOne({ phone }).then(user => {
             //randomatic gens  6 digit number
             const randomNum = randomize("0", 6);
+            console.log("randomNum", randomNum);
 
             const objNum = {
               randomNum
@@ -51,12 +52,14 @@ router.post(
               { new: true }
             )
               .then(update => {
-                console.log("update", update.randomNum);
+                console.log("update", update);
                 // user db has randomNum
                 //Sending Nexmo SMS message to user
                 const text = `Dear ${update.name},Your code for login is ${
                   update.randomNum
                 }.`;
+                console.log("text", text);
+
                 nexmo.message.sendSms(
                   "Nexmo ",
                   phone,

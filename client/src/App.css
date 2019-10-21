@@ -1,3 +1,10 @@
 .App {
   text-align: center;
 }
+
+.my-facebook-button {
+  font-size: 1.2rm;
+  background-color: rgb(104, 168, 232);
+  font-weight: 200;
+  color: white;
+}

@@ -32,7 +32,7 @@ class SuccessRegMsg extends Component {
               <div className=" text-center ">
                 Thank You for Registering on CoolAlbum Site. In order to
                 complete your Registration, please check your Email and follow
-                the instraction. Hope to See You Soon...
+                the instruction. Hope to See You Soon...
               </div>
             </div>
           </div>

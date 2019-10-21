@@ -1,16 +1,20 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { setCurrentUser, logoutUser } from "../../actions/userActions";
-import { getWeather } from "../../actions/weatherAction";
+
+import { setCurrentUser, logoutUser } from "../../../actions/userActions";
+import { getPosts } from "../../../actions/postAction";
+import { getWeather } from "../../../actions/weatherAction";
+
 import { reactLocalStorage } from "reactjs-localstorage";
 import jwtDecode from "jwt-decode";
-import { isEmpty } from "../../utils/isEmpty";
+import { isEmpty } from "../../../utils/isEmpty";
 //weather widget
-import WeatherWidGet from "../../utils/WeatherWidGet";
+import WeatherWidGet from "../../../utils/WeatherWidGet";
+
 class Header extends Component {
   state = {
-    isAuthenticated: false
+    posts: null
   };
 
   //Logout
@@ -28,32 +32,89 @@ class Header extends Component {
     if (token) {
       //decode token with jwt-decode
       const decodedToken = jwtDecode(token);
-
       //  putting it into redux state
       this.props.setCurrentUser(decodedToken);
+      this.props.getPosts();
     }
     // Fetch Weather API from OPEN WEATHER MAP
-
     this.props.getWeather();
+  }
+  componentDidUpdate(prevProps) {
+    if (prevProps.post !== this.props.post) {
+      this.setState({
+        posts: this.props.post.post
+      });
+    }
+
+    //get posts after user logged
+    if (prevProps.auth !== this.props.auth) {
+      this.props.getPosts();
+    }
   }
 
   render() {
-    const { user } = this.props.auth;
+    const { user, isAuthenticated } = this.props.auth;
+    const { posts } = this.state;
 
+    //Show links for auth user
+    let linksContent;
+    if (isAuthenticated) {
+      linksContent = (
+        <ul className="nav justify-content-end">
+          <li className="nav-item">
+            <Link className="nav-link text-white" to="/contact">
+              Contact Us
+            </Link>
+          </li>
+          <li className="nav-item">
+            <a className="nav-link text-white" href="/users">
+              Users
+            </a>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link text-white" to="/chat">
+              Chat
+            </Link>
+          </li>
+        </ul>
+      );
+    } else {
+      linksContent = null;
+    }
+
+    let postCountcontent;
+    if (posts) {
+      if (posts.length > 0) {
+        postCountcontent = (
+          <div>
+            <i className="fas fa-envelope  text-white mr-2" />
+            <span className="text-white">{posts.length}</span>
+          </div>
+        );
+      } else {
+        postCountcontent = null;
+      }
+    }
     if (user) {
       return (
         <div className="pos-f-t">
           <nav className="navbar navbar-dark bg-dark">
-            <a className="navbar-brand" href="/">
+            <a className="navbar-brand mr-5" href="/">
               CoolAlbum
             </a>
-            <WeatherWidGet />
-
+            <ul className="navbar-nav ml-auto mt-2 ">
+              <li className="nav-item ">
+                <WeatherWidGet />
+              </li>
+            </ul>
             <nav className="navbar navbar-dark bg-dark navbar-expand-lg ml-auto ">
               {!isEmpty(user) ? (
                 <ul className="nav justify-content-end">
+                  {/* {Post Envelope} */}
+                  <li className="nav-item active ">
+                    <Link to="/inbox">{postCountcontent}</Link>
+                  </li>
                   <li className="nav-item active">
-                    <span className="text-white">Welcome</span>{" "}
                     <Link to={`/userCard/${user.id}`}>
                       <span className="text-info ml-2 ">{user.name}</span>
                     </Link>
@@ -63,7 +124,11 @@ class Header extends Component {
                         src={user.avatar}
                         alt=""
                         className="rounded-circle ml-2 "
-                        style={{ width: "30px", border: "2px solid white" }}
+                        style={{
+                          width: "30px",
+                          height: "30px",
+                          border: "2px solid white"
+                        }}
                       />
                     ) : (
                       <img
@@ -110,25 +175,7 @@ class Header extends Component {
             </button>
           </nav>
           <div className="collapse" id="navbarToggleExternalContent">
-            <div className="bg-dark p-4">
-              <ul className="nav justify-content-end">
-                <li className="nav-item">
-                  <Link className="nav-link text-white" to="/contact">
-                    Contact Us
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link text-white" href="/">
-                    Link
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link text-white" href="/">
-                    Link
-                  </a>
-                </li>
-              </ul>
-            </div>
+            <div className="bg-dark p-4">{linksContent}</div>
           </div>
         </div>
       );
@@ -137,10 +184,11 @@ class Header extends Component {
 }
 
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: state.auth,
+  post: state.post
 });
 
 export default connect(
   mapStateToProps,
-  { setCurrentUser, logoutUser, getWeather }
+  { setCurrentUser, logoutUser, getWeather, getPosts }
 )(withRouter(Header));

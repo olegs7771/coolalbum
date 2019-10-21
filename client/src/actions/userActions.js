@@ -4,7 +4,9 @@ import {
   SET_CURRENT_USER,
   LOGOUT_USER,
   GET_MESSAGE,
-  CLEAR_MESSAGE
+  CLEAR_MESSAGE,
+  GET_ALL_USERS,
+  LOADING_ALL_USERS
 } from "./types";
 import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
@@ -75,7 +77,6 @@ export const loginUser = (userData, history) => dispatch => {
       setAuthToken(token);
       // set the user (using user creds from token. but first we must to decode token with jwt-decode module)
       const decoded = jwt_decode(token);
-      console.log("decoded", decoded);
 
       //set current user (we create separate function here)
       dispatch(setCurrentUser(decoded));
@@ -117,6 +118,8 @@ export const authFacebook = (userData, history) => dispatch => {
   axios
     .post("/api/users/auth/facebook", { access_token: userData })
     .then(res => {
+      console.log("res.data", res.data);
+
       const { token } = res.data;
       //Save to localStorage recieved token
       localStorage.setItem("jwtToken", token);
@@ -124,7 +127,7 @@ export const authFacebook = (userData, history) => dispatch => {
       setAuthToken(token);
       // set the user (using user creds from token. but first we must to decode token with jwt-decode module)
       const decoded = jwt_decode(token);
-
+      console.log("decoded facebook", decoded);
       //set current user (we create separate function here)
       dispatch(setCurrentUser(decoded));
       history.push("/");
@@ -139,11 +142,11 @@ export const authFacebook = (userData, history) => dispatch => {
 
 //Update Registered User with new data
 
-export const updateUser = (userData, history) => dispatch => {
+export const updateUser = (upUserCreds, history, userData) => dispatch => {
   console.log("userData", userData);
 
   axios
-    .post("/api/users/update", userData)
+    .post("/api/users/update", upUserCreds)
     .then(res => {
       console.log("res.data", res.data);
       dispatch({
@@ -153,7 +156,7 @@ export const updateUser = (userData, history) => dispatch => {
     })
     .then(() => {
       setTimeout(() => {
-        console.log("userData", userData);
+        dispatch(clearMessages());
 
         // Remove jwtToken from localStorage
         localStorage.removeItem("jwtToken");
@@ -166,6 +169,21 @@ export const updateUser = (userData, history) => dispatch => {
         });
 
         //relogin update user
+        axios.post("api/users/login", userData).then(res => {
+          // Save to localStorage token
+          const { token } = res.data;
+          //Set token to localStorage
+          localStorage.setItem("jwtToken", token);
+          //Set token to Auth header (we crerate it in separate file)
+          setAuthToken(token);
+          // set the user (using user creds from token. but first we must to decode token with jwt-decode module)
+          const decoded = jwt_decode(token);
+          console.log("decoded", decoded);
+
+          //set current user (we create separate function here)
+          dispatch(setCurrentUser(decoded));
+          history.push("/");
+        });
 
         history.push("/login");
       }, 5000);
@@ -194,6 +212,27 @@ export const isEmailExists = data => dispatch => {
     .post("/api/users/email", data)
     .then(res => {
       console.log("res.data", res.data);
+      dispatch(clearErrors());
+      dispatch({
+        type: GET_MESSAGE,
+        payload: res.data
+      });
+    })
+    .catch(err => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
+    });
+};
+//register check if email already exists
+export const isUserEmailExists = data => dispatch => {
+  dispatch(clearErrors());
+  dispatch(clearMessages());
+
+  axios
+    .post("/api/users/email_register", data)
+    .then(res => {
       dispatch(clearErrors());
       dispatch({
         type: GET_MESSAGE,
@@ -273,6 +312,30 @@ export const isMatchedPass = (data, history) => dispatch => {
         payload: err.response.data
       });
     });
+};
+//Get ALL Users
+export const getAllUsers = data => dispatch => {
+  dispatch(loadingAllUsers());
+  axios
+    .post("api/users/all", data)
+    .then(res => {
+      dispatch({
+        type: GET_ALL_USERS,
+        payload: res.data
+      });
+    })
+    .catch(err => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
+    });
+};
+//Loading All Users
+export const loadingAllUsers = () => dispatch => {
+  return dispatch({
+    type: LOADING_ALL_USERS
+  });
 };
 
 // Clear Errors

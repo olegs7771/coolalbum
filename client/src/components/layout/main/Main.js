@@ -1,10 +1,37 @@
 import React, { Component } from "react";
+import BlueBG from "../../../img/bike1.jpg";
 
 class Main extends Component {
   render() {
+    const styles = {
+      header: {
+        backgroundImage: `url(${BlueBG})`,
+        height: "100vh",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover"
+      },
+
+      content: {
+        height: "100%",
+        width: "100%",
+        backgroundColor: "rgba(0, 0, 0, 0.1)"
+      }
+    };
+
     return (
-      <div>
-        <h2>This is main</h2>
+      <div style={styles.header}>
+        <div style={styles.content}>
+          <div className=" pt-4 ">
+            <span className="text-white h4 ">Welcome to CoolAlbum</span>
+            <br />
+            <br />
+            <span className="text-white  ">
+              This Site in the Development , some features will not work
+              properly
+            </span>
+          </div>
+        </div>
       </div>
     );
   }

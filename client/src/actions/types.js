@@ -8,6 +8,10 @@ export const GET_PROFILE = "GET_PROFILE ";
 export const GET_PROFILES = "GET_PROFILES ";
 export const LOADING_PROFILE = "LOADING_PROFILE";
 
+//Users
+export const GET_ALL_USERS = "GET_ALL_USERS";
+export const LOADING_ALL_USERS = "LOADING_ALL_USERS";
+
 //Email
 export const SEND_EMAIL_MESSAGE = "SEND_EMAIL_MESSAGE";
 export const MESSAGE_MAIL_LOADING = "MESSAGE_MAIL_LOADING ";
@@ -21,3 +25,9 @@ export const SEND_SMS = "SEND_SMS";
 //Weather
 export const LOADING_CURRENT_WEATHER = "LOADING_CURRENT_WEATHER ";
 export const GET_CURRENT_WEATHER = "GET_CURRENT_WEATHER ";
+//Posts
+export const GET_POSTS = "GET_POSTS";
+export const LOADING_POSTS = "LOADING_POSTS";
+//Chat
+export const CHAT_MESSAGE = "CHAT_MESSAGE";
+export const LOAD_CHAT_MESSAGES = "LOAD_CHAT_MESSAGES";

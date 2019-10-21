@@ -4,12 +4,17 @@ import {
   LOADING_PROFILE,
   GET_PROFILE,
   GET_MESSAGE,
-  CLEAR_MESSAGE
+  CLEAR_MESSAGE,
+  LOGOUT_USER,
+  SET_CURRENT_USER
   // GET_PROFILES
 } from "./types";
 import axios from "axios";
-import store from "../store";
-import { logoutUser } from "./userActions";
+// import configureStore from "../store/configureStore";
+import setAuthToken from "../utils/setAuthToken";
+
+import jwt_decode from "jwt-decode";
+// const store = configureStore();
 
 // Create new Profile or Update profile
 export const createProfile = (data, history) => dispatch => {
@@ -28,8 +33,15 @@ export const createProfile = (data, history) => dispatch => {
     .then(() => {
       setTimeout(() => {
         dispatch(clearMessages());
-        store.dispatch(logoutUser());
-        history.push("/login");
+        // Remove jwtToken from localStorage
+        localStorage.removeItem("jwtToken");
+        //Remove auth header for future request
+        setAuthToken(false);
+        //Set current user to {} which will set isAuthenticated to false
+        dispatch({
+          type: LOGOUT_USER,
+          payload: {}
+        });
       }, 6000);
     })
     .catch(err => {
@@ -39,8 +51,17 @@ export const createProfile = (data, history) => dispatch => {
       });
     });
 };
+
+// /set logged user
+export const setCurrentUser = decoded => {
+  return {
+    type: SET_CURRENT_USER,
+    payload: decoded
+  };
+};
 // Create new or Update Profile Avatar
-export const updateAvatar = (fd, history) => dispatch => {
+export const updateAvatar = (fd, history, userData) => dispatch => {
+  console.log("userData", userData);
   console.log("fd", fd);
 
   axios
@@ -52,12 +73,34 @@ export const updateAvatar = (fd, history) => dispatch => {
         type: GET_MESSAGE,
         payload: res.data
       });
-    })
-    .then(() => {
       setTimeout(() => {
         dispatch(clearMessages());
-        store.dispatch(logoutUser());
-        history.push("/login");
+        // Remove jwtToken from localStorage
+        localStorage.removeItem("jwtToken");
+        //Remove auth header for future request
+        setAuthToken(false);
+        //Set current user to {} which will set isAuthenticated to false
+        dispatch({
+          type: LOGOUT_USER,
+          payload: {}
+        });
+        //login updated user
+        // store.dispatch(loginUser(userData, history));
+        axios.post("api/users/login", userData).then(res => {
+          // Save to localStorage token
+          const { token } = res.data;
+          //Set token to localStorage
+          localStorage.setItem("jwtToken", token);
+          //Set token to Auth header (we crerate it in separate file)
+          setAuthToken(token);
+          // set the user (using user creds from token. but first we must to decode token with jwt-decode module)
+          const decoded = jwt_decode(token);
+          console.log("decoded", decoded);
+
+          //set current user (we create separate function here)
+          dispatch(setCurrentUser(decoded));
+          history.push("/");
+        });
       }, 6000);
     })
 
@@ -70,10 +113,10 @@ export const updateAvatar = (fd, history) => dispatch => {
 };
 
 // Get Current Profile
-export const getProfile = id => dispatch => {
+export const getProfile = () => dispatch => {
   dispatch(setProfileLoading());
   axios
-    .post("/api/profiles/current", id)
+    .post("/api/profiles/current")
     .then(res => {
       dispatch({
         type: GET_PROFILE,
@@ -111,12 +154,61 @@ export const deleteProfile = history => dispatch => {
       });
     });
 };
+
+//Delete Avatar
+//Private Route
+
+export const deleteAvatar = (history, userData) => dispatch => {
+  console.log("delete in action");
+  axios
+    .post("/api/uploads/delete")
+    .then(res => {
+      console.log("res.data", res.data);
+      dispatch({
+        type: GET_MESSAGE,
+        payload: res.data
+      });
+      setTimeout(() => {
+        dispatch(clearMessages());
+        // Remove jwtToken from localStorage
+        localStorage.removeItem("jwtToken");
+        //Remove auth header for future request
+        setAuthToken(false);
+        //Set current user to {} which will set isAuthenticated to false
+        dispatch({
+          type: LOGOUT_USER,
+          payload: {}
+        });
+        //login updated user
+        // store.dispatch(loginUser(userData, history));
+        axios.post("api/users/login", userData).then(res => {
+          // Save to localStorage token
+          const { token } = res.data;
+          //Set token to localStorage
+          localStorage.setItem("jwtToken", token);
+          //Set token to Auth header (we crerate it in separate file)
+          setAuthToken(token);
+          // set the user (using user creds from token. but first we must to decode token with jwt-decode module)
+          const decoded = jwt_decode(token);
+          console.log("decoded", decoded);
+          //set current user (we create separate function here)
+          dispatch(setCurrentUser(decoded));
+          history.push("/");
+        });
+      }, 4000);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+
 //Profile Loading
 export const setProfileLoading = () => {
   return {
     type: LOADING_PROFILE
   };
 };
+
 //Clear Messages
 export const clearMessages = () => {
   return {

@@ -16,7 +16,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         message: action.payload,
-        loading: true
+        loading: false
       };
 
     default:
