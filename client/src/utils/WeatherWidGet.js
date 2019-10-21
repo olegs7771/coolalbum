@@ -17,43 +17,16 @@ class WeatherWidGet extends Component {
   }
 
   render() {
-<<<<<<< HEAD
-    console.log("this.state", this.state);
-
-=======
     //styles
     const FontSize = styled.span`
       font-size: 12px;
     `;
->>>>>>> 7849620d1844cfcbc4ed3d011e17ca63871b54d0
     const { weather } = this.state;
     let weatherContent;
     let dayTime;
     let skyCon;
     if (weather.weather) {
       const { data1, data2, location, daytime } = weather.weather;
-<<<<<<< HEAD
-      console.log("data1", data1);
-
-      console.log("daytime", daytime);
-      console.log("Date.now()", Date.now());
-
-      //description
-      desc = <div>{data1.description}</div>;
-      if (daytime.sunrise < Date.now()) {
-        dayTime = (
-          <div>
-            <i className="  far  fa-sun  " />
-          </div>
-        );
-      }
-      if (daytime.sunset > Date.now()) {
-        dayTime = (
-          <div>
-            <i className="  far  fa-moon  " />
-          </div>
-        );
-=======
 
       if (
         daytime.sunrise < Math.trunc(Date.now() / 1000) &&
@@ -123,7 +96,6 @@ class WeatherWidGet extends Component {
         // console.log("8");
 
         skyCon = <i className="fas fa-poo-storm" />;
->>>>>>> 7849620d1844cfcbc4ed3d011e17ca63871b54d0
       }
 
       weatherContent = (

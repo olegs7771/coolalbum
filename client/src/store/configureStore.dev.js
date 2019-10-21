@@ -5,11 +5,7 @@ import rootReducer from "../reducers";
 // const initialState = {};
 
 const middleware = [thunk];
-<<<<<<< HEAD
-console.log("process.env.NODE_ENV", process.env.NODE_ENV);
-=======
 // console.log("process.env.NODE_ENV", process.env.NODE_ENV);
->>>>>>> 7849620d1844cfcbc4ed3d011e17ca63871b54d0
 
 export default function configureStore(initialState) {
   const store = createStore(
