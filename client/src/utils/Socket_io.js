@@ -2,8 +2,13 @@
 import io from "socket.io-client";
 
 const Socket_io = () => {
-  // const socket = io("https://infinite-everglades-47869.herokuapp.com");
-  const socket = io("http://localhost:5000");
+  let socket;
+  if (process.env.NODE_ENV !== "production") {
+    socket = io("http://localhost:5000");
+  } else {
+    socket = io("https://morning-thicket-46114.herokuapp.com");
+  }
+
   return socket;
 };
 export default Socket_io;
