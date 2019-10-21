@@ -291,6 +291,7 @@ router.post(
     //generate token
     // create JWT with user info
     //set location
+    res.setHeader("set-cookie", ["SameSite=Strict"]);
 
     const payload = {
       id: req.user.id,
