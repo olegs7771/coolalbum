@@ -78,8 +78,8 @@ class UserCard extends Component {
             </div>
             <div className="col-md-6 my-4">
               <div className="mx-auto my-3">
-                In oreder to fully use our site <br />
-                Please create profile
+                seems like you do not have any albums <br />
+                Here you can create one
               </div>
               <Link
                 to={`/profile_create/${user.id}`}
