@@ -8,20 +8,20 @@ const AlbumSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "users"
   },
-  title: {
+
     type: String,
     required: true,
     max: 30
   },
 
-  text: {
+
     type: String,
     required: true
   },
   location: {
     type: String
   },
-  image_path: {
+
     type: String
   },
 
@@ -31,4 +31,4 @@ const AlbumSchema = new Schema({
   }
 });
 mongoose.set("useCreateIndex", true);
-module.exports = Album = mongoose.model("albums", AlbumSchema);
+
