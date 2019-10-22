@@ -3,12 +3,6 @@ import moment from "moment";
 import { Link } from "react-router-dom";
 
 class UserCardItem extends Component {
-  //edit userCard
-  // editHandle = e => {
-  //   e.preventDefault();
-  //   console.log("clicked");
-  // };
-
   render() {
     const { name, email, avatar, phone, date, location } = this.props;
     // console.log("this.props", this.props);
@@ -51,13 +45,15 @@ class UserCardItem extends Component {
             <div className="a btn btn-danger ml-2">Delete Profile</div>
           </div>
         </div>
-        <div className="col-md-4">
-          <img
-            src={avatar}
-            className="my-3 rounded-circle border"
-            style={{ width: "100px", height: "100px" }}
-            alt=""
-          />
+        <div className="col-md-4 pt-5 pl-5 ">
+          <div className=" ">
+            <img
+              src={avatar}
+              className="my-3 rounded-circle "
+              style={{ width: "200px", height: "200px" }}
+              alt=""
+            />
+          </div>
         </div>
       </div>
     );

@@ -4,7 +4,7 @@ import {
   clearErrors,
   updateAvatar,
   deleteAvatar
-} from "../../../actions/profileAction";
+} from "../../../actions/userActions";
 
 import { withRouter } from "react-router-dom";
 import { reactLocalStorage } from "reactjs-localstorage";
@@ -129,7 +129,7 @@ class UserCardAvatar extends Component {
           <img
             src={selectedImage}
             className="rounded"
-            style={{ width: "150px" }}
+            style={{ width: "350px" }}
             alt=""
           />
           <br />

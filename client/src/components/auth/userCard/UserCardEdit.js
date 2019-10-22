@@ -4,9 +4,9 @@ import { reactLocalStorage } from "reactjs-localstorage";
 import TextFormGroup from "../../textFormGroup/TextFormGroup";
 import TextAreaFormGroup from "../../textFormGroup/TextAreaFormGroup";
 import UserCardAvatar from "./UserCardAvatar";
-import { updateUser } from "../../../actions/userActions";
+import { getUser, updateUser } from "../../../actions/userActions";
+import Spinner from "../../../utils/Spinner";
 
-import { getProfile } from "../../../actions/profileAction";
 //intl_phone_input
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
@@ -23,7 +23,8 @@ class UserCardEdit extends Component {
     errors: {},
     message: {},
     isConfirmDelete: false,
-    token: ""
+    token: "",
+    isUserData: false
   };
   onChange = e => {
     this.setState({
@@ -36,8 +37,6 @@ class UserCardEdit extends Component {
       token: reactLocalStorage.get("jwtToken")
     });
 
-    this.props.getProfile();
-
     //get user creds from props to state
     if (Object.keys(this.props.user).length > 0) {
       let bio;
@@ -48,7 +47,8 @@ class UserCardEdit extends Component {
         email: this.props.user.email,
         bio,
         avatar: this.props.user.avatar,
-        phone: this.props.user.phone
+        phone: this.props.user.phone,
+        isUserData: true
       });
     }
   }
@@ -108,83 +108,94 @@ class UserCardEdit extends Component {
       phone,
       errors,
       message,
-      avatar
+      avatar,
+      isUserData
     } = this.state;
 
-    return (
-      <div>
-        <div className="h4 my-4">Edit User Card </div>
-        {message.user ? (
-          <div className="my-3 text-success"> {message.user}</div>
-        ) : null}
-        <div className="row">
-          <div className="col-md-8  mt-4">
-            <form onSubmit={this.onSubmitUpdateUser}>
-              <TextFormGroup
-                label="Name"
-                value={name}
-                name="name"
-                onChange={this.onChange}
-                error={errors.name}
-              />
-              <TextFormGroup
-                label="Email"
-                value={email}
-                name="email"
-                onChange={this.onChange}
-                error={errors.email}
-              />
-              <TextFormGroup
-                label="Location"
-                value={location}
-                name="location"
-                onChange={this.onChange}
-                error={errors.location}
-              />
-              <TextAreaFormGroup
-                label="Bio"
-                placeholder="write about yourself something..."
-                value={bio}
-                name="bio"
-                onChange={this.onChange}
-                error={errors.bio}
-                info="You can write a  some basic information about yourself"
-              />
-              <div className="mx-auto">
-                <PhoneInput
-                  placeholder="Enter phone number"
-                  value={phone}
-                  onChange={phone => this.setState({ phone })}
-                  className="form-control"
-                />{" "}
-                <br />
-                <div className="my-2">
-                  Your number needed for login with SMS (Optinal)
+    if (!isUserData) {
+      return (
+        <div className="pt-5" style={{ height: 400 }}>
+          <Spinner />
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <div className="h4 my-4">Edit User Card </div>
+          {message.user ? (
+            <div className="my-3 text-success"> {message.user}</div>
+          ) : null}
+          <div className="row">
+            <div className="col-md-8  mt-4">
+              <form onSubmit={this.onSubmitUpdateUser}>
+                <TextFormGroup
+                  placeholder="Name"
+                  value={name}
+                  name="name"
+                  onChange={this.onChange}
+                  error={errors.name}
+                />
+
+                <TextFormGroup
+                  placeholder="Email"
+                  value={email}
+                  name="email"
+                  onChange={this.onChange}
+                  error={errors.email}
+                />
+
+                <TextFormGroup
+                  placeholder="Location"
+                  value={location}
+                  name="location"
+                  onChange={this.onChange}
+                  error={errors.location}
+                />
+
+                <TextAreaFormGroup
+                  placeholder="Bio"
+                  value={bio}
+                  name="bio"
+                  onChange={this.onChange}
+                  error={errors.bio}
+                  info="You can write a  some basic information about yourself"
+                />
+                <div className="mx-auto">
+                  <PhoneInput
+                    placeholder="Phone"
+                    value={phone}
+                    onChange={phone => this.setState({ phone })}
+                    className="form-control"
+                  />{" "}
+                  <br />
+                  <div className="my-2">
+                    Your number needed for login with SMS (Optinal)
+                  </div>
                 </div>
+                <button type="submit" className="btn btn-dark btn-lg my-4">
+                  Edit
+                </button>
+              </form>
+            </div>
+            <div className="col-md-4">
+              <div className="h5 text-center ">Edit Avatar</div>
+              <div className="  ">
+                {name ? <UserCardAvatar avatar={avatar} /> : null}
               </div>
-              <button type="submit" className="btn btn-dark btn-lg my-4">
-                Edit
-              </button>
-            </form>
-          </div>
-          <div className="col-md-4">
-            <div className="h5 text-center my-3">Edit Avatar</div>
-            <div className=" card card-body  " style={{ height: "432px" }}>
-              {name ? <UserCardAvatar avatar={avatar} /> : null}
             </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
 }
 const mapStateToProps = state => ({
   errors: state.errors.errors,
   user: state.auth.user,
   message: state.message.message,
-  profile: state.profile.profile
+  album: state.album.album
 });
 export default connect(
   mapStateToProps,
-  { updateUser, getProfile }
+  { updateUser, getUser }
 )(UserCardEdit);
