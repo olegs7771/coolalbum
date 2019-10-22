@@ -1,5 +1,5 @@
-import { GET_USER_ALBUMS, LOADING_ALBUMS } from "../actions/types";
 // import { isEmpty } from "../utils/isEmpty";
+import { LOADING_ALBUMS, GET_USER_ALBUMS } from "../actions/types";
 
 const initialState = {
   albums: null,
@@ -16,9 +16,10 @@ export default function(state = initialState, action) {
     case GET_USER_ALBUMS:
       return {
         ...state,
-        album: action.payload,
+        albums: action.payload,
         loading: false
       };
+
     default:
       return state;
   }

@@ -39,6 +39,7 @@ class FaceBookBtn extends Component {
         <div className="my-3">
           <FacebookLogin
             appId="991632717694701"
+            cookie={(true, ["Same"])}
             autoLoad={true}
             fields="name,email,picture"
             onClick={this.componentClicked}

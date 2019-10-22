@@ -31,7 +31,6 @@ router.get(
   "/get_all",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    res.setHeader("set-cookie", ["setFromServer=1"]);
     ChatMessage.find().then(messages => {
       req.app.io.emit("all", messages);
 
