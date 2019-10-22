@@ -43,7 +43,7 @@ class UserCard extends Component {
       userContent = <Spinner />;
     }
 
-    return <div>{userContent}</div>;
+    return <div style={{ backgroundColor: "#95d0f0" }}>{userContent}</div>;
   }
 }
 
