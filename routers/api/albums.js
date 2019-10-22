@@ -17,16 +17,16 @@ router.get("/test", (req, res) => {
 //Get User Albums@Private Route
 router.post(
   "/albums",
-  (passport.authenticate("jwt", { session: false }),
+  passport.authenticate("jwt", { session: false }),
   (req, res) => {
     Album.findById(req.user.id)
       .then(albums => {
         res.status(200).json(albums);
       })
-      .catch(err => {
-        res.status(400).json({ msg: "No Albums" });
+      .catch(empty => {
+        res.status(200).json({ msg: "No Albums For this User" });
       });
-  })
+  }
 );
 
 module.exports = router;
