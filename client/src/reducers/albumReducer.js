@@ -1,22 +1,22 @@
-import { GET_PROFILE, LOADING_PROFILE } from "../actions/types";
+import { GET_USER_ALBUMS, LOADING_ALBUMS } from "../actions/types";
 // import { isEmpty } from "../utils/isEmpty";
 
 const initialState = {
-  profiles: null,
-  profile: null,
+  albums: null,
+  album: null,
   loading: false
 };
 export default function(state = initialState, action) {
   switch (action.type) {
-    case LOADING_PROFILE:
+    case LOADING_ALBUMS:
       return {
         ...state,
         loading: true
       };
-    case GET_PROFILE:
+    case GET_USER_ALBUMS:
       return {
         ...state,
-        profile: action.payload,
+        album: action.payload,
         loading: false
       };
     default:

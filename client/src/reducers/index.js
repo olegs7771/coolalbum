@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import authReducer from "./authReducer";
-import profileReducer from "./profileReducer";
+import albumReducer from "./albumReducer";
 import userReducer from "./userReducer";
 import errorsReducer from "./errorsReducer";
 import mailReducer from "./mailReducer";
@@ -11,7 +11,7 @@ import chatReducer from "./chatReducer";
 
 export default combineReducers({
   auth: authReducer,
-  profile: profileReducer,
+  album: albumReducer,
   users: userReducer,
   errors: errorsReducer,
   message: messageReducer,
