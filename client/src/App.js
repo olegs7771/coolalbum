@@ -15,8 +15,6 @@ import ConfirmRegister from "./utils/ConfirmRegister";
 import Contact from "./utils/Contact";
 import UserCard from "./components/auth/userCard/UserCard";
 import UserCardEdit from "./components/auth/userCard/UserCardEdit";
-import ProfileCreate from "./components/profile/ProfileCreate";
-import ProfileEdit from "./components/profile/ProfileEdit";
 
 import jwt_decode from "jwt-decode";
 import { logoutUser } from "./actions/userActions";
@@ -33,6 +31,9 @@ import setAuthToken from "./utils/setAuthToken";
 import { setCurrentUser } from "./actions/userActions";
 import configureStore from "./store/configureStore";
 import styled from "styled-components";
+//Albums
+import Album from "./components/layout/albums/Album";
+import AlbumCreate from "./components/layout/albums/AlbumCreate";
 
 //
 const store = configureStore();
@@ -102,20 +103,13 @@ class App extends Component {
                   <Route exact path="/contact" component={Contact} />
                   <Route exact path="/userCard/:id" component={UserCard} />
                   <Route exact path="/userCard_edit" component={UserCardEdit} />
-                  <Route
-                    exact
-                    path="/profile_create/:id"
-                    component={ProfileCreate}
-                  />
-                  <Route
-                    exact
-                    path="/profile_edit/:id"
-                    component={ProfileEdit}
-                  />
+
                   <Route exact path="/post" component={Post} />
                   <Route exact path="/users" component={Users} />
                   <Route exact path="/inbox" component={Inbox} />
                   <Route exact path="/chat" component={Chat} />
+                  <Route exact path="/albums" component={Album} />
+                  <Route exact path="/albums_create" component={AlbumCreate} />
                 </Switch>
               </div>
               <Footer />

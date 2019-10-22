@@ -8,7 +8,7 @@ require("dotenv").config();
 
 //routers
 const users = require("./routers/api/users");
-const profiles = require("./routers/api/profiles");
+const albums = require("./routers/api/albums");
 const email = require("./routers/api/email");
 const upload = require("./routers/api/upload");
 const phone = require("./routers/api/phone");
@@ -70,7 +70,7 @@ mongoose
 
 //Use routes
 app.use("/api/users", users);
-app.use("/api/profiles", profiles);
+app.use("/api/albums", albums);
 app.use("/api/email", email);
 app.use("/api/uploads", upload);
 app.use("/api/phone", phone);

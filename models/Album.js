@@ -8,20 +8,20 @@ const AlbumSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "users"
   },
-  name: {
+
     type: String,
     required: true,
     max: 30
   },
 
-  email: {
+
     type: String,
     required: true
   },
   location: {
     type: String
   },
-  status: {
+
     type: String
   },
 
@@ -31,4 +31,4 @@ const AlbumSchema = new Schema({
   }
 });
 mongoose.set("useCreateIndex", true);
-module.exports = Profile = mongoose.model("album", AlbumSchema);
+

@@ -30,9 +30,7 @@ class Users extends Component {
   render() {
     //styles
     const styles = {
-      container: {
-        height: "300px"
-      }
+      container: {}
     };
 
     let userContent;

@@ -1,4 +1,4 @@
-import { GET_PROFILE, LOADING_PROFILE } from "../actions/types";
+
 // import { isEmpty } from "../utils/isEmpty";
 
 const initialState = {
@@ -8,7 +8,7 @@ const initialState = {
 };
 export default function(state = initialState, action) {
   switch (action.type) {
-    case LOADING_PROFILE:
+
       return {
         ...state,
         loading: true

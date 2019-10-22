@@ -58,6 +58,7 @@ class Chat extends Component {
   };
 
   componentDidMount() {
+    this.props.loadChatMessages();
     const socket = Socket_io();
     console.log("socket", socket);
 
@@ -69,7 +70,6 @@ class Chat extends Component {
         onlineUserMessage: name + "  online"
       });
     });
-    this.props.loadChatMessages();
     socket.on("all", data => {
       console.log("all data", data);
 
