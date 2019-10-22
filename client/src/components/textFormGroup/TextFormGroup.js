@@ -27,6 +27,7 @@ const TextFormGroup = ({
         value={value}
         name={name}
         onChange={onChange}
+        style={{ marginTop: "-2rem" }}
       />
       {error && <div className="invalid-feedback">{error}</div>}
       {message && <div className="valid-feedback">{message}</div>}

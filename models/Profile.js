@@ -30,4 +30,5 @@ const ProfileSchema = new Schema({
     default: Date.now()
   }
 });
+mongoose.set("useCreateIndex", true);
 module.exports = Profile = mongoose.model("profiles", ProfileSchema);

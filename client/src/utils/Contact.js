@@ -39,11 +39,13 @@ class Contact extends Component {
     const { name, company, email, text } = this.state;
     const { history } = this.props;
     e.preventDefault();
+    const emailContact = true;
     const newEmailMessage = {
       name,
       company,
       email,
-      text
+      text,
+      emailContact
     };
     this.props.sendEmailMessage(newEmailMessage, history);
   };
@@ -138,12 +140,12 @@ class Contact extends Component {
                 />
 
                 <div className="mx-auto">
+                  {mailMessageContent}
                   <button type="submit" className="btn btn-block bg-dark my-4">
                     <span className="text-white">Send</span>
                   </button>
                 </div>
               </form>
-              {mailMessageContent}
             </div>
           </div>
         </div>

@@ -1,9 +1,9 @@
 import { GET_ERRORS, MESSAGE_MAIL_SENT, MESSAGE_MAIL_LOADING } from "./types";
 import axios from "axios";
-import setAuthToken from "../utils/setAuthToken";
+// import setAuthToken from "../utils/setAuthToken";
 
 export const sendEmailMessage = (emailData, history) => dispatch => {
-  setAuthToken(localStorage.jwtToken);
+  // setAuthToken(localStorage.jwtToken);
   dispatch(mailMessageLoading());
 
   axios

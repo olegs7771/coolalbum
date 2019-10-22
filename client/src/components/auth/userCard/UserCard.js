@@ -14,16 +14,12 @@ class UserCard extends Component {
       avatar: ""
     };
 
-    const id = {
-      id: props.match.params.id
-    };
-    props.getProfile(id);
+    props.getProfile();
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.profile !== this.props.profile) {
       // this.props coming here
-      console.log("this.props", this.props);
     }
   }
 

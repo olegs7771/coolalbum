@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
-import store from "./store";
 
-import Header from "./components/layout/Header";
+import Header from "./components/layout/header/Header";
 import Main from "./components/layout/main/Main";
+import Footer from "./components/layout/footer/Footer";
 import Register from "./components/auth/register/Register";
 import Login from "./components/auth/login/Login";
 import RecoverPassword from "./components/auth/login/RecoverPassword";
@@ -20,12 +20,22 @@ import ProfileEdit from "./components/profile/ProfileEdit";
 
 import jwt_decode from "jwt-decode";
 import { logoutUser } from "./actions/userActions";
-//Avatar
-
+//Posts
+import Post from "./components/layout/posts/Post";
+//Users
+import Users from "./components/layout/users/Users";
+//Inbox Posts
+import Inbox from "./components/layout/inbox/Inbox";
+//Chat
+import Chat from "./components/layout/chat/Chat";
 import "./App.css";
 import setAuthToken from "./utils/setAuthToken";
 import { setCurrentUser } from "./actions/userActions";
+import configureStore from "./store/configureStore";
+import styled from "styled-components";
 
+//
+const store = configureStore();
 //check for token
 if (localStorage.jwtToken) {
   //Set auth token to header
@@ -58,40 +68,59 @@ if (localStorage.jwtToken) {
 
 class App extends Component {
   render() {
+    //styles
+    const Body = styled.section`
+      background-color: rgb(230, 245, 250, 0.1);
+    `;
     return (
       <Provider store={store}>
         <Router>
-          <div className="App">
-            <Header />
-            <div className="container">
-              <Switch>
-                <Route exact path="/" component={Main} />
-                <Route exact path="/login" component={Login} />
-                <Route exact path="/recover_pass" component={RecoverPassword} />
-                <Route
-                  exact
-                  path="/recover_newPass/:token/:_id"
-                  component={RecoverNewPassword}
-                />
-                <Route exact path="/register" component={Register} />
-                <Route exact path="/success_msg" component={SuccessRegMsg} />
-                <Route
-                  exact
-                  path="/confirm_registration/:token/:_id"
-                  component={ConfirmRegister}
-                />
-                <Route exact path="/contact" component={Contact} />
-                <Route exact path="/userCard/:id" component={UserCard} />
-                <Route exact path="/userCard_edit" component={UserCardEdit} />
-                <Route
-                  exact
-                  path="/profile_create/:id"
-                  component={ProfileCreate}
-                />
-                <Route exact path="/profile_edit/:id" component={ProfileEdit} />
-              </Switch>
+          <Body>
+            <div className="App">
+              <Header />
+              <div className="container">
+                <Switch>
+                  <Route exact path="/" component={Main} />
+                  <Route exact path="/login" component={Login} />
+                  <Route
+                    exact
+                    path="/recover_pass"
+                    component={RecoverPassword}
+                  />
+                  <Route
+                    exact
+                    path="/recover_newPass/:token/:_id"
+                    component={RecoverNewPassword}
+                  />
+                  <Route exact path="/register" component={Register} />
+                  <Route exact path="/success_msg" component={SuccessRegMsg} />
+                  <Route
+                    exact
+                    path="/confirm_registration/:token/:_id"
+                    component={ConfirmRegister}
+                  />
+                  <Route exact path="/contact" component={Contact} />
+                  <Route exact path="/userCard/:id" component={UserCard} />
+                  <Route exact path="/userCard_edit" component={UserCardEdit} />
+                  <Route
+                    exact
+                    path="/profile_create/:id"
+                    component={ProfileCreate}
+                  />
+                  <Route
+                    exact
+                    path="/profile_edit/:id"
+                    component={ProfileEdit}
+                  />
+                  <Route exact path="/post" component={Post} />
+                  <Route exact path="/users" component={Users} />
+                  <Route exact path="/inbox" component={Inbox} />
+                  <Route exact path="/chat" component={Chat} />
+                </Switch>
+              </div>
+              <Footer />
             </div>
-          </div>
+          </Body>
         </Router>
       </Provider>
     );

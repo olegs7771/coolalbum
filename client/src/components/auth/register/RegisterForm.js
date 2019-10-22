@@ -4,7 +4,11 @@ import TextFormGroup from "../../textFormGroup/TextFormGroup";
 import { connect } from "react-redux";
 import FaceBookBtn from "../../../utils/FaceBookBtn";
 
-import { registerUser, deleteErrors } from "../../../actions/userActions";
+import {
+  registerUser,
+  deleteErrors,
+  isUserEmailExists
+} from "../../../actions/userActions";
 import { withRouter } from "react-router-dom";
 //intl_phone_input
 import PhoneInput from "react-phone-number-input";
@@ -18,7 +22,8 @@ class RegisterForm extends Component {
     phone: "",
     location: "",
     showLoginBtnFaceBook: false,
-    errors: {}
+    errors: {},
+    message: {}
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -28,7 +33,24 @@ class RegisterForm extends Component {
         errors: this.props.errors
       });
     }
+    if (this.props.message !== prevProps.message) {
+      this.setState({
+        message: this.props.message
+      });
+    }
+    if (prevState.email !== this.state.email) {
+      const data = {
+        email: this.state.email
+      };
+      this.props.isUserEmailExists(data, this.props.history);
+    }
   }
+  //Intering Email field for sending to fetch code
+  onChangeEmail = e => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  };
 
   onChange = e => {
     this.setState({
@@ -48,7 +70,7 @@ class RegisterForm extends Component {
 
       password: this.state.password
     };
-    console.log(this.props);
+    console.log("this.props", this.props);
 
     const { history } = this.props;
     this.props.registerUser(newUser, history);
@@ -63,12 +85,18 @@ class RegisterForm extends Component {
       location,
 
       password,
-      errors
+      errors,
+      message
     } = this.state;
+    // console.log("this.state", this.state);
 
     return (
       <div className="col-md-6 my-3  mx-auto">
-        <div className="text-center h3 ">Register Here</div>
+        <div className="mx-auto" style={{ marginTop: "-1rem" }}>
+          <FaceBookBtn />
+        </div>
+        <div className="mx-auto">Or fill out the forms</div>
+
         <div className="card card-body">
           <div className="container">
             <form onSubmit={this.onSubmit}>
@@ -84,8 +112,9 @@ class RegisterForm extends Component {
                 type="email"
                 value={email}
                 name="email"
-                onChange={this.onChange}
-                error={errors.email}
+                onChange={this.onChangeEmail}
+                error={errors.regEmail}
+                message={message.regEmail}
                 info="We will never share your email with anyone else"
               />
 
@@ -97,7 +126,7 @@ class RegisterForm extends Component {
                   onChange={phone => this.setState({ phone })}
                 />{" "}
                 <br />
-                <div className="">
+                <div className="mb-2" style={{ fontSize: "0.9rem" }}>
                   Your number needed for login with SMS (Optinal)
                 </div>
               </div>
@@ -120,29 +149,17 @@ class RegisterForm extends Component {
             </form>
           </div>
         </div>
-
-        <div className="row my-2">
-          <div className="col-md-5">
-            <hr />
-          </div>
-          <div className="col-md-2">or</div>
-          <div className="col-md-5">
-            <hr />
-          </div>
-          <div className="mx-auto">
-            <FaceBookBtn />
-          </div>
-        </div>
       </div>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  errors: state.errors.errors
+  errors: state.errors.errors,
+  message: state.message.message
 });
 
 export default connect(
   mapStateToProps,
-  { registerUser, deleteErrors }
+  { registerUser, deleteErrors, isUserEmailExists }
 )(withRouter(RegisterForm));

@@ -1,47 +1,73 @@
 const nodemailer = require("nodemailer");
-const mailPass = require("../config/dev_keys").mailPass;
+const mailPass = require("../config/keys").mailPass;
 
 module.exports = function sendMail(data, cb) {
-  //create htmlBody for email (contact us)
-  const htmlBody = `<b>From</b>
-   <ul className='list-group'>
-
-     <li>Name :${data.name}</li>
-     <li>Company :${data.company}</li>
-     <li>Email :${data.email}</li>
-     </ul>
-     <p>${data.text}</p>`;
-
-  //create htmlBody for registration confirmation
-  const htmlRegBody = `Dear ${data.name} </br>
-  We have received  a request to authorize this email on CoolAlbum website
-  Please  <a href=${data.URL}>confirm</a>   to complete your registration
-  `;
-  // create htmlBody for recovering password
-  const htmlRecoverBody = `Dear ${data.name}, please <a href=${
-    data.URL
-  }>follow this</a>  link to create your new password.
-  `;
+  console.log("data in mailer", data);
 
   let html;
 
-  if (data.register) {
-    html = htmlRegBody;
-  }
-  if (data.name) {
+  //create htmlBody for email (contact us)
+  let htmlBody;
+  if (data.emailContact) {
+    htmlBody = `<b>From</b>
+    <ul className='list-group'>
+ 
+      <li>Sender:${data.name}</li>
+      <li>Company :${data.company}</li>
+      <li>From :${data.email}</li>
+      </ul>
+      <p>${data.text}</p>`;
     html = htmlBody;
   }
-  if (data.recover) {
-    html = htmlRecoverBody;
-  }
 
+  //create htmlBody for registration confirmation
+  let htmlRegBody;
+  let to;
+  if (data.register) {
+    htmlRegBody = `Dear ${data.name} </br>
+    We have received  a request to authorize this email on CoolAlbum website
+    Please  <a href=${data.urlReg}>confirm</a>   to complete your registration
+    `;
+    html = htmlRegBody;
+    to = data.email;
+    console.log("html register");
+    console.log("to ", to);
+  }
+  // create htmlBody for recovering password
+  let htmlRecoverBody;
+  if (data.recover) {
+    console.log("html recover");
+    htmlRecoverBody = `Dear ${data.name}, please <a href=${data.urlReg}>follow this</a>  link to create your new password.
+   `;
+    html = htmlRecoverBody;
+    to ? (to = data.email) : (to = "olegs777@bezeqint.net");
+    to = data.email;
+
+    console.log("html recover");
+    console.log("to ", to);
+  }
+  if (to === undefined) {
+    to = "olegs777@bezeqint.net";
+  }
+  // let transporter = nodemailer.createTransport({
+  //   host: "185.197.74.181",
+  //   port: 465,
+  //   secure: true, // true for 465, false for other ports
+  //   auth: {
+  //     user: "coolalbum@coolalbum.info", // generated ethereal user
+  //     pass: mailPass // generated ethereal password
+  //   },
+  //   tls: {
+  //     rejectUnauthorized: false
+  //   }
+  // });
   let transporter = nodemailer.createTransport({
-    host: "185.197.74.181",
-    port: 587,
-    secure: false, // true for 465, false for other ports
+    host: "smtp.googlemail.com",
+    port: 465,
+    secure: true, // true for 465, false for other ports
     auth: {
-      user: "coolalbum@coolalbum.info", // generated ethereal user
-      pass: mailPass // generated ethereal password
+      user: "olegs7771", // generated ethereal user
+      pass: "maspena0503054422" // generated ethereal password
     },
     tls: {
       rejectUnauthorized: false
@@ -51,7 +77,7 @@ module.exports = function sendMail(data, cb) {
   let info = transporter.sendMail(
     {
       from: '"CoolAlbum 👻" <coolalbum@coolalbum.info>', // sender address
-      to: "olegs777@bezeqint.net", // list of receivers
+      to, // list of receivers//to ---> email of recover user
       subject: "CoolAlbum", // Subject line
       text: "Hello world?", // plain text body
       html // html body

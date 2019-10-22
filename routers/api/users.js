@@ -21,7 +21,7 @@ const validator = require("validator");
 router.post("/register", (req, res) => {
   const { errors, isValid } = validateRegisterInput(req.body);
 
-  console.log("req.body", req.body);
+  // console.log("req.body", req.body);
 
   if (!isValid) {
     return res.status(400).json(errors);
@@ -62,18 +62,21 @@ router.post("/register", (req, res) => {
 
         newUser.save().then(user => {
           //create data object for mailer trasporter
+          let urlConfirm;
+          if (process.env.NODE_ENV !== "production") {
+            urlConfirm = `https://localhost:3000/confirm_registration/${user.token}/${user._id}`;
+          } else {
+            urlConfirm = `https://morning-thicket-46114.herokuapp.com/confirm_registration/${user.token}/${user._id}`;
+          }
 
-          const urlConfirm = `https://localhost:3000/confirm_registration/${
-            user.token
-          }/${user._id}`;
-          const register = "Register";
+          const register = true;
           const data = {
             token: user.token,
             name: user.name,
             email: user.email,
             register,
 
-            URL: urlConfirm
+            urlReg: urlConfirm
           };
           sendMail(data, response => {
             console.log(response.messageId);
@@ -122,8 +125,10 @@ router.post("/confirmRegistration", (req, res) => {
             location: user.location,
             bio: user.bio,
             password, //hashed
+            unhashedPassword: user.password,
             avatar,
             password,
+
             date: user.date
           };
 
@@ -140,6 +145,7 @@ router.post("/confirmRegistration", (req, res) => {
                 $set: {
                   confirmed: true,
                   password,
+                  createdAt: "",
                   avatar
                 }
               }
@@ -158,7 +164,7 @@ router.post("/confirmRegistration", (req, res) => {
 // // @desc /Login User
 // // @route POST /api/users/register
 // // @access Public
-
+let sess; //session object
 router.post("/login", (req, res) => {
   //First line of validation
 
@@ -182,30 +188,45 @@ router.post("/login", (req, res) => {
       return res.status(400).json({ email: "something wrong.." });
     }
     //user found , we can delete tempToken form db
-    User.update({ email }, { $unset: { token: "" } }).then(() => {
-      bcrypt.compare(password, user.password).then(isMatch => {
-        if (isMatch) {
-          //password from form compared to password from db(user matched)
-          // user obtains jwt
-          //1. create JWT payload with user info
-          const payload = {
-            id: user._id,
-            name: user.name,
-            email: user.email,
-            phone: user.phone,
-            avatar: user.avatar,
-            location: user.location,
-            bio: user.bio,
-            date: user.date
-          };
-          //creating token for exp 10h
-          jwt.sign(payload, keys, { expiresIn: 36000 }, (err, token) => {
-            res.json({ success: true, token: "bearer  " + token });
+    User.updateOne({ email }, { $unset: { token: "" } }).then(() => {
+      bcrypt
+        .compare(password, user.password)
+        .then(isMatch => {
+          if (isMatch) {
+            //password from form compared to password from db(user matched)
+            // user obtains jwt
+            //1. create JWT payload with user info
+            const payload = {
+              id: user._id,
+              name: user.name,
+              email: user.email,
+              password,
+              phone: user.phone,
+              avatar: user.avatar,
+              location: user.location,
+              bio: user.bio,
+              date: user.date
+            };
+            //creating token for exp 10h
+            jwt.sign(payload, keys, { expiresIn: 36000 }, (err, token) => {
+              res.json({ success: true, token: "bearer  " + token });
+            });
+
+            console.log("user.name", user.name);
+            const onlineUser = user.name;
+
+            // console.log("req.app.io", req.app.io);
+
+            req.app.io.emit("online", onlineUser);
+          } else {
+            return res.status(400).json({ password: "passport wrong" });
+          }
+        })
+        .catch(err => {
+          res.status(401).json({
+            password: "Login with Facebook for this E-Mail"
           });
-        } else {
-          return res.status(400).json({ password: "passport wrong" });
-        }
-      });
+        });
     });
   });
 });
@@ -222,6 +243,41 @@ router.get(
   }
 );
 
+//get all users
+router.post("/all", (req, res) => {
+  if (req.body.id) {
+    console.log("req.body.id", req.body.id);
+    const _id = req.body.id;
+    //show all exept logged user
+    User.find({
+      _id: {
+        $nin: {
+          _id
+        }
+      }
+    })
+      .then(users => {
+        if (!users) {
+          res.status(200).json({ message: "No users" });
+        }
+        //here we create filter to exclude auth user
+
+        res.status(200).json(users);
+      })
+      .catch(err => {
+        res.status(400).json(err);
+      });
+  } else {
+    User.find()
+      .then(users => {
+        res.status(200).json(users);
+      })
+      .catch(err => {
+        res.status(400).json(err);
+      });
+  }
+});
+
 //auth with facebook
 
 router.post(
@@ -234,12 +290,13 @@ router.post(
   (req, res) => {
     //generate token
     // create JWT with user info
+    //set location
+    res.setHeader("set-cookie", ["SameSite=Strict"]);
+
     const payload = {
       id: req.user.id,
       name: req.user.name,
       email: req.user.email,
-      location: "",
-
       avatar: req.user.avatar,
       date: req.user.date,
       location: req.user.location,
@@ -260,7 +317,8 @@ router.post(
       name: req.body.name,
       email: req.body.email,
       location: req.body.location,
-      bio: req.body.bio
+      bio: req.body.bio,
+      phone: req.body.phone
     };
     User.findOneAndUpdate(
       {
@@ -294,6 +352,18 @@ router.post("/email", (req, res) => {
     }
   });
 });
+//check if Email not exists for register form
+
+router.post("/email_register", (req, res) => {
+  const email = req.body.email;
+  User.findOne({ email }).then(user => {
+    if (!user) {
+      return res.status(200).json({ regEmail: "good!" });
+    } else {
+      res.status(400).json({ regEmail: "User with such email already exists" });
+    }
+  });
+});
 
 //send user email with password recovery instructions
 router.post("/recover", (req, res) => {
@@ -302,7 +372,10 @@ router.post("/recover", (req, res) => {
     return res.status(400).json({ loginEmail: "Please fill in Email address" });
   }
   const email = req.body.email;
-  User.findOne({ email }).then(user => {
+  User.findOne({ email }).then((user, err) => {
+    if (err) {
+      console.log("err", err);
+    }
     if (user) {
       //creating body for email
       const payload = {
@@ -317,27 +390,35 @@ router.post("/recover", (req, res) => {
       };
       jwt.sign(payload, keys, { expiresIn: 3600 }, (err, token) => {
         // res.json({ success: true, token: "bearer  " + token });
+        if (err) {
+          throw err;
+        }
+        //define env
+        let urlReg;
+        if (process.env.NODE_ENV === "production") {
+          urlReg = `https://morning-thicket-46114.herokuapp.com/recover_newPass/${token}/${user._id}`;
+        } else {
+          urlReg = `https://localhost:3000/recover_newPass/${token}/${user._id}`;
+        }
 
-        const URL = `https://localhost:3000/recover_newPass/${token}/${
-          user._id
-        }`;
         const name = user.name;
-        const recover = "Recover";
+        const email = user.email;
+        const recover = true;
 
         const data = {
-          URL,
+          urlReg,
           name,
+          email,
           recover
         };
+
         sendMail(data, response => {
           console.log(response.messageId);
           if (response.messageId) {
             console.log("response from mailer", response);
 
             res.status(200).json({
-              loginEmail: `Message with a recovery instructions has been sent to ${
-                response.envelope.to
-              }. Please check Email`
+              loginEmail: `Message with a recovery instructions has been sent to ${response.envelope.to}. Please check Email`
             });
           }
         });
@@ -350,11 +431,11 @@ router.post("/recover", (req, res) => {
 router.post("/password", (req, res) => {
   console.log("req.body", req.body);
   const passport1 = req.body.password1;
-  if (req.body.password1) {
-    if (req.body.password1.length < 6) {
+  if (passport1) {
+    if (passport1.length < 6) {
       return res.status(400).json({ password1: "Too short" });
     }
-    if (req.body.password1.length > 8) {
+    if (passport1.length > 8) {
       return res.status(400).json({ password1: "Too long" });
     }
     res.status(200).json({ password1: "Valid" });

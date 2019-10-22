@@ -91,7 +91,7 @@ router.post(
   "/current",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    Profile.findOne({ user: req.body.id })
+    Profile.findOne({ user: req.user._id })
       .then(profile => {
         if (!profile) {
           return res.status(200).json({});
@@ -131,7 +131,7 @@ router.delete(
           return res.status(401).json({ msg: "No Profile for this user" });
         }
         profile
-          .remove()
+          .deleteOne()
           .then(() => {
             res.status(200).json({ msg: "Profile successefully been deleted" });
           })
