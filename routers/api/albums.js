@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 //Bring in Model (models/User.js)
 const User = require("../../models/User");
-const Profile = require("../../models/Profile");
+const Album = require("../../models/Album");
 
 const passport = require("passport");
 const validateCreateProfileInput = require("../validation/profileCreate");
@@ -14,6 +14,19 @@ router.get("/test", (req, res) => {
   res.status(200).json({ msg: "Test Success" });
 });
 
-//post create or update Profile
+//Get User Albums@Private Route
+router.post(
+  "/albums",
+  (passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Album.findById(req.user.id)
+      .then(albums => {
+        res.status(200).json(albums);
+      })
+      .catch(err => {
+        res.status(400).json({ msg: "No Albums" });
+      });
+  })
+);
 
 module.exports = router;

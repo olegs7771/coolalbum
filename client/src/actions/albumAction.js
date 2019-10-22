@@ -5,9 +5,16 @@ import {
   CLEAR_MESSAGE,
   GET_USER_ALBUMS,
   LOADING_ALBUMS
-
-  // GET_PROFILES
 } from "./types";
 import axios from "axios";
 
-export const getUserAlbums = () => dispatch => {};
+export const getUserAlbums = () => dispatch => {
+  axios
+    .post("/api/albums/albums")
+    .then(res => {
+      console.log("res.data", res.data);
+    })
+    .catch(err => {
+      console.log("err:", err);
+    });
+};

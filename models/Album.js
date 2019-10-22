@@ -3,25 +3,25 @@ const Schema = mongoose.Schema;
 
 //Create Schema
 
-const ProfileSchema = new Schema({
+const AlbumSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
     ref: "users"
   },
-  name: {
+  title: {
     type: String,
     required: true,
     max: 30
   },
 
-  email: {
+  text: {
     type: String,
     required: true
   },
   location: {
     type: String
   },
-  status: {
+  image_path: {
     type: String
   },
 
@@ -31,4 +31,4 @@ const ProfileSchema = new Schema({
   }
 });
 mongoose.set("useCreateIndex", true);
-module.exports = Profile = mongoose.model("profiles", ProfileSchema);
+module.exports = Album = mongoose.model("albums", AlbumSchema);
