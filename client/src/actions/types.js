@@ -5,6 +5,7 @@ export const SET_CURRENT_USER = "SET_CURRENT_USER";
 export const LOGOUT_USER = "LOGOUT_USER";
 
 //Users
+export const GET_USER = "GET_USER";
 export const GET_ALL_USERS = "GET_ALL_USERS";
 export const LOADING_ALL_USERS = "LOADING_ALL_USERS";
 

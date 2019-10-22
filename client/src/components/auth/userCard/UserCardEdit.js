@@ -4,9 +4,8 @@ import { reactLocalStorage } from "reactjs-localstorage";
 import TextFormGroup from "../../textFormGroup/TextFormGroup";
 import TextAreaFormGroup from "../../textFormGroup/TextAreaFormGroup";
 import UserCardAvatar from "./UserCardAvatar";
-import { updateUser } from "../../../actions/userActions";
+import { getUser, updateUser } from "../../../actions/userActions";
 
-import { getProfile } from "../../../actions/profileAction";
 //intl_phone_input
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
@@ -182,9 +181,9 @@ const mapStateToProps = state => ({
   errors: state.errors.errors,
   user: state.auth.user,
   message: state.message.message,
-  profile: state.profile.profile
+  album: state.album.album
 });
 export default connect(
   mapStateToProps,
-  { updateUser, getProfile }
+  { updateUser, getUser }
 )(UserCardEdit);

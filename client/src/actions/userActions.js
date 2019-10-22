@@ -103,6 +103,18 @@ export const logoutUser = history => dispatch => {
   });
 };
 
+//get user
+export const getUser = () => dispatch => {
+  axios
+    .post("/api/users/get_user")
+    .then(res => {
+      console.log("res.data", res.data);
+    })
+    .catch(err => {
+      console.log("err", err);
+    });
+};
+
 //set logged user
 export const setCurrentUser = decoded => {
   return {
@@ -137,6 +149,31 @@ export const authFacebook = (userData, history) => dispatch => {
         type: GET_ERRORS,
         payload: err.response.data
       });
+    });
+};
+
+//Update Avatar
+
+export const updateAvatar = (fd, history, userData) => dispatch => {
+  axios
+    .post("/api/upload/update", fd)
+    .then(res => {
+      console.log("res.data updtaeAvatar", res.data);
+    })
+    .catch(err => {
+      console.log("error update Avatar", err);
+    });
+};
+//Delete Avatar
+
+export const deleteAvatar = () => dispatch => {
+  axios
+    .post("/api/upload/delete")
+    .then(res => {
+      console.log("res.data deleteAvatar", res.data);
+    })
+    .catch(err => {
+      console.log("error delete Avatar", err);
     });
 };
 
