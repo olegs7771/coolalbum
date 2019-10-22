@@ -3,10 +3,6 @@ export const GET_ERRORS = "GET_ERRORS";
 export const CLEAR_ERRORS = "CLEAR_ERRORS";
 export const SET_CURRENT_USER = "SET_CURRENT_USER";
 export const LOGOUT_USER = "LOGOUT_USER";
-//Profiles
-export const GET_PROFILE = "GET_PROFILE ";
-export const GET_PROFILES = "GET_PROFILES ";
-export const LOADING_PROFILE = "LOADING_PROFILE";
 
 //Users
 export const GET_ALL_USERS = "GET_ALL_USERS";
@@ -31,3 +27,5 @@ export const LOADING_POSTS = "LOADING_POSTS";
 //Chat
 export const CHAT_MESSAGE = "CHAT_MESSAGE";
 export const LOAD_CHAT_MESSAGES = "LOAD_CHAT_MESSAGES";
+//Albums
+export const GET_USER_ALBUMS = "GET_USER_ALBUMS";
