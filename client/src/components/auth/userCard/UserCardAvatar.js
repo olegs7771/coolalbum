@@ -4,7 +4,7 @@ import {
   clearErrors,
   updateAvatar,
   deleteAvatar
-} from "../../../actions/userAction";
+} from "../../../actions/userActions";
 
 import { withRouter } from "react-router-dom";
 import { reactLocalStorage } from "reactjs-localstorage";
