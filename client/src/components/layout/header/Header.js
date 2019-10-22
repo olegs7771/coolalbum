@@ -76,6 +76,11 @@ class Header extends Component {
               Chat
             </Link>
           </li>
+          <li className="nav-item">
+            <Link className="nav-link text-white" to="/albums">
+              My Albums
+            </Link>
+          </li>
         </ul>
       );
     } else {

@@ -31,6 +31,9 @@ import setAuthToken from "./utils/setAuthToken";
 import { setCurrentUser } from "./actions/userActions";
 import configureStore from "./store/configureStore";
 import styled from "styled-components";
+//Albums
+import Album from "./components/layout/albums/Album";
+import AlbumCreate from "./components/layout/albums/AlbumCreate";
 
 //
 const store = configureStore();
@@ -105,6 +108,8 @@ class App extends Component {
                   <Route exact path="/users" component={Users} />
                   <Route exact path="/inbox" component={Inbox} />
                   <Route exact path="/chat" component={Chat} />
+                  <Route exact path="/albums" component={Album} />
+                  <Route exact path="/albums_create" component={AlbumCreate} />
                 </Switch>
               </div>
               <Footer />

@@ -31,8 +31,4 @@ const AlbumSchema = new Schema({
   }
 });
 mongoose.set("useCreateIndex", true);
-<<<<<<< HEAD:models/Album.js
-module.exports = Profile = mongoose.model("album", AlbumSchema);
-=======
 module.exports = Album = mongoose.model("albums", AlbumSchema);
->>>>>>> 175de00e6e372553cd0e937cb2c5b39566bd7a20:models/Profile.js
