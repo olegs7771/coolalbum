@@ -3,7 +3,7 @@ import UserCardItem from "./UserCardItem";
 import { Link } from "react-router-dom";
 
 import { connect } from "react-redux";
-import { getProfile } from "../../../actions/profileAction";
+import { getUserAlbums } from "../../../actions/albumAction";
 import Spinner from "../../../utils/Spinner";
 
 class UserCard extends Component {
@@ -101,10 +101,10 @@ class UserCard extends Component {
 
 const mapStateToProps = state => ({
   user: state.auth.user,
-  profile: state.profile
+  album: state.album
 });
 
 export default connect(
   mapStateToProps,
-  { getProfile }
+  { getUserAlbums }
 )(UserCard);
