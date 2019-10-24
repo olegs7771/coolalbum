@@ -69,6 +69,15 @@ if (localStorage.jwtToken) {
 
 class App extends Component {
   render() {
+    const authState = store.getState();
+
+    if (
+      !authState.auth.isAuthenticated &&
+      window.location.pathname !== "/login"
+    ) {
+      window.location.href = "/login";
+    }
+
     //styles
     const Body = styled.section`
       background-color: rgb(230, 245, 250, 0.1);
