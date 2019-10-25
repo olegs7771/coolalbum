@@ -5,7 +5,7 @@ const User = require("../../models/User");
 const Album = require("../../models/Album");
 
 const passport = require("passport");
-const validateCreateProfileInput = require("../validation/profileCreate");
+const validateAlbumCreate = require("../validation/albumCreate");
 
 const isEmpty = require("../validation/isEmpty");
 
@@ -26,6 +26,16 @@ router.post(
       .catch(empty => {
         res.status(200).json({ msg: "No Albums For this User" });
       });
+  }
+);
+
+//Update/Create Album
+
+router.post(
+  "/update",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    console.log("req.body", req.body);
   }
 );
 

@@ -4,7 +4,7 @@ const router = express.Router();
 const validationEmailFormInput = require("../validation/emailForm");
 const passport = require("passport");
 
-const sendMail = require("../../mailer/transporter");
+const sendMail = require("../../utils/mailer/transporter");
 
 // Sending Email Message
 

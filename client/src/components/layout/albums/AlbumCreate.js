@@ -2,28 +2,32 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import TextFormGroup from "../../textFormGroup/TextFormGroup";
 import TextAreaFormGroup from "../../textFormGroup/TextAreaFormGroup";
+import { updateAlbum } from "../../../actions/albumAction";
 
 export class AlbumCreate extends Component {
   state = {
-    album_title: "",
-    album_desc: "",
-    theme_image_selected: null,
+    title: "",
+    desc: "",
+    theme_selected: null,
+    errors: {},
+    message: {},
     rotation: 0
   };
   //Select File
   _selectFile = e => {
     console.log("e.target", e.target.files[0]);
     this.setState({
-      theme_image_selected: URL.createObjectURL(e.target.files[0])
+      theme_selected: URL.createObjectURL(e.target.files[0]),
+      theme_upload: e.target.files[0]
     });
   };
   //Loaded Image
-  _onLoadImage = ({ target: img }) => {
-    console.log("img.naturalWidth", img.naturalWidth);
-    console.log("img.naturalHeight", img.naturalHeight);
-    console.log("img.offsetWidth", img.offsetWidth);
-    console.log("img.offsetHeight", img.offsetHeight);
-  };
+  // _onLoadImage = ({ target: img }) => {
+  //   console.log("img.naturalWidth", img.naturalWidth);
+  //   console.log("img.naturalHeight", img.naturalHeight);
+  //   console.log("img.offsetWidth", img.offsetWidth);
+  //   console.log("img.offsetHeight", img.offsetHeight);
+  // };
   //Rotate Image
   _rotateImage = () => {
     this.setState({
@@ -33,8 +37,19 @@ export class AlbumCreate extends Component {
 
   //Create Album
   _createAlbum = e => {
+    //create FormData
+    const fd = new FormData();
+    fd.append("album_theme", this.state.theme_upload);
+
+    const newAlbumData = {
+      title: this.state.title,
+      desc: this.state.desc,
+      theme_img: fd
+    };
+
     e.preventDefault();
-    console.log("submitted");
+    console.log("submitted data :", newAlbumData);
+    this.props.updateAlbum(newAlbumData);
   };
   render() {
     const { name } = this.props.auth.user;
@@ -50,20 +65,20 @@ export class AlbumCreate extends Component {
           <div className="col-md-6 ">
             <form onSubmit={this._createAlbum}>
               <TextFormGroup
-                value={this.state.album_title}
+                value={this.state.title}
                 placeholder="Choose Title for Album"
                 onChange={e =>
                   this.setState({
-                    album_title: e.target.value
+                    title: e.target.value
                   })
                 }
               />
               <TextAreaFormGroup
                 placeholder="Some Description of Album"
-                value={this.state.album_desc}
+                value={this.state.desc}
                 onChange={e =>
                   this.setState({
-                    album_desc: e.target.value
+                    desc: e.target.value
                   })
                 }
               />
@@ -82,15 +97,16 @@ export class AlbumCreate extends Component {
               </button>
             </form>
           </div>
-          {this.state.theme_image_selected ? (
+          {this.state.theme_selected ? (
             <div className="col-md-6  pt-2 pb-5  ">
               <img
                 onLoad={this._onLoadImage}
-                src={this.state.theme_image_selected}
+                src={this.state.theme_selected}
                 alt=""
                 style={{
                   width: "100%",
-                  transform: `rotate(${this.state.rotation}deg)`
+                  transform: `rotate(${this.state.rotation}deg)`,
+                  borderRadius: 5
                 }}
                 onClick={this._rotateImage}
               />
@@ -106,7 +122,7 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = { updateAlbum };
 
 export default connect(
   mapStateToProps,
