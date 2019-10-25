@@ -41,19 +41,6 @@ class Header extends Component {
     if (this.props.auth.user.name) {
       this.props.getWeather();
     }
-
-    //Rotate Avatar in Header if not taken from Facebook or Gravatar
-    const reg = new RegExp("^(http|https|//www)://", "i");
-    if (!reg.test(this.props.auth.user.avatar)) {
-      this.setState({
-        rotateAvatar: true
-      });
-    } else {
-      console.log(false);
-      this.setState({
-        rotateAvatar: false
-      });
-    }
   }
   componentDidUpdate(prevProps) {
     if (prevProps.post !== this.props.post) {
@@ -65,6 +52,21 @@ class Header extends Component {
     //get posts after user logged
     if (prevProps.auth !== this.props.auth) {
       this.props.getPosts();
+
+      //Rotate Avatar in Header if not taken from Facebook or Gravatar
+      const reg = new RegExp("^(http|https|//www)://", "i");
+      if (!reg.test(this.props.auth.user.avatar)) {
+        console.log("false");
+
+        this.setState({
+          rotateAvatar: true
+        });
+      } else {
+        console.log("true");
+        this.setState({
+          rotateAvatar: false
+        });
+      }
     }
   }
 
