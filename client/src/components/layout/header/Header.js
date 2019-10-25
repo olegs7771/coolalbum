@@ -14,7 +14,8 @@ import WeatherWidGet from "../../../utils/WeatherWidGet";
 
 class Header extends Component {
   state = {
-    posts: null
+    posts: null,
+    rotateAvatar: false
   };
 
   //Logout
@@ -39,6 +40,19 @@ class Header extends Component {
     // Fetch Weather API from OPEN WEATHER MAP
     if (this.props.auth.user.name) {
       this.props.getWeather();
+    }
+
+    //Rotate Avatar in Header if not taken from Facebook or Gravatar
+    const reg = new RegExp("^(http|https|//www)://", "i");
+    if (!reg.test(this.props.auth.user.avatar)) {
+      this.setState({
+        rotateAvatar: true
+      });
+    } else {
+      console.log(false);
+      this.setState({
+        rotateAvatar: false
+      });
     }
   }
   componentDidUpdate(prevProps) {
@@ -132,9 +146,13 @@ class Header extends Component {
                         alt=""
                         className="rounded-circle ml-2 "
                         style={{
-                          width: "30px",
-                          height: "30px",
-                          border: "2px solid white"
+                          width: "50px",
+                          height: "50px",
+                          border: "2px solid white",
+
+                          transform: this.state.rotateAvatar
+                            ? "rotate(90deg)"
+                            : null
                         }}
                       />
                     ) : (
