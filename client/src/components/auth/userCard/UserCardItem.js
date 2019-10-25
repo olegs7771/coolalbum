@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 
 class UserCardItem extends Component {
   state = {
-    rotateAvatar: false
+    rotateAvatar: false,
+    paddingImg: false
   };
   componentDidMount() {
     console.log("this.props.avatar", this.props.avatar);
@@ -21,6 +22,17 @@ class UserCardItem extends Component {
       });
     }
   }
+  _onloadImage = ({ target: img }) => {
+    console.log("offsetWidth", img.offsetWidth);
+    console.log("offsetHeight", img.offsetHeight);
+    if (img.offsetHeight !== 242) {
+      console.log("padding true");
+
+      this.setState({
+        paddingImg: true
+      });
+    }
+  };
 
   render() {
     const { name, email, avatar, phone, date, location } = this.props;
@@ -67,16 +79,18 @@ class UserCardItem extends Component {
           </div>
         </div>
         <div className="col-md-4  ">
-          <div className="px-4">
+          <div className="px-4 pt-2">
             <img
               src={avatar}
               className="my-3  "
               style={{
                 width: "100%",
-                transform: this.state.rotateAvatar ? "rotate(90deg)" : null
+                transform: this.state.rotateAvatar ? "rotate(90deg)" : null,
+                paddingTop: this.state.paddingImg ? "60px" : null,
+                paddingBottom: this.state.paddingImg ? "60px" : null
               }}
               alt=""
-              onLoad={({ target: img }) => console.log("img", img)}
+              onLoad={this._onloadImage}
             />
           </div>
         </div>

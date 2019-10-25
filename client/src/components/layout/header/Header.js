@@ -58,12 +58,10 @@ class Header extends Component {
       console.log("this.props.auth.user.avatar", this.props.auth.user.avatar);
 
       if (reg.test(this.props.auth.user.avatar)) {
-        console.log("true");
         this.setState({
           rotateAvatar: false
         });
       } else {
-        console.log("false");
         this.setState({
           rotateAvatar: true
         });
