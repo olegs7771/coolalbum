@@ -82,6 +82,7 @@ class LoginForm extends Component {
                 onChange={this.onChangeMail}
                 error={errors.loginEmail}
                 message={message.loginEmail}
+                style={{ marginTop: "-35px" }}
               />
               <TextFormGroup
                 placeholder="Password..."
@@ -89,6 +90,7 @@ class LoginForm extends Component {
                 name="password"
                 onChange={this.onChange}
                 error={errors.password}
+                style={{ marginTop: "-35px" }}
               />
 
               <div className="form-check form-check-inline ">

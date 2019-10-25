@@ -37,7 +37,9 @@ class Header extends Component {
       this.props.getPosts();
     }
     // Fetch Weather API from OPEN WEATHER MAP
-    this.props.getWeather();
+    if (this.props.auth.user.name) {
+      this.props.getWeather();
+    }
   }
   componentDidUpdate(prevProps) {
     if (prevProps.post !== this.props.post) {

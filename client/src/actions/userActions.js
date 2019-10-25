@@ -154,9 +154,6 @@ export const authFacebook = (userData, history) => dispatch => {
 
 // Create new or Update Profile Avatar
 export const updateAvatar = (fd, history, userData) => dispatch => {
-  console.log("userData", userData);
-  console.log("fd", fd);
-
   axios
     .post("/api/uploads/update", fd)
     .then(res => {
