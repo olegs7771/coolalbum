@@ -36,6 +36,7 @@ const app = express();
 
 // Public folder
 app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "albums")));
 
 //bodyParser MiddleWare
 

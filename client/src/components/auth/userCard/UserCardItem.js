@@ -49,9 +49,10 @@ class UserCardItem extends Component {
           <div className=" ">
             <img
               src={avatar}
-              className="my-3 rounded-circle "
-              style={{ width: "200px", height: "200px" }}
+              className="my-3  "
+              style={{ width: "100%" }}
               alt=""
+              onLoad={({ target: img }) => console.log("img", img)}
             />
           </div>
         </div>
