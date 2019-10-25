@@ -8,7 +8,7 @@ class UserCardItem extends Component {
   };
   componentDidMount() {
     console.log("this.props.avatar", this.props.avatar);
-    const reg = new RegExp("^(http|https|//www)://", "i");
+    const reg = new RegExp("^(http|https)://|^//www", "i");
     if (!reg.test(this.props.avatar)) {
       console.log("true");
       this.setState({
@@ -66,8 +66,8 @@ class UserCardItem extends Component {
             <div className="a btn btn-danger ml-2">Delete Profile</div>
           </div>
         </div>
-        <div className="col-md-4 border ">
-          <div className="border" style={{ paddingTop: 60, paddingBottom: 60 }}>
+        <div className="col-md-4  ">
+          <div className="px-4">
             <img
               src={avatar}
               className="my-3  "

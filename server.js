@@ -128,3 +128,17 @@ app.use((req, res, next) => {
   res.locals["socketio"] = io;
   next();
 });
+
+const reg = new RegExp("^(http|https)://|^//www", "i");
+console.log(
+  "test reg",
+  reg.test(
+    "https://graph.facebook.com/v2.6/10157153784748169/picture?type=large"
+  )
+);
+console.log(
+  "test reg",
+  reg.test(
+    "//www.gravatar.com/avatar/d415f0e30c471dfdd9bc4f827329ef48?s=200&r=pg&d=mm"
+  )
+);
