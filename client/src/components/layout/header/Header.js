@@ -54,17 +54,18 @@ class Header extends Component {
       this.props.getPosts();
 
       //Rotate Avatar in Header if not taken from Facebook or Gravatar
-      const reg = new RegExp("^(http|https|//www)://", "i");
-      if (!reg.test(this.props.auth.user.avatar)) {
-        console.log("false");
+      const reg = new RegExp("^(http|https)://|^//www", "i");
+      console.log("this.props.auth.user.avatar", this.props.auth.user.avatar);
 
-        this.setState({
-          rotateAvatar: true
-        });
-      } else {
+      if (reg.test(this.props.auth.user.avatar)) {
         console.log("true");
         this.setState({
           rotateAvatar: false
+        });
+      } else {
+        console.log("false");
+        this.setState({
+          rotateAvatar: true
         });
       }
     }
