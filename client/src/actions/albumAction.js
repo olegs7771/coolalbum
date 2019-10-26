@@ -28,7 +28,7 @@ export const getUserAlbums = () => dispatch => {
 //Create/update  Album
 export const updateAlbum = data => dispatch => {
   console.log("data", data);
-  axios.post("/api/albums/update", data.theme_img).then(res => {
+  axios.post("/api/albums/update", data).then(res => {
     console.log("res.data", res.data);
   });
 };

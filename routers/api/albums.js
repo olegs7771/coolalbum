@@ -6,6 +6,12 @@ const Album = require("../../models/Album");
 
 const passport = require("passport");
 const validateAlbumCreate = require("../validation/albumCreate");
+//Bring compressor
+const compressor = require("../../utils/multer/compressor");
+const compressImg = compressor();
+//Bring in Multer
+const fileUploader = require("../../utils/multer/multer");
+const upload = fileUploader();
 
 const isEmpty = require("../validation/isEmpty");
 
@@ -36,6 +42,12 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     console.log("req.body", req.body);
+    const { errors, isValid } = validateAlbumCreate(req.body);
+        upload(req,res,err=>{
+          if (req.file === undefined) {
+            return res.status(400).json({ error: "Please select file" });
+        })
+
   }
 );
 
