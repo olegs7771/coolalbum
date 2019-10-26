@@ -43,11 +43,10 @@ router.post(
   (req, res) => {
     console.log("req.body", req.body);
     const { errors, isValid } = validateAlbumCreate(req.body);
-        upload(req,res,err=>{
-          if (req.file === undefined) {
-            return res.status(400).json({ error: "Please select file" });
-        })
-
+    // upload(req,res,err=>{
+    //   if (req.file === undefined) {
+    //     return res.status(400).json({ error: "Please select file" });
+    // })
   }
 );
 
