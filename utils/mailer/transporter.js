@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer");
-const mailPass = require("../config/keys").mailPass;
+const mailPass = require("../../config/keys").mailPass;
 
 module.exports = function sendMail(data, cb) {
   console.log("data in mailer", data);

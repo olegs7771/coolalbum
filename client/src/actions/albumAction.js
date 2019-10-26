@@ -8,6 +8,7 @@ import {
 } from "./types";
 import axios from "axios";
 
+//Get Users Albums
 export const getUserAlbums = () => dispatch => {
   dispatch(loadingAlbum());
   axios
@@ -22,6 +23,14 @@ export const getUserAlbums = () => dispatch => {
     .catch(err => {
       console.log("err:", err);
     });
+};
+
+//Create/update  Album
+export const updateAlbum = data => dispatch => {
+  console.log("data", data);
+  axios.post("/api/albums/update", data).then(res => {
+    console.log("res.data", res.data);
+  });
 };
 
 //Loading

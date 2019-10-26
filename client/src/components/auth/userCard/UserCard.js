@@ -40,7 +40,7 @@ class UserCard extends Component {
         />
       );
     } else {
-
+      userContent = <Spinner />;
     }
 
     return <div style={{ backgroundColor: "#95d0f0" }}>{userContent}</div>;

@@ -24,7 +24,8 @@ class UserCardAvatar extends Component {
 
       //Here Avatar string update State
       selectedImage: props.avatar,
-      uploadImage: ""
+      uploadImage: "",
+      rotation: 0
     };
     this.fileSelectedHandlert = this.fileSelectedHandler.bind(this);
     // this.fileUploadHandler = this.fileUploadHandler.bind(this);
@@ -71,11 +72,32 @@ class UserCardAvatar extends Component {
 
   //Select Avatar from browser to tmp memory
   fileSelectedHandler = e => {
+    console.log("selected file :", e.target.files[0]);
+
     this.setState({
       selectedImage: URL.createObjectURL(e.target.files[0]),
       uploadImage: e.target.files[0]
     });
     this.props.clearErrors();
+  };
+
+  //OnLoaded Image
+
+  _onLoadImage = e => {
+    // console.log("offsetWidth :", img.offsetWidth);
+    // console.log("offsetHeight :", img.offsetHeight);
+    console.log("e.target", e.target);
+  };
+
+  _rotateImage = e => {
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        rotation: prevState.rotation + 90
+      };
+    });
+    console.log("e.target :", e.target);
+    console.log("this.state.rotation", this.state.rotation);
   };
 
   //Upload Avatar from browser to db
@@ -97,6 +119,7 @@ class UserCardAvatar extends Component {
     };
     const fd = new FormData();
     fd.append("myImage", this.state.uploadImage);
+
     this.props.updateAvatar(fd, this.props.history, userData);
   };
   //Delete Avatar in DB
@@ -126,12 +149,22 @@ class UserCardAvatar extends Component {
     return (
       <div>
         <div className="">
-          <img
-            src={selectedImage}
-            className="rounded"
-            style={{ width: "350px" }}
-            alt=""
-          />
+          <div className="p-5 ">
+            <img
+              onLoad={this._onLoadImage}
+              src={selectedImage}
+              className="rounded"
+              style={{
+                width: "100%",
+                transform: `rotate(${this.state.rotation}deg)`
+              }}
+              alt=""
+              onClick={this._rotateImage}
+            />
+          </div>
+          <div className="my-0">
+            <span className="h6 text-success">Click Image To Rotate</span>
+          </div>
           <br />
           <div className="">
             {errors.error ? (

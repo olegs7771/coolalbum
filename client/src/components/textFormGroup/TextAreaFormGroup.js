@@ -24,6 +24,7 @@ const TextAreaFormGroup = ({
         rows="1"
         onChange={onChange}
         className={classnames("form-control", { "is-invalid": error })}
+        style={{ marginTop: "-25px" }}
       />
       <small className="text-muted"> {info}</small>
       {error && <div className="invalid-feedback">{error}</div>}
