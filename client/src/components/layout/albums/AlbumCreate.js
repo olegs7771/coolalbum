@@ -37,19 +37,21 @@ export class AlbumCreate extends Component {
 
   //Create Album
   _createAlbum = e => {
+    e.preventDefault();
+
     //create FormData
-    const fd = new FormData();
-    fd.append("album_theme", this.state.theme_upload);
+    const FD = new FormData();
+    FD.append("album_theme", this.state.theme_upload);
+    FD.append("title", this.state.title);
+    FD.append("desc", this.state.desc);
 
     const newAlbumData = {
       title: this.state.title,
-      desc: this.state.desc,
-      theme_img: fd
+      desc: this.state.desc
     };
 
-    e.preventDefault();
-    console.log("submitted data :", newAlbumData);
-    this.props.updateAlbum(newAlbumData);
+    // console.log("submitted data :", newAlbumData);
+    this.props.updateAlbum(FD);
   };
   render() {
     const { name } = this.props.auth.user;

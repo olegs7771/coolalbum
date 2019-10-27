@@ -26,9 +26,8 @@ export const getUserAlbums = () => dispatch => {
 };
 
 //Create/update  Album
-export const updateAlbum = data => dispatch => {
-  console.log("data", data);
-  axios.post("/api/albums/update", data).then(res => {
+export const updateAlbum = FD => dispatch => {
+  axios.post("api/albums/update", FD).then(res => {
     console.log("res.data", res.data);
   });
 };
