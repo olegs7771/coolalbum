@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const path = require("path");
 //Bring in Model (models/User.js)
 const User = require("../../models/User");
 const Album = require("../../models/Album");
@@ -10,7 +11,7 @@ const validateAlbumCreate = require("../validation/albumCreate");
 const compressor = require("../../utils/multer/compressor");
 const compressImg = compressor();
 //Bring in Multer
-const fileUploader = require("../../utils/multer/multer");
+const fileUploader = require("../../utils/multer/multerAlbumTheme");
 const upload = fileUploader();
 
 const isEmpty = require("../validation/isEmpty");
@@ -27,10 +28,14 @@ router.post(
   (req, res) => {
     Album.findById(req.user.id)
       .then(albums => {
-        res.status(200).json(albums);
+        if (!albums) {
+          res.status(401).json({ Msg: "No Albums" });
+        } else {
+          res.status(200).json({ Msg: "Albums" });
+        }
       })
-      .catch(empty => {
-        res.status(200).json({ msg: "No Albums For this User" });
+      .catch(err => {
+        res.status(400).json(err);
       });
   }
 );
@@ -42,11 +47,23 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     console.log("req.body", req.body);
-    const { errors, isValid } = validateAlbumCreate(req.body);
-    // upload(req,res,err=>{
-    //   if (req.file === undefined) {
-    //     return res.status(400).json({ error: "Please select file" });
-    // })
+
+    upload(req, res, err => {
+      // console.log("req.file", req.file);
+      // console.log("req.body.title", req.body.title);
+      // console.log("req.body.desc", req.body.desc);
+
+      if (req.file === undefined) {
+        return res.status(200).json({ error: "Please select file" });
+      }
+      if (err) {
+        res.status(400).json({ error: err });
+      } else {
+        //No Errors in uploadin image
+        // if(req.file.filename){
+        // }
+      }
+    });
   }
 );
 

@@ -10,7 +10,7 @@ const compressImg = compressor();
 
 const isEmpty = require("../validation/isEmpty");
 //Bring in Multer
-const fileUploader = require("../../utils/multer/multer");
+const fileUploader = require("../../utils/multer/multerAvatar");
 const upload = fileUploader();
 
 //File System
