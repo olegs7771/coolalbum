@@ -8,7 +8,7 @@ const Album = require("../../models/Album");
 const passport = require("passport");
 const validateAlbumCreate = require("../validation/albumCreate");
 //Bring compressor
-const compressor = require("../../utils/multer/compressor");
+const compressor = require("../../utils/compressor/compressorAlbumTheme");
 const compressImg = compressor();
 //Bring in Multer
 const fileUploader = require("../../utils/multer/multerAlbumTheme");
@@ -60,8 +60,34 @@ router.post(
         res.status(400).json({ error: err });
       } else {
         //No Errors in uploadin image
-        // if(req.file.filename){
-        // }
+        if (req.file.filename) {
+          compressImg(cb => {
+            cb.forEach(elem => {
+              console.log("elem", elem);
+            });
+            if (cb) {
+              //Compression succided!
+              //Create new Album
+              console.log("req.user.id", req.user.id);
+
+              const newAlbum = new Album({
+                uid: req.user.id,
+                title: "some album",
+                text: "some text",
+                location: "some location",
+                image: "some image"
+              });
+              newAlbum
+                .save()
+                .then(album => {
+                  console.log("album saved", album);
+                })
+                .catch(err => {
+                  console.log("err to save albim :", err);
+                });
+            }
+          });
+        }
       }
     });
   }
