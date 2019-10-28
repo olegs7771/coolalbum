@@ -5,7 +5,7 @@ const passport = require("passport");
 //Bring in Models
 const User = require("../../models/User");
 //Bring compressor
-const compressor = require("../../utils/multer/compressor");
+const compressor = require("../../utils/compressor/compressorAvatar");
 const compressImg = compressor();
 
 const isEmpty = require("../validation/isEmpty");
