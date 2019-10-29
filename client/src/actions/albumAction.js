@@ -8,7 +8,7 @@ import {
 } from "./types";
 import axios from "axios";
 
-//Get Users Albums
+//Get Users Albums bu uid
 export const getUserAlbums = () => dispatch => {
   dispatch(loadingAlbum());
   axios

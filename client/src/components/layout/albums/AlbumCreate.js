@@ -44,13 +44,6 @@ export class AlbumCreate extends Component {
     FD.append("album_theme", this.state.theme_upload);
     FD.append("title", this.state.title);
     FD.append("desc", this.state.desc);
-
-    const newAlbumData = {
-      title: this.state.title,
-      desc: this.state.desc
-    };
-
-    // console.log("submitted data :", newAlbumData);
     this.props.updateAlbum(FD);
   };
   render() {

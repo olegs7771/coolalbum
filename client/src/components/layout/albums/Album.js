@@ -11,32 +11,18 @@ export class Album extends Component {
 
   render() {
     console.log("this.props.album", this.props.album);
-    const { loading, albums } = this.props;
+    const { loading, albums } = this.props.album;
     let albumsContent;
     if (albums === null || loading) {
       albumsContent = <Spinner />;
     } else {
-      albumsContent = <div>Here ALBUMS</div>;
+      albumsContent = (
+        <div className="col-md-12 border">here come all albums</div>
+      );
     }
 
     return (
-      <div
-        className="row border my-4"
-        style={{ height: albums == null ? 600 : null }}
-      >
-        <div className="h5 mx-auto">
-          {albums == null ? (
-            <div>
-              <span>You do not have any Albums</span>
-
-              <Link className="nav-link " to="/albums_create">
-                Create Album
-              </Link>
-            </div>
-          ) : (
-            <span>Albums</span>
-          )}
-        </div>
+      <div className="row border my-4">
         <div className="col-md-12 my-3">{albumsContent}</div>
       </div>
     );

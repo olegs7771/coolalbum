@@ -8,18 +8,20 @@ const AlbumSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "users"
   },
+  uid: {
+    type: String,
+    required: true
+  },
   title: {
     type: String,
     required: true,
     max: 30
   },
-  text: {
+  desc: {
     type: String,
     required: true
   },
-  location: {
-    type: String
-  },
+
   image: {
     type: String
   },
