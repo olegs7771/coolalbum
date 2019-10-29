@@ -3,41 +3,45 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { getUserAlbums } from "../../../actions/albumAction";
 import Spinner from "../../../utils/Spinner";
+import AlbumItems from "./AlbumItems";
 
 export class Album extends Component {
+  state = {
+    isUserHasAlbums: false
+  };
+
   componentDidMount() {
     this.props.getUserAlbums();
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.album !== this.props.album) {
+      if (this.props.album.albums) {
+        if (this.props.album.albums.length > 0) {
+          this.setState({
+            isUserHasAlbums: true
+          });
+        }
+      }
+    }
+  }
+
   render() {
     console.log("this.props.album", this.props.album);
-    const { loading, albums } = this.props;
+    const { loading, albums } = this.props.album;
     let albumsContent;
     if (albums === null || loading) {
       albumsContent = <Spinner />;
     } else {
-      albumsContent = <div>Here ALBUMS</div>;
+      albumsContent = albums.map(album => (
+        <AlbumItems key={album._id} title={album.title} />
+      ));
     }
 
     return (
-      <div
-        className="row border my-4"
-        style={{ height: albums == null ? 600 : null }}
-      >
-        <div className="h5 mx-auto">
-          {albums == null ? (
-            <div>
-              <span>You do not have any Albums</span>
-
-              <Link className="nav-link " to="/albums_create">
-                Create Album
-              </Link>
-            </div>
-          ) : (
-            <span>Albums</span>
-          )}
-        </div>
-        <div className="col-md-12 my-3">{albumsContent}</div>
+      <div className="row  my-4">
+        <div className="col-md-4 border">text</div>
+        <div className="col-md-8 border">{albumsContent}</div>
       </div>
     );
   }

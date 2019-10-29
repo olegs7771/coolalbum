@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const path = require("path");
+//File System
+const fse = require("fs-extra");
+
 //Bring in Model (models/User.js)
 const User = require("../../models/User");
 const Album = require("../../models/Album");
@@ -21,17 +24,18 @@ router.get("/test", (req, res) => {
   res.status(200).json({ msg: "Test Success" });
 });
 
-//Get User Albums@Private Route
+//Get User Albums by req.user.id
+//@Private Route
 router.post(
   "/albums",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    Album.findById(req.user.id)
+    Album.find({ uid: req.user.id })
       .then(albums => {
         if (!albums) {
           res.status(401).json({ Msg: "No Albums" });
         } else {
-          res.status(200).json({ Msg: "Albums" });
+          res.status(200).json(albums);
         }
       })
       .catch(err => {
@@ -64,28 +68,37 @@ router.post(
           compressImg(cb => {
             cb.forEach(elem => {
               console.log("elem", elem);
-            });
-            if (cb) {
-              //Compression succided!
-              //Create new Album
-              console.log("req.user.id", req.user.id);
+              if (cb) {
+                //Compression succided!
+                //Create new Album
+                const themeImagePath = elem.path.substring(6);
 
-              const newAlbum = new Album({
-                uid: req.user.id,
-                title: "some album",
-                text: "some text",
-                location: "some location",
-                image: "some image"
-              });
-              newAlbum
-                .save()
-                .then(album => {
-                  console.log("album saved", album);
-                })
-                .catch(err => {
-                  console.log("err to save albim :", err);
+                const newAlbum = new Album({
+                  uid: req.user.id,
+                  title: req.body.title,
+                  desc: req.body.desc,
+                  image: themeImagePath
                 });
-            }
+                newAlbum
+                  .save()
+                  .then(album => {
+                    console.log("album saved", album);
+                    //New Album has been created then delete in
+                    // public/theme_image_upload
+                    fse
+                      .remove(req.file.path)
+                      .then(() => {
+                        console.log("deleted in uploads");
+                      })
+                      .catch(err => {
+                        console.log("error to delete in uploads", err);
+                      });
+                  })
+                  .catch(err => {
+                    console.log("err to save albim :", err);
+                  });
+              }
+            });
           });
         }
       }

@@ -4,7 +4,7 @@ const path = require("path");
 module.exports = function fileUploader() {
   // set storage engine
   const storage = multer.diskStorage({
-    destination: "./public/theme_image/",
+    destination: "./public/theme_image_upload/",
     filename: function(req, file, cb) {
       cb(
         null,

@@ -7,7 +7,7 @@ module.exports = function compressor() {
   const compressImg = cb => {
     (async () => {
       const files = await imagemin(
-        ["public/theme_image/*.{jpg,png}"],
+        ["public/theme_image_upload/*.{jpg,png}"],
         "public/theme_image_compressed/",
         {
           plugins: [
