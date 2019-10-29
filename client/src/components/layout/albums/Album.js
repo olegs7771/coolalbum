@@ -34,13 +34,33 @@ export class Album extends Component {
       albumsContent = <Spinner />;
     } else {
       albumsContent = albums.map(album => (
-        <AlbumItems key={album._id} title={album.title} />
+        <AlbumItems
+          key={album._id}
+          image={album.image}
+          title={album.title}
+          desc={album.desc}
+          date={album.date}
+        />
       ));
     }
 
     return (
-      <div className="row  my-4">
-        <div className="col-md-4 border">text</div>
+      <div
+        className="row  my-4"
+        style={{ height: !this.state.isUserHasAlbums ? "600px" : null }}
+      >
+        <div className="col-md-4 border">
+          <div className="my-4">
+            {!this.state.isUserHasAlbums ? (
+              <p className="text-left h5">
+                You don't have any albums. Time to create
+                <Link to="/albums_create"> one</Link>
+              </p>
+            ) : (
+              <p className="text-left">Here you can edit Albums</p>
+            )}
+          </div>
+        </div>
         <div className="col-md-8 border">{albumsContent}</div>
       </div>
     );
