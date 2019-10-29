@@ -3,10 +3,27 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { getUserAlbums } from "../../../actions/albumAction";
 import Spinner from "../../../utils/Spinner";
+import AlbumItems from "./AlbumItems";
 
 export class Album extends Component {
+  state = {
+    isUserHasAlbums: false
+  };
+
   componentDidMount() {
     this.props.getUserAlbums();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.album !== this.props.album) {
+      if (this.props.album.albums) {
+        if (this.props.album.albums.length > 0) {
+          this.setState({
+            isUserHasAlbums: true
+          });
+        }
+      }
+    }
   }
 
   render() {
@@ -16,14 +33,15 @@ export class Album extends Component {
     if (albums === null || loading) {
       albumsContent = <Spinner />;
     } else {
-      albumsContent = (
-        <div className="col-md-12 border">here come all albums</div>
-      );
+      albumsContent = albums.map(album => (
+        <AlbumItems key={album._id} title={album.title} />
+      ));
     }
 
     return (
-      <div className="row border my-4">
-        <div className="col-md-12 my-3">{albumsContent}</div>
+      <div className="row  my-4">
+        <div className="col-md-4 border">text</div>
+        <div className="col-md-8 border">{albumsContent}</div>
       </div>
     );
   }
