@@ -33,12 +33,14 @@ export const updateAlbum = (FD, history) => dispatch => {
   });
   history.push("/albums");
 };
-//Select Album by id
+//Get Album by id
 //@Private Route
 export const selectAlbum = data => dispatch => {
-  dispatch({
-    type: SELECT_ALBUM,
-    payload: data
+  axios.post("/api/albums/fetchAlbum", data).then(res => {
+    dispatch({
+      type: SELECT_ALBUM,
+      payload: res.data
+    });
   });
 };
 

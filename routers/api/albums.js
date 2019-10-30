@@ -43,6 +43,25 @@ router.post(
       });
   }
 );
+//Get Album by id
+//@Private Route
+router.post(
+  "/fetchAlbum",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Album.findById(req.body.id)
+      .then(album => {
+        if (!album) {
+          res.status(401).json({ Msg: "No Albums" });
+        } else {
+          res.status(200).json(album);
+        }
+      })
+      .catch(err => {
+        res.status(400).json(err);
+      });
+  }
+);
 
 //Update/Create Album
 

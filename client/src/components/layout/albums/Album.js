@@ -31,7 +31,11 @@ export class Album extends Component {
     const { loading, albums } = this.props.album;
     let albumsContent;
     if (albums === null || loading) {
-      albumsContent = <Spinner />;
+      albumsContent = (
+        <div className="mx-auto mt-5">
+          <Spinner />
+        </div>
+      );
     } else {
       albumsContent = albums.map(album => (
         <AlbumItems
@@ -66,10 +70,12 @@ export class Album extends Component {
         className="row  my-4"
         style={{ height: !this.state.isUserHasAlbums ? "600px" : null }}
       >
-        <div className="col-md-4 border">
+        <div className="col-md-4 ">
           <div className="my-4">{wellcomeUserContent}</div>
         </div>
-        <div className="col-md-8 border">{albumsContent}</div>
+        <div className="col-md-8  ">
+          <div className="row">{albumsContent}</div>
+        </div>
       </div>
     );
   }
