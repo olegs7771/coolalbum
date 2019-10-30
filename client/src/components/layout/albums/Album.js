@@ -40,8 +40,25 @@ export class Album extends Component {
           title={album.title}
           desc={album.desc}
           date={album.date}
+          id={album._id}
         />
       ));
+    }
+    let wellcomeUserContent;
+    if (this.state.isUserHasAlbums === false) {
+      wellcomeUserContent = (
+        <p className="text-left h5">
+          You don't have any albums. Time to create
+          <Link to="/albums_create"> one</Link>
+        </p>
+      );
+    } else {
+      wellcomeUserContent = (
+        <p className="text-left">
+          Here you can edit Albums or
+          <Link to="/albums_create"> add</Link> anoter one
+        </p>
+      );
     }
 
     return (
@@ -50,16 +67,7 @@ export class Album extends Component {
         style={{ height: !this.state.isUserHasAlbums ? "600px" : null }}
       >
         <div className="col-md-4 border">
-          <div className="my-4">
-            {!this.state.isUserHasAlbums ? (
-              <p className="text-left h5">
-                You don't have any albums. Time to create
-                <Link to="/albums_create"> one</Link>
-              </p>
-            ) : (
-              <p className="text-left">Here you can edit Albums</p>
-            )}
-          </div>
+          <div className="my-4">{wellcomeUserContent}</div>
         </div>
         <div className="col-md-8 border">{albumsContent}</div>
       </div>
