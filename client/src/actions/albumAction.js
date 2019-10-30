@@ -4,7 +4,8 @@ import {
   // GET_MESSAGE,
   // CLEAR_MESSAGE,
   GET_USER_ALBUMS,
-  LOADING_ALBUMS
+  LOADING_ALBUMS,
+  SELECT_ALBUM
 } from "./types";
 import axios from "axios";
 
@@ -26,9 +27,18 @@ export const getUserAlbums = () => dispatch => {
 };
 
 //Create/update  Album
-export const updateAlbum = FD => dispatch => {
+export const updateAlbum = (FD, history) => dispatch => {
   axios.post("api/albums/update", FD).then(res => {
     console.log("res.data", res.data);
+  });
+  history.push("/albums");
+};
+//Select Album by id
+//@Private Route
+export const selectAlbum = data => dispatch => {
+  dispatch({
+    type: SELECT_ALBUM,
+    payload: data
   });
 };
 

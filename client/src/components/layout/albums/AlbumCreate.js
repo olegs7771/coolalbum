@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 import TextFormGroup from "../../textFormGroup/TextFormGroup";
 import TextAreaFormGroup from "../../textFormGroup/TextAreaFormGroup";
 import { updateAlbum } from "../../../actions/albumAction";
@@ -44,7 +45,8 @@ export class AlbumCreate extends Component {
     FD.append("album_theme", this.state.theme_upload);
     FD.append("title", this.state.title);
     FD.append("desc", this.state.desc);
-    this.props.updateAlbum(FD);
+    const history = this.props.history;
+    this.props.updateAlbum(FD, history);
   };
   render() {
     const { name } = this.props.auth.user;
@@ -122,4 +124,4 @@ const mapDispatchToProps = { updateAlbum };
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(AlbumCreate);
+)(withRouter(AlbumCreate));

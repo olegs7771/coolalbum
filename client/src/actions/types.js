@@ -31,3 +31,4 @@ export const LOAD_CHAT_MESSAGES = "LOAD_CHAT_MESSAGES";
 //Albums
 export const GET_USER_ALBUMS = "GET_USER_ALBUMS";
 export const LOADING_ALBUMS = "LOADING_ALBUMS";
+export const SELECT_ALBUM = "SELECT_ALBUM";

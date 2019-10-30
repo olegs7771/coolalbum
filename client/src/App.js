@@ -34,6 +34,7 @@ import styled from "styled-components";
 //Albums
 import Album from "./components/layout/albums/Album";
 import AlbumCreate from "./components/layout/albums/AlbumCreate";
+import AlbumEdit from "./components/layout/albums/AlbumEdit";
 
 //
 const store = configureStore();
@@ -110,6 +111,7 @@ class App extends Component {
                   <Route exact path="/chat" component={Chat} />
                   <Route exact path="/albums" component={Album} />
                   <Route exact path="/albums_create" component={AlbumCreate} />
+                  <Route exact path="/album_edit/:id" component={AlbumEdit} />
                 </Switch>
               </div>
               <Footer />
