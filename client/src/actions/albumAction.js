@@ -1,11 +1,12 @@
 import {
-  // GET_ERRORS,
-  // CLEAR_ERRORS,
-  // GET_MESSAGE,
+  GET_ERRORS,
+  CLEAR_ERRORS,
+  GET_MESSAGE,
   // CLEAR_MESSAGE,
   GET_USER_ALBUMS,
   LOADING_ALBUMS,
-  SELECT_ALBUM
+  SELECT_ALBUM,
+  ADD_IMAGE_TO_GALLERY
 } from "./types";
 import axios from "axios";
 
@@ -19,7 +20,6 @@ export const getUserAlbums = () => dispatch => {
         type: GET_USER_ALBUMS,
         payload: res.data
       });
-      console.log("res.data", res.data);
     })
     .catch(err => {
       console.log("err:", err);
@@ -28,10 +28,27 @@ export const getUserAlbums = () => dispatch => {
 
 //Create/update  Album
 export const updateAlbum = (FD, history) => dispatch => {
-  axios.post("api/albums/update", FD).then(res => {
-    console.log("res.data", res.data);
-  });
-  history.push("/albums");
+  axios
+    .post("api/albums/update", FD)
+    .then(res => {
+      console.log("res.data", res.data);
+      dispatch({
+        type: GET_MESSAGE,
+        payload: res.data
+      });
+      setTimeout(() => {
+        history.push("/albums");
+      }, 3000);
+    })
+    .catch(err => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
+    });
+  // .then(() => {
+  //   history.push("/albums");
+  // });
 };
 //Get Album by id
 //@Private Route
@@ -44,9 +61,20 @@ export const selectAlbum = data => dispatch => {
   });
 };
 
+//Add Image To the Gallery
+export const addImageToGallery = data => dispatch => {
+  console.log("data", data);
+};
+
 //Loading
 export const loadingAlbum = () => {
   return {
     type: LOADING_ALBUMS
+  };
+};
+//Clear Errors
+export const clearErrors = () => {
+  return {
+    type: CLEAR_ERRORS
   };
 };

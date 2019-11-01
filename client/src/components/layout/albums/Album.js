@@ -27,6 +27,8 @@ export class Album extends Component {
   }
 
   render() {
+    console.log("window.innerWidth", window.innerWidth);
+
     console.log("this.props.album", this.props.album);
     const { loading, albums } = this.props.album;
     let albumsContent;
@@ -49,9 +51,9 @@ export class Album extends Component {
       ));
     }
     let wellcomeUserContent;
-    if (this.state.isUserHasAlbums === false) {
+    if (this.state.isUserHasAlbums === false && this.props.loading === false) {
       wellcomeUserContent = (
-        <p className="text-left h5">
+        <p className="text-left ">
           You don't have any albums. Time to create
           <Link to="/albums_create"> one</Link>
         </p>
@@ -70,10 +72,10 @@ export class Album extends Component {
         className="row  my-4"
         style={{ height: !this.state.isUserHasAlbums ? "600px" : null }}
       >
-        <div className="col-md-4 ">
+        <div className="col-md-2 ">
           <div className="my-4">{wellcomeUserContent}</div>
         </div>
-        <div className="col-md-8  ">
+        <div className="col-md-10  ">
           <div className="row">{albumsContent}</div>
         </div>
       </div>

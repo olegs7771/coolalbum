@@ -8,7 +8,8 @@ import {
 const initialState = {
   albums: null,
   album: null,
-  loading: false
+  loading: false,
+  gallery: []
 };
 export default function(state = initialState, action) {
   switch (action.type) {

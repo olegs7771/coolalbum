@@ -52,7 +52,7 @@ router.post(
     Album.findById(req.body.id)
       .then(album => {
         if (!album) {
-          res.status(401).json({ Msg: "No Albums" });
+          res.status(200).json({ Msg: "No Albums" });
         } else {
           res.status(200).json(album);
         }
@@ -72,9 +72,14 @@ router.post(
     console.log("req.body", req.body);
 
     upload(req, res, err => {
-      // console.log("req.file", req.file);
-      // console.log("req.body.title", req.body.title);
-      // console.log("req.body.desc", req.body.desc);
+      const { isValid, errors } = validateAlbumCreate(req.body);
+      if (!isValid) {
+        return res.status(400).json(errors);
+      }
+
+      console.log("req.file", req.file);
+      console.log("req.body.title", req.body.title);
+      console.log("req.body.desc", req.body.desc);
 
       if (req.file === undefined) {
         return res.status(200).json({ error: "Please select file" });
@@ -100,8 +105,11 @@ router.post(
                 });
                 newAlbum
                   .save()
-                  .then(album => {
-                    console.log("album saved", album);
+                  .then(() => {
+                    res.status(200).json({
+                      album: ` Album ${req.body.title} was seccessfuly created`
+                    });
+
                     //New Album has been created then delete in
                     // public/theme_image_upload
                     fse
@@ -114,7 +122,7 @@ router.post(
                       });
                   })
                   .catch(err => {
-                    console.log("err to save albim :", err);
+                    console.log("err to save album! :", err);
                   });
               }
             });

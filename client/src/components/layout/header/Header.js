@@ -27,7 +27,7 @@ class Header extends Component {
     history.push("/");
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     //obtain token from localStorage and
     const token = reactLocalStorage.get("jwtToken");
     if (token) {
@@ -35,7 +35,7 @@ class Header extends Component {
       const decodedToken = jwtDecode(token);
       //  putting it into redux state
       this.props.setCurrentUser(decodedToken);
-      this.props.getPosts();
+      await this.props.getPosts();
     }
     // Fetch Weather API from OPEN WEATHER MAP
     if (this.props.auth.user.name) {
@@ -55,7 +55,6 @@ class Header extends Component {
 
       //Rotate Avatar in Header if not taken from Facebook or Gravatar
       const reg = new RegExp("^(http|https)://|^//www", "i");
-      console.log("this.props.auth.user.avatar", this.props.auth.user.avatar);
 
       if (reg.test(this.props.auth.user.avatar)) {
         this.setState({
