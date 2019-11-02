@@ -27,9 +27,10 @@ export class Album extends Component {
   }
 
   render() {
-    console.log("window.innerWidth", window.innerWidth);
+    // console.log("window.innerWidth", window.innerWidth);
+    console.log("this.state", this.state);
+    console.log("this.props", this.props);
 
-    console.log("this.props.album", this.props.album);
     const { loading, albums } = this.props.album;
     let albumsContent;
     if (albums === null || loading) {
@@ -51,7 +52,7 @@ export class Album extends Component {
       ));
     }
     let wellcomeUserContent;
-    if (this.state.isUserHasAlbums === false && this.props.loading === false) {
+    if (this.state.isUserHasAlbums === false || this.props.loading === false) {
       wellcomeUserContent = (
         <p className="text-left ">
           You don't have any albums. Time to create

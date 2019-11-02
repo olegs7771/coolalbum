@@ -39,14 +39,17 @@ class AlbumItems extends Component {
         onMouseLeave={this._onMouseLeave}
         onClick={this._onClick}
       >
-        <img
-          src={this.props.image}
-          style={{ width: "100%" }}
-          className="card-img-top"
-          alt=""
-        />
+        <div className="p-1" style={{ height: 200 }}>
+          <img
+            src={this.props.image}
+            style={{ width: "100%", height: "100%" }}
+            className="card-img-top"
+            alt=""
+          />
+        </div>
         <div className="card-body">
           <h5 className="card-title">{this.props.title}</h5>
+
           <p className="card-text">{this.props.desc}</p>
         </div>
         <span>Created {Moment(this.props.date).format("DD/MM/YYYY")}</span>
