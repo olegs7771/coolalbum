@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
+
 import TextFormGroup from "../../textFormGroup/TextFormGroup";
 import TextAreaFormGroup from "../../textFormGroup/TextAreaFormGroup";
-import { updateAlbum } from "../../../actions/albumAction";
+import { updateAlbum, clearErrors } from "../../../actions/albumAction";
 
 export class AlbumCreate extends Component {
   state = {
@@ -14,6 +15,14 @@ export class AlbumCreate extends Component {
     message: {},
     rotation: 0
   };
+
+  _onChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+    this.props.clearErrors();
+  };
+
   //Select File
   _selectFile = e => {
     console.log("e.target", e.target.files[0]);
@@ -48,6 +57,16 @@ export class AlbumCreate extends Component {
     const history = this.props.history;
     this.props.updateAlbum(FD, history);
   };
+  //Get Errors And Messages
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.errors !== this.props.errors) {
+      return console.log("this.props.errors", this.props.errors);
+    }
+    if (prevProps.message !== this.props.message) {
+      return console.log("this.props.message", this.props.message);
+    }
+  }
+
   render() {
     const { name } = this.props.auth.user;
     return (
@@ -62,22 +81,18 @@ export class AlbumCreate extends Component {
           <div className="col-md-6 ">
             <form onSubmit={this._createAlbum}>
               <TextFormGroup
+                name="title"
                 value={this.state.title}
                 placeholder="Choose Title for Album"
-                onChange={e =>
-                  this.setState({
-                    title: e.target.value
-                  })
-                }
+                onChange={this._onChange}
+                error={this.props.errors.title}
               />
               <TextAreaFormGroup
+                name="desc"
                 placeholder="Some Description of Album"
                 value={this.state.desc}
-                onChange={e =>
-                  this.setState({
-                    desc: e.target.value
-                  })
-                }
+                onChange={this._onChange}
+                error={this.props.errors.desc}
               />
               <div className="custom-file">
                 <input
@@ -93,6 +108,9 @@ export class AlbumCreate extends Component {
                 Create
               </button>
             </form>
+            {this.props.message.album ? (
+              <span className="text-success">{this.props.message.album}</span>
+            ) : null}
           </div>
           {this.state.theme_selected ? (
             <div className="col-md-6  pt-2 pb-5  ">
@@ -116,10 +134,12 @@ export class AlbumCreate extends Component {
 }
 
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: state.auth,
+  errors: state.errors.errors,
+  message: state.message.message
 });
 
-const mapDispatchToProps = { updateAlbum };
+const mapDispatchToProps = { updateAlbum, clearErrors };
 
 export default connect(
   mapStateToProps,

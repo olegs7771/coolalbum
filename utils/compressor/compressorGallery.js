@@ -1,14 +1,14 @@
 const imagemin = require("imagemin");
-// const imageminJpegtran = require("imagemin-jpegtran");
+const imageminJpegtran = require("imagemin-jpegtran");
 const imageminPngquant = require("imagemin-pngquant");
 const imageminMozjpeg = require("imagemin-mozjpeg");
 
-module.exports = function compressorTheme() {
-  const compressImgTheme = cb => {
+module.exports = function compressorGallery() {
+  const compressImgGallery = cb => {
     (async () => {
       const files = await imagemin(
-        ["public/theme_image_upload/*.{jpg,png}"],
-        "public/theme_image_compressed/",
+        ["public/gallery_upload/*.{jpg,png}"],
+        "public/compressed_gallery/",
         {
           plugins: [
             imageminMozjpeg({
@@ -18,10 +18,11 @@ module.exports = function compressorTheme() {
           ]
         }
       );
+
       //=> [{data: <Buffer 89 50 4e …>, path: 'build/images/foo.jpg'}, …]
       return cb(files);
     })();
   };
 
-  return compressImgTheme;
+  return compressImgGallery;
 };

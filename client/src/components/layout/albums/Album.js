@@ -27,11 +27,18 @@ export class Album extends Component {
   }
 
   render() {
-    console.log("this.props.album", this.props.album);
+    // console.log("window.innerWidth", window.innerWidth);
+    console.log("this.state", this.state);
+    console.log("this.props", this.props);
+
     const { loading, albums } = this.props.album;
     let albumsContent;
     if (albums === null || loading) {
-      albumsContent = <Spinner />;
+      albumsContent = (
+        <div className="mx-auto mt-5">
+          <Spinner />
+        </div>
+      );
     } else {
       albumsContent = albums.map(album => (
         <AlbumItems
@@ -45,9 +52,9 @@ export class Album extends Component {
       ));
     }
     let wellcomeUserContent;
-    if (this.state.isUserHasAlbums === false) {
+    if (this.state.isUserHasAlbums === false || this.props.loading === false) {
       wellcomeUserContent = (
-        <p className="text-left h5">
+        <p className="text-left ">
           You don't have any albums. Time to create
           <Link to="/albums_create"> one</Link>
         </p>
@@ -66,10 +73,12 @@ export class Album extends Component {
         className="row  my-4"
         style={{ height: !this.state.isUserHasAlbums ? "600px" : null }}
       >
-        <div className="col-md-4 border">
+        <div className="col-md-2 ">
           <div className="my-4">{wellcomeUserContent}</div>
         </div>
-        <div className="col-md-8 border">{albumsContent}</div>
+        <div className="col-md-10  ">
+          <div className="row">{albumsContent}</div>
+        </div>
       </div>
     );
   }

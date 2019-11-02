@@ -72,7 +72,7 @@ class UserCardAvatar extends Component {
 
   //Select Avatar from browser to tmp memory
   fileSelectedHandler = e => {
-    console.log("selected file :", e.target.files[0]);
+    console.log("selected file :", e.target);
 
     this.setState({
       selectedImage: URL.createObjectURL(e.target.files[0]),
@@ -86,7 +86,7 @@ class UserCardAvatar extends Component {
   _onLoadImage = e => {
     // console.log("offsetWidth :", img.offsetWidth);
     // console.log("offsetHeight :", img.offsetHeight);
-    console.log("e.target", e.target);
+    // console.log("e.target", e.target);
   };
 
   _rotateImage = e => {

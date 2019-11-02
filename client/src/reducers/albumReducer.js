@@ -2,13 +2,15 @@
 import {
   LOADING_ALBUMS,
   GET_USER_ALBUMS,
-  SELECT_ALBUM
+  SELECT_ALBUM,
+  GET_GALLERY
 } from "../actions/types";
 
 const initialState = {
   albums: null,
   album: null,
-  loading: false
+  loading: false,
+  gallery: []
 };
 export default function(state = initialState, action) {
   switch (action.type) {

@@ -29,7 +29,24 @@ const AlbumSchema = new Schema({
   date: {
     type: Date,
     default: Date.now()
-  }
+  },
+  gallery: [
+    {
+      img: {
+        type: String
+      },
+      comments: {
+        type: String
+      },
+      img_title: {
+        type: String
+      },
+      date: {
+        type: Date,
+        default: Date.now
+      }
+    }
+  ]
 });
 mongoose.set("useCreateIndex", true);
 module.exports = Album = mongoose.model("album", AlbumSchema);

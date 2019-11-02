@@ -10,12 +10,21 @@ const Album = require("../../models/Album");
 
 const passport = require("passport");
 const validateAlbumCreate = require("../validation/albumCreate");
-//Bring compressor
-const compressor = require("../../utils/compressor/compressorAlbumTheme");
-const compressImg = compressor();
-//Bring in Multer
+
+//Bring compressor  Album Theme
+const compressorTheme = require("../../utils/compressor/compressorAlbumTheme");
+const compressImgTheme = compressorTheme();
+
+//Bring compressor Album Gallery
+const compressorGallery = require("../../utils/compressor/compressorGallery");
+const compressImgGallery = compressorGallery();
+
+//Bring in Multer Album Theme
 const fileUploader = require("../../utils/multer/multerAlbumTheme");
 const upload = fileUploader();
+//Bring in Multer Album Gallery
+const fileUploaderGallery = require("../../utils/multer/multerGallery");
+const upload_gallery = fileUploaderGallery();
 
 const isEmpty = require("../validation/isEmpty");
 
@@ -43,6 +52,25 @@ router.post(
       });
   }
 );
+//Get Album by id
+//@Private Route
+router.post(
+  "/fetchAlbum",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Album.findById(req.body.id)
+      .then(album => {
+        if (!album) {
+          res.status(200).json({ Msg: "No Albums" });
+        } else {
+          res.status(200).json(album);
+        }
+      })
+      .catch(err => {
+        res.status(400).json(err);
+      });
+  }
+);
 
 //Update/Create Album
 
@@ -53,9 +81,14 @@ router.post(
     console.log("req.body", req.body);
 
     upload(req, res, err => {
-      // console.log("req.file", req.file);
-      // console.log("req.body.title", req.body.title);
-      // console.log("req.body.desc", req.body.desc);
+      const { isValid, errors } = validateAlbumCreate(req.body);
+      if (!isValid) {
+        return res.status(400).json(errors);
+      }
+
+      console.log("req.file", req.file);
+      console.log("req.body.title", req.body.title);
+      console.log("req.body.desc", req.body.desc);
 
       if (req.file === undefined) {
         return res.status(200).json({ error: "Please select file" });
@@ -63,9 +96,9 @@ router.post(
       if (err) {
         res.status(400).json({ error: err });
       } else {
-        //No Errors in uploadin image
+        //No Errors in uploading image
         if (req.file.filename) {
-          compressImg(cb => {
+          compressImgTheme(cb => {
             cb.forEach(elem => {
               console.log("elem", elem);
               if (cb) {
@@ -81,8 +114,11 @@ router.post(
                 });
                 newAlbum
                   .save()
-                  .then(album => {
-                    console.log("album saved", album);
+                  .then(() => {
+                    res.status(200).json({
+                      album: ` Album ${req.body.title} was seccessfuly created`
+                    });
+
                     //New Album has been created then delete in
                     // public/theme_image_upload
                     fse
@@ -95,13 +131,102 @@ router.post(
                       });
                   })
                   .catch(err => {
-                    console.log("err to save albim :", err);
+                    console.log("err to save album! :", err);
                   });
               }
             });
           });
         }
       }
+    });
+  }
+);
+
+router.post(
+  "/add_gallery_img",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    console.log("req.body", req.body);
+
+    upload_gallery(req, res, err => {
+      console.log("req.file", req.file);
+      if (req.file === undefined) {
+        return res.status(200).json({ error: "Please select file" });
+      }
+      if (err) {
+        res.status(400).json({ error: err });
+      } else {
+        //no errors
+        if (req.file.filename) {
+          //fire up compressor
+          compressImgGallery(cb => {
+            cb.forEach(elem => {
+              console.log("elem", elem);
+              //Remove row file from /upload
+              fse
+                .remove(req.file.path)
+                .then(() => {
+                  console.log("deleted in uploads");
+                })
+                .catch(err => {
+                  console.log("error to delete in uploads", err);
+                });
+              console.log("req.body", req.body);
+              Album.findById(req.body.id)
+                .then(album => {
+                  console.log("album", album);
+                  //Album has been found
+                  // we can add to gallery
+                  const imagePath = elem.path.substring(6);
+                  const newGalleryItem = {
+                    comments: req.body.comments,
+                    img_title: req.body.img_title,
+                    img: imagePath
+                  };
+                  if (album) {
+                    album.gallery.unshift(newGalleryItem);
+                    album.save().then(item => {
+                      console.log("item", item);
+                    });
+                  }
+                })
+                .catch(err => {
+                  console.log("error to find album", err);
+                });
+            });
+          });
+        }
+      }
+    });
+  }
+);
+//Delete Album By id
+//Private route
+
+router.post(
+  "/delete",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Album.findById(req.body.id).then(album => {
+      //theme album to delete
+      const albumThemePath = "public" + album.image;
+      console.log("albumThemePath", albumThemePath);
+      fse.pathExists(albumThemePath).then(path => {
+        if (!path) {
+          console.log("no file");
+        } else {
+          console.log("file exists");
+          fse.unlink(albumThemePath, err => {
+            if (err) {
+              return console.log("error to delete", err);
+            }
+            console.log("deleted successfully in public");
+            album.deleteOne().then(() => {
+              res.status(200).json({ msg: "Deleted" });
+            });
+          });
+        }
+      });
     });
   }
 );

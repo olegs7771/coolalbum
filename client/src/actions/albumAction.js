@@ -1,11 +1,12 @@
 import {
-  // GET_ERRORS,
-  // CLEAR_ERRORS,
-  // GET_MESSAGE,
+  GET_ERRORS,
+  CLEAR_ERRORS,
+  GET_MESSAGE,
   // CLEAR_MESSAGE,
   GET_USER_ALBUMS,
   LOADING_ALBUMS,
-  SELECT_ALBUM
+  SELECT_ALBUM,
+  GET_GALLERY
 } from "./types";
 import axios from "axios";
 
@@ -19,7 +20,6 @@ export const getUserAlbums = () => dispatch => {
         type: GET_USER_ALBUMS,
         payload: res.data
       });
-      console.log("res.data", res.data);
     })
     .catch(err => {
       console.log("err:", err);
@@ -28,17 +28,60 @@ export const getUserAlbums = () => dispatch => {
 
 //Create/update  Album
 export const updateAlbum = (FD, history) => dispatch => {
-  axios.post("api/albums/update", FD).then(res => {
-    console.log("res.data", res.data);
-  });
-  history.push("/albums");
+  axios
+    .post("api/albums/update", FD)
+    .then(res => {
+      console.log("res.data", res.data);
+      dispatch({
+        type: GET_MESSAGE,
+        payload: res.data
+      });
+      setTimeout(() => {
+        history.push("/albums");
+      }, 3000);
+    })
+    .catch(err => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
+    });
+  // .then(() => {
+  //   history.push("/albums");
+  // });
 };
-//Select Album by id
+//Get Album by id
 //@Private Route
 export const selectAlbum = data => dispatch => {
-  dispatch({
-    type: SELECT_ALBUM,
-    payload: data
+  axios.post("/api/albums/fetchAlbum", data).then(res => {
+    dispatch({
+      type: SELECT_ALBUM,
+      payload: res.data
+    });
+  });
+};
+
+//Add Image To the Gallery
+export const addImageToGallery = fd => dispatch => {
+  console.log("fd", fd);
+
+  axios
+    .post("/api/albums/add_gallery_img", fd)
+    .then(res => {
+      console.log("res.data", res.data);
+    })
+    .catch(err => {
+      console.log("error :", err.response.data);
+    });
+};
+
+//Delete Album by id
+export const deleteAlbum = (data, history) => dispatch => {
+  axios.post("/api/albums/delete", data).then(res => {
+    console.log("res.data", res.data);
+    setTimeout(() => {
+      history.push("/albums");
+    }, 3000);
   });
 };
 
@@ -46,5 +89,11 @@ export const selectAlbum = data => dispatch => {
 export const loadingAlbum = () => {
   return {
     type: LOADING_ALBUMS
+  };
+};
+//Clear Errors
+export const clearErrors = () => {
+  return {
+    type: CLEAR_ERRORS
   };
 };
