@@ -4,6 +4,8 @@ import Moment from "moment";
 import Spinner from "../../../utils/Spinner";
 import Popup from "reactjs-popup";
 import { withRouter } from "react-router-dom";
+import TextAreaFormGroup from "../../textFormGroup/TextAreaFormGroup";
+import TextFormGroup from "../../textFormGroup/TextFormGroup";
 
 import {
   selectAlbum,
@@ -15,7 +17,13 @@ class AlbumEdit extends Component {
     albumHasGallery: false,
     showDeleteWorning: false,
     image_gallery_comment: "",
+    image_gallery_title: "",
     message: {}
+  };
+  _onChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
   };
 
   componentDidMount() {
@@ -49,6 +57,8 @@ class AlbumEdit extends Component {
     e.preventDefault();
     const fd = new FormData();
     fd.append("gallery_img", this.state.uploadImage);
+    fd.append("img_title", this.state.image_gallery_title);
+    fd.append("comments", this.state.image_gallery_comment);
     fd.append("id", this.props.album.album._id);
 
     this.props.addImageToGallery(fd);
@@ -97,7 +107,7 @@ class AlbumEdit extends Component {
               alt="..."
             />
             <div className="row">
-              <div className="col-md-8">
+              <div className="col-md-6">
                 <div className="card-body">
                   <h5 className="card-title">{this.props.album.album.title}</h5>
                   <p className="card-text">{this.props.album.album.desc}</p>
@@ -109,7 +119,7 @@ class AlbumEdit extends Component {
                   </p>
                 </div>
               </div>
-              <div className="col-md-4 ">
+              <div className="col-md-6 ">
                 {this.state.selectedImage ? (
                   <div className="p-1 ">
                     <img
@@ -123,17 +133,29 @@ class AlbumEdit extends Component {
                       alt=""
                       onClick={this._rotateImage}
                     />
-                    <div className="border m-1 p-2">
-                      <input
+                    <div className=" m-1 p-2">
+                      <TextFormGroup
+                        placeholder="Add Title to Picture.."
                         type="text"
+                        name="image_gallery_title"
+                        value={this.state.image_gallery_title}
+                        onChange={this._onChange}
+                        style={{ marginTop: "-20px" }}
+                      />
+                      <TextAreaFormGroup
+                        placeholder="Add some comments.."
+                        type="text"
+                        name="image_gallery_comment"
                         value={this.state.image_gallery_comment}
+                        onChange={this._onChange}
+                        style={{ marginTop: "-20px" }}
                       />
                     </div>
                   </div>
                 ) : null}
-                <div className="mx-auto mt-4">
+                <div className="mx-auto ">
                   <div className="row">
-                    <div className="col-md-10">
+                    <div className="col-md-8">
                       <form onSubmit={this._addImageToGallery}>
                         <div className="custom-file" style={{ width: "60%" }}>
                           <input
@@ -158,21 +180,15 @@ class AlbumEdit extends Component {
                       </form>
                     </div>
                     <div
-                      className="col-md-2  pt-1 pr-5 "
+                      className="col-md-4 pt-1 pr-5  "
                       onMouseEnter={this._onMouseEnter}
                       onMouseLeave={this._onMouseLeave}
-                      onClick={this._deleteAlbum}
                     >
-                      <Popup
-                        open={this.state.showDeleteWorning}
-                        trigger={open => (
-                          <i className="fas fa-trash-alt  fa-2x"></i>
-                        )}
-                        position="right center"
-                        closeOnDocumentClick
-                      >
-                        <span className="text-danger"> Delete Album </span>
-                      </Popup>
+                      <i
+                        className="fas fa-trash-alt  fa-2x"
+                        onClick={this._deleteAlbum}
+                      ></i>
+                      Delete Album
                     </div>
                   </div>
                 </div>

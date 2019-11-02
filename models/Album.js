@@ -35,7 +35,7 @@ const AlbumSchema = new Schema({
       img: {
         type: String
       },
-      text: {
+      comments: {
         type: String
       },
       img_title: {

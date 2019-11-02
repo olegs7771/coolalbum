@@ -162,35 +162,38 @@ router.post(
           compressImgGallery(cb => {
             cb.forEach(elem => {
               console.log("elem", elem);
+              //Remove row file from /upload
+              fse
+                .remove(req.file.path)
+                .then(() => {
+                  console.log("deleted in uploads");
+                })
+                .catch(err => {
+                  console.log("error to delete in uploads", err);
+                });
+              console.log("req.body", req.body);
+              Album.findById(req.body.id)
+                .then(album => {
+                  console.log("album", album);
+                  //Album has been found
+                  // we can add to gallery
+                  const imagePath = elem.path.substring(6);
+                  const newGalleryItem = {
+                    comments: req.body.comments,
+                    img_title: req.body.img_title,
+                    img: imagePath
+                  };
+                  if (album) {
+                    album.gallery.unshift(newGalleryItem);
+                    album.save().then(item => {
+                      console.log("item", item);
+                    });
+                  }
+                })
+                .catch(err => {
+                  console.log("error to find album", err);
+                });
             });
-            //Remove row file from /upload
-            fse
-              .remove(req.file.path)
-              .then(() => {
-                console.log("deleted in uploads");
-              })
-              .catch(err => {
-                console.log("error to delete in uploads", err);
-              });
-            console.log("req.body", req.body);
-            Album.findById(req.body.id)
-              .then(album => {
-                console.log("album", album);
-                //Album has been found
-                // we can add to gallery
-                const newGalleryItem = {
-                  text: req.body.id
-                };
-                if (album) {
-                  album.gallery.unshift(newGalleryItem);
-                  album.save().then(item => {
-                    console.log("item", item);
-                  });
-                }
-              })
-              .catch(err => {
-                console.log("error to find album", err);
-              });
           });
         }
       }

@@ -6,7 +6,7 @@ import {
   GET_USER_ALBUMS,
   LOADING_ALBUMS,
   SELECT_ALBUM,
-  ADD_IMAGE_TO_GALLERY
+  GET_GALLERY
 } from "./types";
 import axios from "axios";
 

@@ -2,7 +2,8 @@
 import {
   LOADING_ALBUMS,
   GET_USER_ALBUMS,
-  SELECT_ALBUM
+  SELECT_ALBUM,
+  GET_GALLERY
 } from "../actions/types";
 
 const initialState = {
