@@ -62,13 +62,18 @@ export const selectAlbum = data => dispatch => {
 };
 
 //Add Image To the Gallery
-export const addImageToGallery = fd => dispatch => {
+export const addImageToGallery = (fd, data) => dispatch => {
   console.log("fd", fd);
+  console.log("data", data);
 
   axios
     .post("/api/albums/add_gallery_img", fd)
     .then(res => {
-      console.log("res.data", res.data);
+      console.log("image loaded to the gallery");
+
+      setTimeout(() => {
+        data.history.push(`/album_edit/${data.id}`);
+      }, 3000);
     })
     .catch(err => {
       console.log("error :", err.response.data);

@@ -186,7 +186,7 @@ router.post(
                   if (album) {
                     album.gallery.unshift(newGalleryItem);
                     album.save().then(item => {
-                      console.log("item", item);
+                      res.status(200).json({ gallery: "Image Added" });
                     });
                   }
                 })
@@ -228,6 +228,7 @@ router.post(
       //theme album to delete
       const albumThemePath = "public" + album.image;
       console.log("albumThemePath", albumThemePath);
+      //Delete in theme_img_compressed
       fse.pathExists(albumThemePath).then(path => {
         if (!path) {
           console.log("no file");
@@ -244,6 +245,8 @@ router.post(
           });
         }
       });
+      //Delete all gallery images in compressed_gallery
+      console.log("album.gallery", album.gallery);
     });
   }
 );
