@@ -200,6 +200,23 @@ router.post(
     });
   }
 );
+
+//Get all gallery images from Album by id
+
+router.post(
+  "/get_gallery_all",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Album.findById(req.body.id)
+      .then(album => {
+        res.status(200).json(album.gallery);
+      })
+      .catch(err => {
+        res.status(400).json(err);
+      });
+  }
+);
+
 //Delete Album By id
 //Private route
 

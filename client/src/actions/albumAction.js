@@ -75,6 +75,24 @@ export const addImageToGallery = fd => dispatch => {
     });
 };
 
+//Get All Gallery from Album by id
+export const getGallery = data => dispatch => {
+  console.log("data", data);
+
+  axios
+    .post("/api/albums/get_gallery_all", data)
+    .then(res => {
+      // console.log("res.data", res.data);
+      dispatch({
+        type: GET_GALLERY,
+        payload: res.data
+      });
+    })
+    .catch(err => {
+      console.log("error :", err);
+    });
+};
+
 //Delete Album by id
 export const deleteAlbum = (data, history) => dispatch => {
   axios.post("/api/albums/delete", data).then(res => {

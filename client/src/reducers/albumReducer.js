@@ -30,6 +30,11 @@ export default function(state = initialState, action) {
         ...state,
         album: action.payload
       };
+    case GET_GALLERY:
+      return {
+        ...state,
+        gallery: action.payload
+      };
 
     default:
       return state;

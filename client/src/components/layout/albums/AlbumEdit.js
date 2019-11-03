@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import Moment from "moment";
 import Spinner from "../../../utils/Spinner";
-import Popup from "reactjs-popup";
+import AlbumGallery from "./AlbumGallery";
+
 import { withRouter } from "react-router-dom";
 import TextAreaFormGroup from "../../textFormGroup/TextAreaFormGroup";
 import TextFormGroup from "../../textFormGroup/TextFormGroup";
@@ -10,7 +11,8 @@ import TextFormGroup from "../../textFormGroup/TextFormGroup";
 import {
   selectAlbum,
   addImageToGallery,
-  deleteAlbum
+  deleteAlbum,
+  getGallery
 } from "../../../actions/albumAction";
 class AlbumEdit extends Component {
   state = {
@@ -31,6 +33,7 @@ class AlbumEdit extends Component {
       id: this.props.match.params.id
     };
     this.props.selectAlbum(data);
+    this.props.getGallery(data);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -209,7 +212,7 @@ class AlbumEdit extends Component {
         return (
           <div className="row py-2">
             <div className="col-lg-10">
-              <div className="card">
+              <div className="card py-2">
                 <img
                   src={this.props.album.album.image}
                   className="card-img-top"
@@ -232,7 +235,7 @@ class AlbumEdit extends Component {
                       </p>
                     </div>
                   </div>
-                  <div className="col-md-6  ">
+                  <div className="col-md-6 ">
                     {this.state.selectedImage ? (
                       <div className="p-1 ">
                         <img
@@ -246,11 +249,29 @@ class AlbumEdit extends Component {
                           alt=""
                           onClick={this._rotateImage}
                         />
+                        <div className=" m-1 p-2">
+                          <TextFormGroup
+                            placeholder="Add Title to Picture.."
+                            type="text"
+                            name="image_gallery_title"
+                            value={this.state.image_gallery_title}
+                            onChange={this._onChange}
+                            style={{ marginTop: "-20px" }}
+                          />
+                          <TextAreaFormGroup
+                            placeholder="Add some comments.."
+                            type="text"
+                            name="image_gallery_comment"
+                            value={this.state.image_gallery_comment}
+                            onChange={this._onChange}
+                            style={{ marginTop: "-20px" }}
+                          />
+                        </div>
                       </div>
                     ) : null}
-                    <div className="mx-auto mt-4">
+                    <div className="mx-auto ">
                       <div className="row">
-                        <div className="col-md-10">
+                        <div className="col-md-8">
                           <form onSubmit={this._addImageToGallery}>
                             <div
                               className="custom-file"
@@ -265,7 +286,7 @@ class AlbumEdit extends Component {
                               <label className="custom-file-label bg-success">
                                 <p className="text-left text-white">
                                   {" "}
-                                  Choose Image1
+                                  Pick Image
                                 </p>
                               </label>
                             </div>
@@ -281,21 +302,15 @@ class AlbumEdit extends Component {
                           </form>
                         </div>
                         <div
-                          className="col-md-2  pt-1 pr-5 "
+                          className="col-md-4 pt-1 pr-5  "
                           onMouseEnter={this._onMouseEnter}
                           onMouseLeave={this._onMouseLeave}
-                          onClick={this._deleteAlbum}
                         >
-                          <Popup
-                            open={this.state.showDeleteWorning}
-                            trigger={open => (
-                              <i className="fas fa-trash-alt  fa-2x"></i>
-                            )}
-                            position="right center"
-                            closeOnDocumentClick
-                          >
-                            <span className="text-danger"> Delete Album </span>
-                          </Popup>
+                          <i
+                            className="fas fa-trash-alt  fa-2x"
+                            onClick={this._deleteAlbum}
+                          ></i>
+                          Delete Album
                         </div>
                       </div>
                     </div>
@@ -303,7 +318,11 @@ class AlbumEdit extends Component {
                 </div>
               </div>
             </div>
-            <div className="col-lg-2">Gallery</div>
+            <div className="col-lg-2">
+              {this.props.album.gallery.map(item => (
+                <AlbumGallery key={item._id} image={item.img} />
+              ))}
+            </div>
           </div>
         );
       } else {
@@ -322,5 +341,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { selectAlbum, addImageToGallery, deleteAlbum }
+  { selectAlbum, addImageToGallery, deleteAlbum, getGallery }
 )(withRouter(AlbumEdit));
