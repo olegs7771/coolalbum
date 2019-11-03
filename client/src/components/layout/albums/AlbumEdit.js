@@ -63,8 +63,12 @@ class AlbumEdit extends Component {
     fd.append("img_title", this.state.image_gallery_title);
     fd.append("comments", this.state.image_gallery_comment);
     fd.append("id", this.props.album.album._id);
+    const data = {
+      history: this.props.history,
+      id: this.props.album.album._id
+    };
 
-    this.props.addImageToGallery(fd);
+    this.props.addImageToGallery(fd, data);
   };
 
   //Show worning on onMouseEnter event
