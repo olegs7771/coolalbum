@@ -70,10 +70,13 @@ export const addImageToGallery = (fd, data) => dispatch => {
     .post("/api/albums/add_gallery_img", fd)
     .then(res => {
       console.log("image loaded to the gallery");
-
+      dispatch({
+        type: GET_MESSAGE,
+        payload: res.data
+      });
       setTimeout(() => {
-        data.history.push(`/album_edit/${data.id}`);
-      }, 3000);
+        data.history.push(`/albums`);
+      }, 5000);
     })
     .catch(err => {
       console.log("error :", err.response.data);

@@ -45,6 +45,11 @@ class AlbumEdit extends Component {
         });
       }
     }
+    if (prevProps.message !== this.props.message) {
+      this.setState({
+        message: this.props.message
+      });
+    }
   }
 
   //Select Image To Gallery
@@ -72,23 +77,6 @@ class AlbumEdit extends Component {
   };
 
   //Show worning on onMouseEnter event
-
-  _onMouseEnter = e => {
-    console.log("event.type", e.type);
-    if (e.type === "mouseenter") {
-      this.setState({
-        showDeleteWorning: true
-      });
-    }
-  };
-  _onMouseLeave = e => {
-    console.log("event.type", e.type);
-    if (e.type === "mouseleave") {
-      this.setState({
-        showDeleteWorning: false
-      });
-    }
-  };
 
   //Delete Album by id
   _deleteAlbum = e => {
@@ -140,6 +128,7 @@ class AlbumEdit extends Component {
                       alt=""
                       onClick={this._rotateImage}
                     />
+
                     <div className=" m-1 p-2">
                       <TextFormGroup
                         placeholder="Add Title to Picture.."
@@ -186,16 +175,11 @@ class AlbumEdit extends Component {
                         ) : null}
                       </form>
                     </div>
-                    <div
-                      className="col-md-4 pt-1 pr-5  "
-                      onMouseEnter={this._onMouseEnter}
-                      onMouseLeave={this._onMouseLeave}
-                    >
+                    <div className="col-md-4 pt-1 pr-5  ">
                       <i
                         className="fas fa-trash-alt  fa-2x"
                         onClick={this._deleteAlbum}
                       ></i>
-                      Delete Album
                     </div>
                   </div>
                 </div>
@@ -253,6 +237,9 @@ class AlbumEdit extends Component {
                           alt=""
                           onClick={this._rotateImage}
                         />
+                        {this.state.message ? (
+                          <span>{this.state.message.gallery}</span>
+                        ) : null}
                         <div className=" m-1 p-2">
                           <TextFormGroup
                             placeholder="Add Title to Picture.."
@@ -305,16 +292,11 @@ class AlbumEdit extends Component {
                             ) : null}
                           </form>
                         </div>
-                        <div
-                          className="col-md-4 pt-1 pr-5  "
-                          onMouseEnter={this._onMouseEnter}
-                          onMouseLeave={this._onMouseLeave}
-                        >
+                        <div className="col-md-4 pt-1 pr-5  ">
                           <i
                             className="fas fa-trash-alt  fa-2x"
                             onClick={this._deleteAlbum}
                           ></i>
-                          Delete Album
                         </div>
                       </div>
                     </div>
@@ -340,7 +322,8 @@ class AlbumEdit extends Component {
   }
 }
 const mapStateToProps = state => ({
-  album: state.album
+  album: state.album,
+  message: state.message.message
 });
 
 export default connect(

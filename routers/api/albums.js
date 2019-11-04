@@ -186,7 +186,7 @@ router.post(
                   if (album) {
                     album.gallery.unshift(newGalleryItem);
                     album.save().then(item => {
-                      res.status(200).json({ gallery: "Image Added" });
+                      res.status(200).json({ gallery: "Image was added " });
                     });
                   }
                 })

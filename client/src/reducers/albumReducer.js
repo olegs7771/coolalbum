@@ -10,6 +10,7 @@ const initialState = {
   albums: null,
   album: null,
   loading: false,
+  selectedImage: null,
   gallery: []
 };
 export default function(state = initialState, action) {
