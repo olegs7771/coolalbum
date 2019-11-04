@@ -66,23 +66,6 @@ class AlbumEdit extends Component {
 
   //Show worning on onMouseEnter event
 
-  _onMouseEnter = e => {
-    console.log("event.type", e.type);
-    if (e.type === "mouseenter") {
-      this.setState({
-        showDeleteWorning: true
-      });
-    }
-  };
-  _onMouseLeave = e => {
-    console.log("event.type", e.type);
-    if (e.type === "mouseleave") {
-      this.setState({
-        showDeleteWorning: false
-      });
-    }
-  };
-
   //Delete Album by id
   _deleteAlbum = e => {
     console.log("delete ", this.props.album.album._id);
@@ -179,11 +162,7 @@ class AlbumEdit extends Component {
                         ) : null}
                       </form>
                     </div>
-                    <div
-                      className="col-md-4 pt-1 pr-5  "
-                      onMouseEnter={this._onMouseEnter}
-                      onMouseLeave={this._onMouseLeave}
-                    >
+                    <div className="col-md-4 pt-1 pr-5  ">
                       <i
                         className="fas fa-trash-alt  fa-2x"
                         onClick={this._deleteAlbum}
@@ -282,8 +261,6 @@ class AlbumEdit extends Component {
                         </div>
                         <div
                           className="col-md-2  pt-1 pr-5 "
-                          onMouseEnter={this._onMouseEnter}
-                          onMouseLeave={this._onMouseLeave}
                           onClick={this._deleteAlbum}
                         >
                           <Popup

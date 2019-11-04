@@ -128,3 +128,14 @@ app.use((req, res, next) => {
   res.locals["socketio"] = io;
   next();
 });
+
+const promise1 = new Promise((res, rej) => {
+  setTimeout(() => {
+    res("settled");
+  }, 3000);
+});
+
+promise1.then(value => {
+  console.log(value);
+});
+console.log(promise1);
