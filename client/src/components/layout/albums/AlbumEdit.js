@@ -45,6 +45,11 @@ class AlbumEdit extends Component {
         });
       }
     }
+    if (prevProps.message !== this.props.message) {
+      this.setState({
+        message: this.props.message
+      });
+    }
   }
 
   //Select Image To Gallery
@@ -123,6 +128,7 @@ class AlbumEdit extends Component {
                       alt=""
                       onClick={this._rotateImage}
                     />
+
                     <div className=" m-1 p-2">
                       <TextFormGroup
                         placeholder="Add Title to Picture.."
@@ -231,6 +237,9 @@ class AlbumEdit extends Component {
                           alt=""
                           onClick={this._rotateImage}
                         />
+                        {this.state.message ? (
+                          <span>{this.state.message.gallery}</span>
+                        ) : null}
                         <div className=" m-1 p-2">
                           <TextFormGroup
                             placeholder="Add Title to Picture.."
@@ -313,7 +322,8 @@ class AlbumEdit extends Component {
   }
 }
 const mapStateToProps = state => ({
-  album: state.album
+  album: state.album,
+  message: state.message.message
 });
 
 export default connect(
