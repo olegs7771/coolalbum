@@ -3,7 +3,8 @@ import {
   LOADING_ALBUMS,
   GET_USER_ALBUMS,
   SELECT_ALBUM,
-  GET_GALLERY
+  GET_GALLERY,
+  SELECT_IMAGE
 } from "../actions/types";
 
 const initialState = {
@@ -30,6 +31,11 @@ export default function(state = initialState, action) {
       return {
         ...state,
         album: action.payload
+      };
+    case SELECT_IMAGE:
+      return {
+        ...state,
+        selectedImage: action.payload
       };
     case GET_GALLERY:
       return {

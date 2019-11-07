@@ -15,26 +15,27 @@ import {
   getGallery
 } from "../../../actions/albumAction";
 class AlbumEdit extends Component {
-  state = {
-    albumHasGallery: false,
-    showDeleteWorning: false,
-    image_gallery_comment: "",
-    image_gallery_title: "",
-    message: {}
-  };
+  constructor(props) {
+    super();
+    this.state = {
+      albumHasGallery: false,
+      showDeleteWorning: false,
+      selectedImage: null,
+      image_gallery_comment: "",
+      image_gallery_title: "",
+      message: {},
+      id: ""
+    };
+    const data = {
+      id: !this.state.selectedImage ? props.match.params.id : this.state.id
+    };
+    props.selectAlbum(data);
+  }
   _onChange = e => {
     this.setState({
       [e.target.name]: e.target.value
     });
   };
-
-  componentDidMount() {
-    const data = {
-      id: this.props.match.params.id
-    };
-    this.props.selectAlbum(data);
-    this.props.getGallery(data);
-  }
 
   componentDidUpdate(prevProps, prevState) {
     //If Gallery in Album [].length>0 split screen
@@ -45,11 +46,31 @@ class AlbumEdit extends Component {
         });
       }
     }
+    //Display Selected Image from Gallery As Theme Image
+    if (prevProps.album.selectedImage !== this.props.album.selectedImage) {
+      console.log("selected image :", this.props.album.selectedImage.title);
+      this.setState({
+        selectedImage: this.props.album.selectedImage,
+        id: this.props.match.params.id
+      });
+    }
+
     if (prevProps.message !== this.props.message) {
       this.setState({
         message: this.props.message
       });
     }
+  }
+  componentDidMount() {
+    if (this.state.selectedImage) {
+      console.log("selected no need in params");
+    }
+
+    const data = {
+      id: !this.state.selectedImage ? this.props.match.params.id : this.state.id
+    };
+
+    this.props.getGallery(data);
   }
 
   //Select Image To Gallery
@@ -86,10 +107,65 @@ class AlbumEdit extends Component {
     };
     this.props.deleteAlbum(data, this.props.history);
   };
+  //Delete Album Image from Gallery
+  _deleteImageGallery = e => {
+    console.log("delete ", this.state.selectedImage.id);
+    // const data = {
+    //   id: this.props.album.album._id
+    // };
+    // this.props.deleteAlbum(data, this.props.history);
+  };
 
   render() {
-    // console.log("this.props", this.props);
-    console.log("this.state", this.state);
+    console.log("this.state.id", this.state.id);
+
+    let ThemeImageContent;
+    if (this.props.album.album) {
+      if (this.state.selectedImage) {
+        ThemeImageContent = (
+          <div className="card mb-3">
+            <img
+              src={this.state.selectedImage.image}
+              className="card-img-top"
+              alt="..."
+            />
+            <div className="card-body">
+              <h5 className="card-title">{this.state.selectedImage.title}</h5>
+              <p className="card-text">{this.state.selectedImage.comments}</p>
+              <div className="row">
+                <div className="col-lg-8">
+                  <p className="card-text">
+                    <small className="text-muted">
+                      Last updated{" "}
+                      {Moment(this.state.selectedImage.date).format(
+                        "DD/MM/YYYY"
+                      )}
+                    </small>
+                  </p>
+                </div>
+                <div className="col-lg-4">
+                  {/* {Delete Image from Gallery} */}
+
+                  <i
+                    className="fas fa-trash-alt  fa-2x"
+                    onClick={this._deleteImageGallery}
+                  ></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      } else
+        ThemeImageContent = (
+          <div className="card mb-3">
+            <img
+              src={this.props.album.album.image}
+              className="card-img-top"
+              alt="..."
+            />
+          </div>
+        );
+    }
 
     //If Album has gallery split to col
     if (!this.state.albumHasGallery) {
@@ -194,18 +270,15 @@ class AlbumEdit extends Component {
           </div>
         );
       }
-      //Gallery []===0
+      //Gallery [] > 0
     } else {
       if (this.props.album.album) {
         return (
           <div className="row py-2">
             <div className="col-lg-10">
-              <div className="card py-2">
-                <img
-                  src={this.props.album.album.image}
-                  className="card-img-top"
-                  alt="..."
-                />
+              <div className=" py-2">
+                {/* { Show Selected Image From Gallery if selectedImage:true } */}
+                {ThemeImageContent}
                 <div className="row">
                   <div className="col-md-6">
                     <div className="card-body">
@@ -308,7 +381,13 @@ class AlbumEdit extends Component {
             </div>
             <div className="col-lg-2">
               {this.props.album.gallery.map(item => (
-                <AlbumGallery key={item._id} image={item.img} />
+                <AlbumGallery
+                  key={item._id}
+                  image={item.img}
+                  title={item.img_title}
+                  comments={item.comments}
+                  date={item.date}
+                />
               ))}
             </div>
           </div>

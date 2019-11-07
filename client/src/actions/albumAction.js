@@ -6,6 +6,7 @@ import {
   GET_USER_ALBUMS,
   LOADING_ALBUMS,
   SELECT_ALBUM,
+  SELECT_IMAGE,
   GET_GALLERY
 } from "./types";
 import axios from "axios";
@@ -99,6 +100,15 @@ export const getGallery = data => dispatch => {
     .catch(err => {
       console.log("error :", err);
     });
+};
+
+//Select Image from Gallery To Display As A Theme
+export const selectImage = data => dispatch => {
+  console.log("data", data);
+  dispatch({
+    type: SELECT_IMAGE,
+    payload: data
+  });
 };
 
 //Delete Album by id
