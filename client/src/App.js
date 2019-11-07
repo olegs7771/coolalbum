@@ -35,6 +35,7 @@ import styled from "styled-components";
 import Album from "./components/layout/albums/Album";
 import AlbumCreate from "./components/layout/albums/AlbumCreate";
 import AlbumEdit from "./components/layout/albums/AlbumEdit";
+import GalleryImage from "./components/layout/albums/GalleryImage";
 
 //
 const store = configureStore();
@@ -112,6 +113,11 @@ class App extends Component {
                   <Route exact path="/albums" component={Album} />
                   <Route exact path="/albums_create" component={AlbumCreate} />
                   <Route exact path="/album_edit/:id" component={AlbumEdit} />
+                  <Route
+                    exact
+                    path="/gallery_image/:id"
+                    component={GalleryImage}
+                  />
                 </Switch>
               </div>
               <Footer />
