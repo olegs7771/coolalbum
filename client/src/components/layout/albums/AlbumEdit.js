@@ -238,7 +238,9 @@ class AlbumEdit extends Component {
                           onClick={this._rotateImage}
                         />
                         {this.state.message ? (
-                          <span>{this.state.message.gallery}</span>
+                          <span className="text-success">
+                            {this.state.message.gallery}
+                          </span>
                         ) : null}
                         <div className=" m-1 p-2">
                           <TextFormGroup
