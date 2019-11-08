@@ -20,7 +20,8 @@ class AlbumEdit extends Component {
     showDeleteWorning: false,
     image_gallery_comment: "",
     image_gallery_title: "",
-    message: {}
+    message: {},
+    isMobile: false
   };
   _onChange = e => {
     this.setState({
@@ -34,6 +35,11 @@ class AlbumEdit extends Component {
     };
     this.props.selectAlbum(data);
     this.props.getGallery(data);
+    if (window.innerWidth < 500) {
+      this.setState({
+        isMobile: true
+      });
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -88,8 +94,7 @@ class AlbumEdit extends Component {
   };
 
   render() {
-    // console.log("this.props", this.props);
-    console.log("this.state", this.state);
+    console.log("innerWidth", window.innerWidth);
 
     //If Album has gallery split to col
     if (!this.state.albumHasGallery) {
@@ -128,15 +133,22 @@ class AlbumEdit extends Component {
                       alt=""
                       onClick={this._rotateImage}
                     />
-
-                    <div className=" m-1 p-2">
+                    {this.state.message.gallery ? (
+                      <span className="text-success h6">
+                        {this.state.message.gallery}
+                      </span>
+                    ) : null}
+                    <div className=" m-1  ">
                       <TextFormGroup
                         placeholder="Add Title to Picture.."
                         type="text"
                         name="image_gallery_title"
                         value={this.state.image_gallery_title}
                         onChange={this._onChange}
-                        style={{ marginTop: "-20px" }}
+                        style={{
+                          marginTop: "-20px",
+                          marginBottom: "-10px"
+                        }}
                       />
                       <TextAreaFormGroup
                         placeholder="Add some comments.."
@@ -144,16 +156,25 @@ class AlbumEdit extends Component {
                         name="image_gallery_comment"
                         value={this.state.image_gallery_comment}
                         onChange={this._onChange}
-                        style={{ marginTop: "-20px" }}
+                        style={{
+                          marginTop: "-20px"
+                        }}
                       />
                     </div>
                   </div>
                 ) : null}
-                <div className="mx-auto ">
-                  <div className="row">
-                    <div className="col-md-8">
+                <div
+                  style={{
+                    marginTop:
+                      this.state.selectedImage && !this.state.isMobile
+                        ? "-30px"
+                        : null
+                  }}
+                >
+                  <div className={this.state.isMobile ? "row" : "row my-4"}>
+                    <div className="col-md-6 col-6  ">
                       <form onSubmit={this._addImageToGallery}>
-                        <div className="custom-file" style={{ width: "60%" }}>
+                        <div className="custom-file" style={{ width: "100%" }}>
                           <input
                             type="file"
                             name="gallery_img"
@@ -175,11 +196,16 @@ class AlbumEdit extends Component {
                         ) : null}
                       </form>
                     </div>
-                    <div className="col-md-4 pt-1 pr-5  ">
-                      <i
-                        className="fas fa-trash-alt  fa-2x"
-                        onClick={this._deleteAlbum}
-                      ></i>
+                    <div className="col-md-6 col-6 pt-1  ">
+                      <button className="btn">
+                        <i
+                          className="fas fa-trash-alt text-danger "
+                          onClick={this._deleteAlbum}
+                        >
+                          {" "}
+                          Delete Album
+                        </i>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -237,19 +263,22 @@ class AlbumEdit extends Component {
                           alt=""
                           onClick={this._rotateImage}
                         />
-                        {this.state.message ? (
-                          <span className="text-success">
+                        {this.state.message.gallery ? (
+                          <span className="text-success h6">
                             {this.state.message.gallery}
                           </span>
                         ) : null}
-                        <div className=" m-1 p-2">
+                        <div className=" m-1  ">
                           <TextFormGroup
                             placeholder="Add Title to Picture.."
                             type="text"
                             name="image_gallery_title"
                             value={this.state.image_gallery_title}
                             onChange={this._onChange}
-                            style={{ marginTop: "-20px" }}
+                            style={{
+                              marginTop: "-20px",
+                              marginBottom: "-10px"
+                            }}
                           />
                           <TextAreaFormGroup
                             placeholder="Add some comments.."
@@ -257,18 +286,27 @@ class AlbumEdit extends Component {
                             name="image_gallery_comment"
                             value={this.state.image_gallery_comment}
                             onChange={this._onChange}
-                            style={{ marginTop: "-20px" }}
+                            style={{
+                              marginTop: "-20px"
+                            }}
                           />
                         </div>
                       </div>
                     ) : null}
-                    <div className="mx-auto ">
-                      <div className="row">
-                        <div className="col-md-8">
+                    <div
+                      style={{
+                        marginTop:
+                          this.state.selectedImage && !this.state.isMobile
+                            ? "-30px"
+                            : null
+                      }}
+                    >
+                      <div className={this.state.isMobile ? "row" : "row my-4"}>
+                        <div className="col-md-6 col-6  ">
                           <form onSubmit={this._addImageToGallery}>
                             <div
                               className="custom-file"
-                              style={{ width: "60%" }}
+                              style={{ width: "100%" }}
                             >
                               <input
                                 type="file"
@@ -294,11 +332,16 @@ class AlbumEdit extends Component {
                             ) : null}
                           </form>
                         </div>
-                        <div className="col-md-4 pt-1 pr-5  ">
-                          <i
-                            className="fas fa-trash-alt  fa-2x"
-                            onClick={this._deleteAlbum}
-                          ></i>
+                        <div className="col-md-6 col-6 pt-1  ">
+                          <button className="btn">
+                            <i
+                              className="fas fa-trash-alt text-danger "
+                              onClick={this._deleteAlbum}
+                            >
+                              {" "}
+                              Delete Album
+                            </i>
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -306,7 +349,8 @@ class AlbumEdit extends Component {
                 </div>
               </div>
             </div>
-            <div className="col-lg-2">
+
+            <div className="col-lg-2 col-6 d-line">
               {this.props.album.gallery.map(item => (
                 <AlbumGallery
                   key={item._id}

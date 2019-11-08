@@ -185,7 +185,7 @@ router.post(
                   };
                   if (album) {
                     album.gallery.unshift(newGalleryItem);
-                    album.save().then(item => {
+                    album.save().then(() => {
                       res.status(200).json({ gallery: "Image was added " });
                     });
                   }
@@ -225,6 +225,18 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     Album.findById(req.body.id).then(album => {
+      album.gallery.forEach(elem => {
+        const fileToDeleteGallery = "public\\" + elem.img;
+        fse.pathExists(fileToDeleteGallery).then(exists => {
+          if (!exists) {
+            console.log("no files to delete");
+          }
+          fse.unlink(fileToDeleteGallery, err => {
+            console.log("error to delete gallery", err);
+          });
+        });
+      });
+
       //theme album to delete
       const albumThemePath = "public" + album.image;
       console.log("albumThemePath", albumThemePath);
@@ -236,7 +248,7 @@ router.post(
           console.log("file exists");
           fse.unlink(albumThemePath, err => {
             if (err) {
-              return console.log("error to delete", err);
+              return console.log("error to delete theme", err);
             }
             console.log("deleted successfully in public");
             album.deleteOne().then(() => {
@@ -247,6 +259,43 @@ router.post(
       });
       //Delete all gallery images in compressed_gallery
       console.log("album.gallery", album.gallery);
+    });
+  }
+);
+router.post(
+  "/delete_image",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    console.log("req.body", req.body);
+    Album.findById(req.body.album_id).then(album => {
+      if (album) {
+        console.log("album.gallery", album.gallery);
+        //create filter method
+        //Remove file from public/compressed_gallery
+        const obj = album.gallery.find(elem => {
+          return elem._id == req.body.image_id;
+        });
+        console.log("obj", obj);
+        //From obtained object we get path to file
+        const fileToDelete = "public\\" + obj.img;
+        console.log("fileToDelete", fileToDelete);
+        fse.pathExists(fileToDelete).then(exists => {
+          if (!exists) {
+            console.log(" not exists");
+          }
+          //file exists hence we can delete
+          fse.remove(fileToDelete);
+        });
+
+        album.gallery = album.gallery.filter(elem => {
+          console.log("elem", elem);
+
+          return elem._id != req.body.image_id;
+        });
+        album.save().then(() => {
+          res.status(200).json({ message: "Deleted " });
+        });
+      }
     });
   }
 );

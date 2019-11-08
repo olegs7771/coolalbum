@@ -120,6 +120,21 @@ export const deleteAlbum = (data, history) => dispatch => {
     }, 3000);
   });
 };
+//Delete Gallery Image by id
+export const deleteImage = (data, history) => dispatch => {
+  console.log("data", data);
+
+  axios.post("/api/albums/delete_image", data).then(res => {
+    console.log("res.data", res.data);
+    dispatch({
+      type: GET_MESSAGE,
+      payload: res.data
+    });
+    setTimeout(() => {
+      history.push(`/album_edit/${data.album_id}`);
+    }, 5000);
+  });
+};
 
 //Loading
 export const loadingAlbum = () => {

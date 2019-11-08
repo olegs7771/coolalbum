@@ -37,7 +37,7 @@ class AlbumGallery extends Component {
   render() {
     return (
       <div
-        className="card"
+        className="card  "
         onMouseEnter={this._onMouseEnter}
         onMouseLeave={this._onMouseLeave}
         onClick={this._selectGalleryImage}
