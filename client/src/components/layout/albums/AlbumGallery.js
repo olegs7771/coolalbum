@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 import { selectImage } from "../../../actions/albumAction";
 
 class AlbumGallery extends Component {
@@ -21,22 +22,25 @@ class AlbumGallery extends Component {
     }
   };
 
-  _onClick = () => {
+  _selectGalleryImage = () => {
     const data = {
+      id: this.props.id,
       image: this.props.image,
       title: this.props.title,
-      comments: this.props.comments
+      comments: this.props.comments,
+      date: this.props.date
     };
     this.props.selectImage(data);
+    this.props.history.push(`/gallery_image/${this.props.id}`);
   };
 
   render() {
     return (
       <div
-        className="card"
+        className="card  "
         onMouseEnter={this._onMouseEnter}
         onMouseLeave={this._onMouseLeave}
-        onClick={this._onClick}
+        onClick={this._selectGalleryImage}
         style={{
           borderColor: this.state.onMouseEnter ? "#34cceb" : null,
           borderWidth: this.state.onMouseEnter ? 3 : null,
@@ -57,4 +61,4 @@ const mapDispatchToProps = { selectImage };
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(AlbumGallery);
+)(withRouter(AlbumGallery));
