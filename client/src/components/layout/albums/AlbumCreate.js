@@ -32,12 +32,12 @@ export class AlbumCreate extends Component {
     });
   };
   //Loaded Image
-  // _onLoadImage = ({ target: img }) => {
-  //   console.log("img.naturalWidth", img.naturalWidth);
-  //   console.log("img.naturalHeight", img.naturalHeight);
-  //   console.log("img.offsetWidth", img.offsetWidth);
-  //   console.log("img.offsetHeight", img.offsetHeight);
-  // };
+  _onLoadImage = ({ target: img }) => {
+    console.log("img.naturalWidth", img.naturalWidth);
+    console.log("img.naturalHeight", img.naturalHeight);
+    console.log("img.offsetWidth", img.offsetWidth);
+    console.log("img.offsetHeight", img.offsetHeight);
+  };
   //Rotate Image
   _rotateImage = () => {
     this.setState({
@@ -54,6 +54,7 @@ export class AlbumCreate extends Component {
     FD.append("album_theme", this.state.theme_upload);
     FD.append("title", this.state.title);
     FD.append("desc", this.state.desc);
+    FD.append("rotation", this.state.rotation);
     const history = this.props.history;
     this.props.updateAlbum(FD, history);
   };

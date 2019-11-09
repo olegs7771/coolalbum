@@ -33,6 +33,9 @@ class AlbumGallery extends Component {
     this.props.selectImage(data);
     this.props.history.push(`/gallery_image/${this.props.id}`);
   };
+  _onLoadImage = ({ target: img }) => {
+    console.log("img", img);
+  };
 
   render() {
     return (
@@ -45,10 +48,25 @@ class AlbumGallery extends Component {
           borderColor: this.state.onMouseEnter ? "#34cceb" : null,
           borderWidth: this.state.onMouseEnter ? 3 : null,
           marginBottom: 2,
-          width: "100%"
+          width: "100%",
+
+          paddingTop: this.props.rotation > 0 ? "12%" : null,
+          paddingBottom: this.props.rotation > 0 ? "12%" : null
         }}
       >
-        <img src={this.props.image} className="card-img-top" alt="..." />
+        <div>
+          <img
+            onLoad={this._onLoadImage}
+            src={this.props.image}
+            className="card-img-top"
+            alt="..."
+            style={{
+              width: "100%",
+              height: 100,
+              transform: `rotate(${this.props.rotation}deg)`
+            }}
+          />
+        </div>
       </div>
     );
   }

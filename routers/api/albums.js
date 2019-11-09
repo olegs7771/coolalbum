@@ -150,6 +150,7 @@ router.post(
 
     upload_gallery(req, res, err => {
       console.log("req.file", req.file);
+
       if (req.file === undefined) {
         return res.status(200).json({ error: "Please select file" });
       }
@@ -181,7 +182,8 @@ router.post(
                   const newGalleryItem = {
                     comments: req.body.comments,
                     img_title: req.body.img_title,
-                    img: imagePath
+                    img: imagePath,
+                    rotation: req.body.rotation
                   };
                   if (album) {
                     album.gallery.unshift(newGalleryItem);
