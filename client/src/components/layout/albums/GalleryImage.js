@@ -53,60 +53,57 @@ class GalleryImage extends Component {
               </div>
             </div>
           </div>
-          <div className="row">
-            <div className="col-md-10">
-              <div className="card mb-3">
-                <img
-                  src={this.props.album.selectedImage.image}
-                  className="card-img-top"
-                  alt="..."
-                />
-                <div className="card-body">
-                  <h5 className="card-title">
-                    {this.props.album.selectedImage.title}
-                  </h5>
-                  <p className="card-text">
-                    {this.props.album.selectedImage.comments}
-                  </p>
-                  <div className="row">
-                    <div className="col-md-10">
-                      <p className="card-text">
-                        <small className="text-muted">
-                          Last updated{" "}
-                          {Moment(this.props.album.selectedImage.date).format(
-                            "DD/MM/YYYY"
-                          )}
-                        </small>
-                      </p>
-                    </div>
-                    <div className="col-md-2">
-                      {this.state.message.message ? (
-                        <span className="text-success h6">
-                          {this.state.message.message}
-                        </span>
-                      ) : null}
-                      <button
-                        className="btn btn-sm btn-warning"
-                        onClick={this._deleteImage}
-                      >
-                        Delete Image
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+
+          <div className="card mb-3">
+            <div
+              style={{
+                paddingTop:
+                  this.props.album.selectedImage.rotation > 0 ? "20%" : null,
+                paddingBottom:
+                  this.props.album.selectedImage.rotation > 0 ? "20%" : null
+              }}
+            >
+              <img
+                src={this.props.album.selectedImage.image}
+                className="card-img-top"
+                alt="..."
+                style={{
+                  width: "100%",
+                  transform: `rotate(${this.props.album.selectedImage.rotation}deg)`
+                }}
+              />
             </div>
-            <div className="col-md-2">
-              {this.props.album.gallery.map(item => (
-                <AlbumGallery
-                  key={item._id}
-                  id={item._id}
-                  image={item.img}
-                  comments={item.comments}
-                  title={item.img_title}
-                  date={item.date}
-                />
-              ))}
+            <div className="card-body">
+              <h5 className="card-title">
+                {this.props.album.selectedImage.title}
+              </h5>
+              <p className="card-text">
+                {this.props.album.selectedImage.comments}
+              </p>
+
+              <div className="col-md-10">
+                <p className="card-text">
+                  <small className="text-muted">
+                    Last updated{" "}
+                    {Moment(this.props.album.selectedImage.date).format(
+                      "DD/MM/YYYY"
+                    )}
+                  </small>
+                </p>
+              </div>
+              <div className="col-md-2">
+                {this.state.message.message ? (
+                  <span className="text-success h6">
+                    {this.state.message.message}
+                  </span>
+                ) : null}
+                <button
+                  className="btn btn-sm btn-warning"
+                  onClick={this._deleteImage}
+                >
+                  Delete Image
+                </button>
+              </div>
             </div>
           </div>
         </div>

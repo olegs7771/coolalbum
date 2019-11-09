@@ -277,6 +277,7 @@ class AlbumEdit extends Component {
                           <img
                             onLoad={this._onLoadImage}
                             src={this.state.selectedImage}
+                            alt=""
                             className="rounded"
                             style={{
                               width: "100%",

@@ -23,18 +23,18 @@ class AlbumGallery extends Component {
   };
 
   _selectGalleryImage = () => {
+    console.log("clicked gallery image");
+
     const data = {
       id: this.props.id,
       image: this.props.image,
       title: this.props.title,
       comments: this.props.comments,
+      rotation: this.props.rotation,
       date: this.props.date
     };
     this.props.selectImage(data);
     this.props.history.push(`/gallery_image/${this.props.id}`);
-  };
-  _onLoadImage = ({ target: img }) => {
-    console.log("img", img);
   };
 
   render() {
@@ -50,13 +50,12 @@ class AlbumGallery extends Component {
           marginBottom: 2,
           width: "100%",
 
-          paddingTop: this.props.rotation > 0 ? "12%" : null,
-          paddingBottom: this.props.rotation > 0 ? "12%" : null
+          paddingTop: this.props.rotation > 0 ? "21%" : null,
+          paddingBottom: this.props.rotation > 0 ? "21%" : null
         }}
       >
         <div>
           <img
-            onLoad={this._onLoadImage}
             src={this.props.image}
             className="card-img-top"
             alt="..."
