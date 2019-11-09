@@ -33,6 +33,9 @@ const UserSchema = new Schema({
   avatar: {
     type: String
   },
+  rotation: {
+    type: String
+  },
   token: {
     type: String
   },

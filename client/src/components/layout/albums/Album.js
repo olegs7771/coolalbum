@@ -43,6 +43,7 @@ export class Album extends Component {
           title={album.title}
           desc={album.desc}
           date={album.date}
+          rotation={album.rotation}
           id={album._id}
         />
       ));

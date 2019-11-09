@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import AlbumGallery from "./AlbumGallery";
+
 import { Link, withRouter } from "react-router-dom";
 import Moment from "moment";
 import { deleteImage } from "../../../actions/albumAction";

@@ -9,6 +9,10 @@ import {
 import { withRouter } from "react-router-dom";
 import { reactLocalStorage } from "reactjs-localstorage";
 import jwt_decode from "jwt-decode";
+import { imageOrientation } from "../../../utils/imageOrientation";
+import { rotateDeg } from "../../../utils/imageOrientationSwitch";
+
+const getOrientation = imageOrientation();
 
 class UserCardAvatar extends Component {
   constructor(props) {
@@ -25,7 +29,7 @@ class UserCardAvatar extends Component {
       //Here Avatar string update State
       selectedImage: props.avatar,
       uploadImage: "",
-      rotation: 0
+      rotation: ""
     };
     this.fileSelectedHandlert = this.fileSelectedHandler.bind(this);
     // this.fileUploadHandler = this.fileUploadHandler.bind(this);
@@ -78,27 +82,19 @@ class UserCardAvatar extends Component {
       selectedImage: URL.createObjectURL(e.target.files[0]),
       uploadImage: e.target.files[0]
     });
+    getOrientation(e.target.files[0], orientation => {
+      console.log("orientation", orientation);
+      const rotationDeg = rotateDeg(orientation);
+      console.log("rotationDeg ", rotationDeg);
+
+      this.setState({
+        rotation: rotationDeg
+      });
+    });
     this.props.clearErrors();
   };
 
   //OnLoaded Image
-
-  _onLoadImage = e => {
-    // console.log("offsetWidth :", img.offsetWidth);
-    // console.log("offsetHeight :", img.offsetHeight);
-    // console.log("e.target", e.target);
-  };
-
-  _rotateImage = e => {
-    this.setState(prevState => {
-      return {
-        ...prevState,
-        rotation: prevState.rotation + 90
-      };
-    });
-    console.log("e.target :", e.target);
-    console.log("this.state.rotation", this.state.rotation);
-  };
 
   //Upload Avatar from browser to db
   _avatarUpload = e => {
@@ -119,7 +115,7 @@ class UserCardAvatar extends Component {
     };
     const fd = new FormData();
     fd.append("myImage", this.state.uploadImage);
-
+    fd.append("rotation", this.state.rotation);
     this.props.updateAvatar(fd, this.props.history, userData);
   };
   //Delete Avatar in DB
@@ -159,7 +155,6 @@ class UserCardAvatar extends Component {
                 transform: `rotate(${this.state.rotation}deg)`
               }}
               alt=""
-              onClick={this._rotateImage}
             />
           </div>
           <div className="my-0">
