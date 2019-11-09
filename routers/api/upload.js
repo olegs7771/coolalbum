@@ -23,6 +23,8 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     upload(req, res, err => {
+      console.log("req.body", req.body);
+
       if (req.file === undefined) {
         return res.status(400).json({ error: "Please select file" });
       }

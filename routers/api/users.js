@@ -203,6 +203,7 @@ router.post("/login", (req, res) => {
               password,
               phone: user.phone,
               avatar: user.avatar,
+              rotation: user.rotation,
               location: user.location,
               bio: user.bio,
               date: user.date
