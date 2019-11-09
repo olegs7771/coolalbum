@@ -1,10 +1,14 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
+import { imageOrientation } from "../../../utils/imageOrientation";
+import { rotateDeg } from "../../../utils/imageOrientationSwitch";
 
 import TextFormGroup from "../../textFormGroup/TextFormGroup";
 import TextAreaFormGroup from "../../textFormGroup/TextAreaFormGroup";
 import { updateAlbum, clearErrors } from "../../../actions/albumAction";
+
+const getOrientation = imageOrientation();
 
 export class AlbumCreate extends Component {
   state = {
@@ -30,18 +34,14 @@ export class AlbumCreate extends Component {
       theme_selected: URL.createObjectURL(e.target.files[0]),
       theme_upload: e.target.files[0]
     });
-  };
-  //Loaded Image
-  _onLoadImage = ({ target: img }) => {
-    console.log("img.naturalWidth", img.naturalWidth);
-    console.log("img.naturalHeight", img.naturalHeight);
-    console.log("img.offsetWidth", img.offsetWidth);
-    console.log("img.offsetHeight", img.offsetHeight);
-  };
-  //Rotate Image
-  _rotateImage = () => {
-    this.setState({
-      rotation: this.state.rotation + 90
+    getOrientation(e.target.files[0], orientation => {
+      console.log("orientation", orientation);
+      const rotationDeg = rotateDeg(orientation);
+      console.log("rotationDeg ", rotationDeg);
+
+      this.setState({
+        rotation: rotationDeg
+      });
     });
   };
 
@@ -124,7 +124,6 @@ export class AlbumCreate extends Component {
                   transform: `rotate(${this.state.rotation}deg)`,
                   borderRadius: 5
                 }}
-                onClick={this._rotateImage}
               />
             </div>
           ) : null}

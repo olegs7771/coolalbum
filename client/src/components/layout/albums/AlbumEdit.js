@@ -16,7 +16,9 @@ import {
   deleteAlbum,
   getGallery
 } from "../../../actions/albumAction";
+
 const getOrientation = imageOrientation();
+
 class AlbumEdit extends Component {
   state = {
     albumHasGallery: false,
