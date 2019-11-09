@@ -23,11 +23,14 @@ class AlbumGallery extends Component {
   };
 
   _selectGalleryImage = () => {
+    console.log("clicked gallery image");
+
     const data = {
       id: this.props.id,
       image: this.props.image,
       title: this.props.title,
       comments: this.props.comments,
+      rotation: this.props.rotation,
       date: this.props.date
     };
     this.props.selectImage(data);
@@ -45,10 +48,24 @@ class AlbumGallery extends Component {
           borderColor: this.state.onMouseEnter ? "#34cceb" : null,
           borderWidth: this.state.onMouseEnter ? 3 : null,
           marginBottom: 2,
-          width: "100%"
+          width: "100%",
+
+          paddingTop: this.props.rotation > 0 ? "21%" : null,
+          paddingBottom: this.props.rotation > 0 ? "21%" : null
         }}
       >
-        <img src={this.props.image} className="card-img-top" alt="..." />
+        <div>
+          <img
+            src={this.props.image}
+            className="card-img-top"
+            alt="..."
+            style={{
+              width: "100%",
+              height: 100,
+              transform: `rotate(${this.props.rotation}deg)`
+            }}
+          />
+        </div>
       </div>
     );
   }

@@ -27,10 +27,6 @@ export class Album extends Component {
   }
 
   render() {
-    // console.log("window.innerWidth", window.innerWidth);
-    console.log("this.state", this.state);
-    console.log("this.props", this.props);
-
     const { loading, albums } = this.props.album;
     let albumsContent;
     if (albums === null || loading) {

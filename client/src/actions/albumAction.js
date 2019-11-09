@@ -86,8 +86,6 @@ export const addImageToGallery = (fd, data) => dispatch => {
 
 //Get All Gallery from Album by id
 export const getGallery = data => dispatch => {
-  console.log("data", data);
-
   axios
     .post("/api/albums/get_gallery_all", data)
     .then(res => {

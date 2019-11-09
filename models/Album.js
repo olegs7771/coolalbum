@@ -41,6 +41,9 @@ const AlbumSchema = new Schema({
       img_title: {
         type: String
       },
+      rotation: {
+        type: String
+      },
       date: {
         type: Date,
         default: Date.now

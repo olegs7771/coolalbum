@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import Moment from "moment";
 import Spinner from "../../../utils/Spinner";
 import AlbumGallery from "./AlbumGallery";
+import { imageOrientation } from "../../../utils/imageOrientation";
+import { rotateDeg } from "../../../utils/imageOrientationSwitch";
 
 import { withRouter } from "react-router-dom";
 import TextAreaFormGroup from "../../textFormGroup/TextAreaFormGroup";
@@ -14,6 +16,9 @@ import {
   deleteAlbum,
   getGallery
 } from "../../../actions/albumAction";
+
+const getOrientation = imageOrientation();
+
 class AlbumEdit extends Component {
   state = {
     albumHasGallery: false,
@@ -21,7 +26,8 @@ class AlbumEdit extends Component {
     image_gallery_comment: "",
     image_gallery_title: "",
     message: {},
-    isMobile: false
+    isMobile: false,
+    rotation: ""
   };
   _onChange = e => {
     this.setState({
@@ -60,9 +66,20 @@ class AlbumEdit extends Component {
 
   //Select Image To Gallery
   _selectFile = e => {
+    console.log("e.target.files[0]", e.target.files[0]);
+
     this.setState({
       selectedImage: URL.createObjectURL(e.target.files[0]),
       uploadImage: e.target.files[0]
+    });
+    getOrientation(e.target.files[0], orientation => {
+      console.log("orientation", orientation);
+      const rotationDeg = rotateDeg(orientation);
+      console.log("rotationDeg ", rotationDeg);
+
+      this.setState({
+        rotation: rotationDeg
+      });
     });
   };
 
@@ -74,6 +91,7 @@ class AlbumEdit extends Component {
     fd.append("img_title", this.state.image_gallery_title);
     fd.append("comments", this.state.image_gallery_comment);
     fd.append("id", this.props.album.album._id);
+    fd.append("rotation", this.state.rotation);
     const data = {
       history: this.props.history,
       id: this.props.album.album._id
@@ -94,8 +112,6 @@ class AlbumEdit extends Component {
   };
 
   render() {
-    console.log("innerWidth", window.innerWidth);
-
     //If Album has gallery split to col
     if (!this.state.albumHasGallery) {
       if (this.props.album.album) {
@@ -127,11 +143,9 @@ class AlbumEdit extends Component {
                       src={this.state.selectedImage}
                       className="rounded"
                       style={{
-                        width: "100%",
-                        transform: `rotate(${this.state.rotation}deg)`
+                        imageOrientation: "180deg"
                       }}
                       alt=""
-                      onClick={this._rotateImage}
                     />
                     {this.state.message.gallery ? (
                       <span className="text-success h6">
@@ -229,9 +243,10 @@ class AlbumEdit extends Component {
               <div className=" py-0">
                 <img
                   src={this.props.album.album.image}
-                  className="card-img-top"
+                  className="card-img-top "
                   alt="..."
                 />
+
                 <div className="row">
                   <div className="col-md-6">
                     <div className="card-body">
@@ -251,18 +266,27 @@ class AlbumEdit extends Component {
                   </div>
                   <div className="col-md-6 ">
                     {this.state.selectedImage ? (
-                      <div className="p-1 ">
-                        <img
-                          onLoad={this._onLoadImage}
-                          src={this.state.selectedImage}
-                          className="rounded"
+                      <div className="p-1 border">
+                        <div
                           style={{
-                            width: "100%",
-                            transform: `rotate(${this.state.rotation}deg)`
+                            paddingTop:
+                              this.state.rotation === 0 ? null : "22%",
+
+                            paddingBottom:
+                              this.state.rotation === 0 ? null : "22%"
                           }}
-                          alt=""
-                          onClick={this._rotateImage}
-                        />
+                        >
+                          <img
+                            onLoad={this._onLoadImage}
+                            src={this.state.selectedImage}
+                            alt=""
+                            className="rounded"
+                            style={{
+                              width: "100%",
+                              transform: `rotate(${this.state.rotation}deg)`
+                            }}
+                          />
+                        </div>
                         {this.state.message.gallery ? (
                           <span className="text-success h6">
                             {this.state.message.gallery}
@@ -359,6 +383,7 @@ class AlbumEdit extends Component {
                   comments={item.comments}
                   title={item.img_title}
                   date={item.date}
+                  rotation={item.rotation}
                 />
               ))}
             </div>
