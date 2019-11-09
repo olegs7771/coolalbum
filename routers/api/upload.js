@@ -1,76 +1,20 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
-const path = require("path");
+
 //Bring in Models
 const User = require("../../models/User");
 //Bring compressor
-// const compressor = require("../../compressor/compressor");
-const imagemin = require("imagemin");
-const imageminJpegtran = require("imagemin-jpegtran");
-const imageminPngquant = require("imagemin-pngquant");
-const imageminMozjpeg = require("imagemin-mozjpeg");
+const compressor = require("../../utils/compressor/compressorAvatar");
+const compressImg = compressor();
+
 const isEmpty = require("../validation/isEmpty");
+//Bring in Multer
+const fileUploader = require("../../utils/multer/multerAvatar");
+const upload = fileUploader();
 
 //File System
 const fse = require("fs-extra");
-//Multer
-const multer = require("multer");
-
-// set storage engine
-const storage = multer.diskStorage({
-  destination: "./public/upload_img/",
-  filename: function(req, file, cb) {
-    cb(
-      null,
-      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
-    );
-  }
-});
-// Init Upload
-const upload = multer({
-  storage,
-  limits: {
-    fileSize: 10000000
-  },
-  //file filter
-  fileFilter: function(req, file, cb) {
-    // we create separate function
-    checkFileType(file, cb);
-  }
-}).single("myImage");
-
-// Check File Type Function
-function checkFileType(file, cb) {
-  //Allowed ext
-  const filetypes = /jpeg|jpg|png|gif/;
-  // Check ext
-  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-  // Check mime
-
-  const mimetype = filetypes.test(file.mimetype);
-  if (mimetype && extname) {
-    return cb(null, true);
-  } else {
-    cb("Images Only");
-  }
-}
-
-//Firing Compressor
-function compressImg(cb) {
-  (async () => {
-    const files = await imagemin(
-      ["public/upload_img/*.{jpg,png}"],
-      "public/compressed_img/",
-      {
-        plugins: [imageminMozjpeg([100]), imageminPngquant()]
-      }
-    );
-
-    //=> [{data: <Buffer 89 50 4e …>, path: 'build/images/foo.jpg'}, …]
-    return cb(files);
-  })();
-}
 
 //Route Private
 //Updating Avatar in User
@@ -78,10 +22,8 @@ router.post(
   "/update",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    console.log("req.body", req.body);
-
     upload(req, res, err => {
-      console.log("req.file", req.file);
+      console.log("req.body", req.body);
 
       if (req.file === undefined) {
         return res.status(400).json({ error: "Please select file" });
@@ -97,9 +39,7 @@ router.post(
         if (req.file.filename) {
           //fire up compressor
           compressImg(cb => {
-            cb.forEach(element => {
-              console.log("cb from compressor", element);
-            });
+            cb.forEach(element => {});
 
             if (cb) {
               User.findOne({ _id: req.user.id })
@@ -108,13 +48,8 @@ router.post(
                   // nothing to delete in public/compresse
                   //Check for avatar === https||http
 
-                  console.log("user.avatar", user.avatar);
-
                   const reg = new RegExp("^(http|https|//www)://", "i");
-
                   if (isEmpty(user.avatar) || reg.test(user.avatar)) {
-                    console.log("avatar empty string || https||//www ");
-
                     // avatar !=='' in db
                     //update db
                     if (process.env.NODE_ENV === "production") {
@@ -132,7 +67,8 @@ router.post(
                       { _id: req.user.id },
                       {
                         $set: {
-                          avatar
+                          avatar: avatar,
+                          rotation: req.body.rotation
                         }
                       },
                       { new: true }
@@ -145,9 +81,7 @@ router.post(
                           { avatar }
                         );
                       })
-                      .catch(err => {
-                        console.log("error update avatar", err);
-                      });
+                      .catch(err => {});
 
                     // Delete row file from public/upload_img/
                     fse
@@ -161,8 +95,6 @@ router.post(
                         );
                       });
                   } else {
-                    console.log("avatar is not empty string");
-
                     const userAvatar = user.avatar;
                     console.log("userAvatar ", userAvatar);
                     //path to file to be deleted in public/compressed_img
@@ -171,7 +103,6 @@ router.post(
                     //checks if file exists in /uploads
                     fse.pathExists(pathAvatar).then(exists => {
                       if (!exists) {
-                        console.log("no file in public/compressed_img/ ");
                         let avatar;
 
                         if (process.env.NODE_ENV === "production") {
@@ -190,7 +121,8 @@ router.post(
                           { _id: req.user.id },
                           {
                             $set: {
-                              avatar
+                              avatar,
+                              rotation: req.body.rotation
                             }
                           },
                           { new: true }
@@ -238,7 +170,8 @@ router.post(
                           { _id: req.user.id },
                           {
                             $set: {
-                              avatar
+                              avatar,
+                              rotation: req.body.rotation
                             }
                           },
                           { new: true }

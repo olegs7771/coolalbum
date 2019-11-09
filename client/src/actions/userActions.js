@@ -117,6 +117,8 @@ export const getUser = () => dispatch => {
 
 //set logged user
 export const setCurrentUser = decoded => {
+  console.log("decoded user", decoded);
+
   return {
     type: SET_CURRENT_USER,
     payload: decoded

@@ -38,7 +38,7 @@ router.post(
   "/get_posts",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    Post.find({ toID: req.user._id }).then(post => {
+    Post.findById(req.user.id).then(post => {
       if (!post) {
         res.status(200).json({ post: "no posts" });
       } else {

@@ -1,41 +1,73 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
+import { imageOrientation } from "../../../utils/imageOrientation";
+import { rotateDeg } from "../../../utils/imageOrientationSwitch";
+
 import TextFormGroup from "../../textFormGroup/TextFormGroup";
 import TextAreaFormGroup from "../../textFormGroup/TextAreaFormGroup";
+import { updateAlbum, clearErrors } from "../../../actions/albumAction";
+
+const getOrientation = imageOrientation();
 
 export class AlbumCreate extends Component {
   state = {
-    album_title: "",
-    album_desc: "",
-    theme_image_selected: null,
+    title: "",
+    desc: "",
+    theme_selected: null,
+    errors: {},
+    message: {},
     rotation: 0
   };
+
+  _onChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+    this.props.clearErrors();
+  };
+
   //Select File
   _selectFile = e => {
     console.log("e.target", e.target.files[0]);
     this.setState({
-      theme_image_selected: URL.createObjectURL(e.target.files[0])
+      theme_selected: URL.createObjectURL(e.target.files[0]),
+      theme_upload: e.target.files[0]
     });
-  };
-  //Loaded Image
-  _onLoadImage = ({ target: img }) => {
-    console.log("img.naturalWidth", img.naturalWidth);
-    console.log("img.naturalHeight", img.naturalHeight);
-    console.log("img.offsetWidth", img.offsetWidth);
-    console.log("img.offsetHeight", img.offsetHeight);
-  };
-  //Rotate Image
-  _rotateImage = () => {
-    this.setState({
-      rotation: this.state.rotation + 90
+    getOrientation(e.target.files[0], orientation => {
+      console.log("orientation", orientation);
+      const rotationDeg = rotateDeg(orientation);
+      console.log("rotationDeg ", rotationDeg);
+
+      this.setState({
+        rotation: rotationDeg
+      });
     });
   };
 
   //Create Album
   _createAlbum = e => {
     e.preventDefault();
-    console.log("submitted");
+
+    //create FormData
+    const FD = new FormData();
+    FD.append("album_theme", this.state.theme_upload);
+    FD.append("title", this.state.title);
+    FD.append("desc", this.state.desc);
+    FD.append("rotation", this.state.rotation);
+    const history = this.props.history;
+    this.props.updateAlbum(FD, history);
   };
+  //Get Errors And Messages
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.errors !== this.props.errors) {
+      return console.log("this.props.errors", this.props.errors);
+    }
+    if (prevProps.message !== this.props.message) {
+      return console.log("this.props.message", this.props.message);
+    }
+  }
+
   render() {
     const { name } = this.props.auth.user;
     return (
@@ -50,22 +82,18 @@ export class AlbumCreate extends Component {
           <div className="col-md-6 ">
             <form onSubmit={this._createAlbum}>
               <TextFormGroup
-                value={this.state.album_title}
+                name="title"
+                value={this.state.title}
                 placeholder="Choose Title for Album"
-                onChange={e =>
-                  this.setState({
-                    album_title: e.target.value
-                  })
-                }
+                onChange={this._onChange}
+                error={this.props.errors.title}
               />
               <TextAreaFormGroup
+                name="desc"
                 placeholder="Some Description of Album"
-                value={this.state.album_desc}
-                onChange={e =>
-                  this.setState({
-                    album_desc: e.target.value
-                  })
-                }
+                value={this.state.desc}
+                onChange={this._onChange}
+                error={this.props.errors.desc}
               />
               <div className="custom-file">
                 <input
@@ -81,18 +109,21 @@ export class AlbumCreate extends Component {
                 Create
               </button>
             </form>
+            {this.props.message.album ? (
+              <span className="text-success">{this.props.message.album}</span>
+            ) : null}
           </div>
-          {this.state.theme_image_selected ? (
+          {this.state.theme_selected ? (
             <div className="col-md-6  pt-2 pb-5  ">
               <img
                 onLoad={this._onLoadImage}
-                src={this.state.theme_image_selected}
+                src={this.state.theme_selected}
                 alt=""
                 style={{
                   width: "100%",
-                  transform: `rotate(${this.state.rotation}deg)`
+                  transform: `rotate(${this.state.rotation}deg)`,
+                  borderRadius: 5
                 }}
-                onClick={this._rotateImage}
               />
             </div>
           ) : null}
@@ -103,12 +134,14 @@ export class AlbumCreate extends Component {
 }
 
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: state.auth,
+  errors: state.errors.errors,
+  message: state.message.message
 });
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = { updateAlbum, clearErrors };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(AlbumCreate);
+)(withRouter(AlbumCreate));

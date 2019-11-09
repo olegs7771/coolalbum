@@ -10,7 +10,7 @@ const keys = require("../../config/dev_keys").secredOrKey;
 const passport = require("passport");
 const validateRegisterInput = require("../validation/register");
 const validateLoginInput = require("../validation/login");
-const sendMail = require("../../mailer/transporter");
+const sendMail = require("../../utils/mailer/transporter");
 
 const validator = require("validator");
 
@@ -203,6 +203,7 @@ router.post("/login", (req, res) => {
               password,
               phone: user.phone,
               avatar: user.avatar,
+              rotation: user.rotation,
               location: user.location,
               bio: user.bio,
               date: user.date

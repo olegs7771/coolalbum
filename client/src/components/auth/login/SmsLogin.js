@@ -110,8 +110,6 @@ class SmsLogin extends Component {
 
   render() {
     const { phone, number, code, email, errors, messages } = this.state;
-    console.log("this.props", this.props);
-    console.log("this.state", this.state);
 
     if (!number) {
       return (

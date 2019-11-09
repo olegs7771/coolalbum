@@ -9,6 +9,10 @@ import {
 import { withRouter } from "react-router-dom";
 import { reactLocalStorage } from "reactjs-localstorage";
 import jwt_decode from "jwt-decode";
+import { imageOrientation } from "../../../utils/imageOrientation";
+import { rotateDeg } from "../../../utils/imageOrientationSwitch";
+
+const getOrientation = imageOrientation();
 
 class UserCardAvatar extends Component {
   constructor(props) {
@@ -23,9 +27,9 @@ class UserCardAvatar extends Component {
       showDeleteBtn: false,
 
       //Here Avatar string update State
-      selectedImage: props.avatar,
+      selectedImage: "",
       uploadImage: "",
-      rotation: 0
+      rotation: ""
     };
     this.fileSelectedHandlert = this.fileSelectedHandler.bind(this);
     // this.fileUploadHandler = this.fileUploadHandler.bind(this);
@@ -38,7 +42,7 @@ class UserCardAvatar extends Component {
     //Do not show deleteBtn if avatar === ' //www.gravatar.com/avatar/d415f0e30c471dfdd9bc4f827329ef48?s=200&r=pg&d=mm'  (empty user)
 
     if (
-      this.props.user.avatar !==
+      this.props.auth.user.avatar !==
       "//www.gravatar.com/avatar/d415f0e30c471dfdd9bc4f827329ef48?s=200&r=pg&d=mm"
     ) {
       this.setState({
@@ -72,33 +76,25 @@ class UserCardAvatar extends Component {
 
   //Select Avatar from browser to tmp memory
   fileSelectedHandler = e => {
-    console.log("selected file :", e.target.files[0]);
+    console.log("selected file :", e.target);
 
     this.setState({
       selectedImage: URL.createObjectURL(e.target.files[0]),
       uploadImage: e.target.files[0]
     });
+    getOrientation(e.target.files[0], orientation => {
+      console.log("orientation", orientation);
+      const rotationDeg = rotateDeg(orientation);
+      console.log("rotationDeg ", rotationDeg);
+
+      this.setState({
+        rotation: rotationDeg
+      });
+    });
     this.props.clearErrors();
   };
 
   //OnLoaded Image
-
-  _onLoadImage = e => {
-    // console.log("offsetWidth :", img.offsetWidth);
-    // console.log("offsetHeight :", img.offsetHeight);
-    console.log("e.target", e.target);
-  };
-
-  _rotateImage = e => {
-    this.setState(prevState => {
-      return {
-        ...prevState,
-        rotation: prevState.rotation + 90
-      };
-    });
-    console.log("e.target :", e.target);
-    console.log("this.state.rotation", this.state.rotation);
-  };
 
   //Upload Avatar from browser to db
   _avatarUpload = e => {
@@ -119,7 +115,7 @@ class UserCardAvatar extends Component {
     };
     const fd = new FormData();
     fd.append("myImage", this.state.uploadImage);
-
+    fd.append("rotation", this.state.rotation);
     this.props.updateAvatar(fd, this.props.history, userData);
   };
   //Delete Avatar in DB
@@ -142,7 +138,8 @@ class UserCardAvatar extends Component {
   };
 
   render() {
-    const { selectedImage, message, errors } = this.state;
+    const { selectedImage, message, errors, rotation } = this.state;
+    console.log("this.props.auth.user", this.props.auth.user.rotation);
 
     //content showen to confirm delete profile (isConfirmDelete: true)
 
@@ -152,19 +149,18 @@ class UserCardAvatar extends Component {
           <div className="p-5 ">
             <img
               onLoad={this._onLoadImage}
-              src={selectedImage}
+              src={selectedImage ? selectedImage : this.props.auth.user.avatar}
               className="rounded"
               style={{
                 width: "100%",
-                transform: `rotate(${this.state.rotation}deg)`
+                transform: `rotate(${
+                  selectedImage ? rotation : this.props.auth.user.rotation
+                }deg)`
               }}
               alt=""
-              onClick={this._rotateImage}
             />
           </div>
-          <div className="my-0">
-            <span className="h6 text-success">Click Image To Rotate</span>
-          </div>
+
           <br />
           <div className="">
             {errors.error ? (
@@ -218,7 +214,7 @@ class UserCardAvatar extends Component {
 
 const mapStateToProps = state => ({
   errors: state.errors.errors,
-  user: state.auth.user,
+  auth: state.auth,
   message: state.message.message
 });
 export default connect(

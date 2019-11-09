@@ -8,26 +8,51 @@ const AlbumSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "users"
   },
+  uid: {
+    type: String,
+    required: true
+  },
   title: {
     type: String,
     required: true,
     max: 30
   },
-  text: {
+  desc: {
     type: String,
     required: true
   },
-  location: {
+
+  image: {
     type: String
   },
-  image: {
+  rotation: {
     type: String
   },
 
   date: {
     type: Date,
     default: Date.now()
-  }
+  },
+  gallery: [
+    {
+      img: {
+        type: String
+      },
+      comments: {
+        type: String
+      },
+      img_title: {
+        type: String
+      },
+      rotation: {
+        type: String
+      },
+      date: {
+        type: Date,
+        default: Date.now
+      }
+    }
+  ]
 });
 mongoose.set("useCreateIndex", true);
 module.exports = Album = mongoose.model("album", AlbumSchema);

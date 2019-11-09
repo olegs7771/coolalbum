@@ -35,6 +35,7 @@ class UserCard extends Component {
           name={user.name}
           email={user.email}
           avatar={user.avatar}
+          rotation={user.rotation}
           date={user.date}
           location={user.location}
         />
