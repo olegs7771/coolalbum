@@ -27,7 +27,7 @@ class UserCardAvatar extends Component {
       showDeleteBtn: false,
 
       //Here Avatar string update State
-      selectedImage: props.avatar,
+      selectedImage: "",
       uploadImage: "",
       rotation: ""
     };
@@ -42,7 +42,7 @@ class UserCardAvatar extends Component {
     //Do not show deleteBtn if avatar === ' //www.gravatar.com/avatar/d415f0e30c471dfdd9bc4f827329ef48?s=200&r=pg&d=mm'  (empty user)
 
     if (
-      this.props.user.avatar !==
+      this.props.auth.user.avatar !==
       "//www.gravatar.com/avatar/d415f0e30c471dfdd9bc4f827329ef48?s=200&r=pg&d=mm"
     ) {
       this.setState({
@@ -138,7 +138,8 @@ class UserCardAvatar extends Component {
   };
 
   render() {
-    const { selectedImage, message, errors } = this.state;
+    const { selectedImage, message, errors, rotation } = this.state;
+    console.log("this.props.auth.user", this.props.auth.user.rotation);
 
     //content showen to confirm delete profile (isConfirmDelete: true)
 
@@ -148,18 +149,18 @@ class UserCardAvatar extends Component {
           <div className="p-5 ">
             <img
               onLoad={this._onLoadImage}
-              src={selectedImage}
+              src={selectedImage ? selectedImage : this.props.auth.user.avatar}
               className="rounded"
               style={{
                 width: "100%",
-                transform: `rotate(${this.state.rotation}deg)`
+                transform: `rotate(${
+                  selectedImage ? rotation : this.props.auth.user.rotation
+                }deg)`
               }}
               alt=""
             />
           </div>
-          <div className="my-0">
-            <span className="h6 text-success">Click Image To Rotate</span>
-          </div>
+
           <br />
           <div className="">
             {errors.error ? (
@@ -213,7 +214,7 @@ class UserCardAvatar extends Component {
 
 const mapStateToProps = state => ({
   errors: state.errors.errors,
-  user: state.auth.user,
+  auth: state.auth,
   message: state.message.message
 });
 export default connect(
