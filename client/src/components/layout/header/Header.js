@@ -137,7 +137,7 @@ class Header extends Component {
                           height: "50px",
                           border: "2px solid white",
 
-                          transform: `rotate(${this.state.rotation}deg)`
+                          transform: `rotate(${user.rotation}deg)`
                         }}
                       />
                     ) : (
