@@ -15,7 +15,7 @@ import WeatherWidGet from "../../../utils/WeatherWidGet";
 class Header extends Component {
   state = {
     posts: null,
-    rotateAvatar: false
+    rotation: ""
   };
 
   //Logout
@@ -27,7 +27,7 @@ class Header extends Component {
     history.push("/");
   };
 
-  async componentDidMount() {
+  componentDidMount() {
     //obtain token from localStorage and
     const token = reactLocalStorage.get("jwtToken");
     if (token) {
@@ -35,7 +35,6 @@ class Header extends Component {
       const decodedToken = jwtDecode(token);
       //  putting it into redux state
       this.props.setCurrentUser(decodedToken);
-      await this.props.getPosts();
     }
     // Fetch Weather API from OPEN WEATHER MAP
     if (this.props.auth.user.name) {
@@ -51,20 +50,8 @@ class Header extends Component {
 
     //get posts after user logged
     if (prevProps.auth !== this.props.auth) {
-      this.props.getPosts();
-
       //Rotate Avatar in Header if not taken from Facebook or Gravatar
       const reg = new RegExp("^(http|https)://|^//www", "i");
-
-      if (reg.test(this.props.auth.user.avatar)) {
-        this.setState({
-          rotateAvatar: false
-        });
-      } else {
-        this.setState({
-          rotateAvatar: true
-        });
-      }
     }
   }
 
@@ -150,9 +137,7 @@ class Header extends Component {
                           height: "50px",
                           border: "2px solid white",
 
-                          transform: this.state.rotateAvatar
-                            ? "rotate(90deg)"
-                            : null
+                          transform: `rotate(${this.state.rotation}deg)`
                         }}
                       />
                     ) : (

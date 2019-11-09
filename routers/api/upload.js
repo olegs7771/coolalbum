@@ -65,7 +65,8 @@ router.post(
                       { _id: req.user.id },
                       {
                         $set: {
-                          avatar
+                          avatar: avatar,
+                          rotation: req.body.rotation
                         }
                       },
                       { new: true }
@@ -118,7 +119,8 @@ router.post(
                           { _id: req.user.id },
                           {
                             $set: {
-                              avatar
+                              avatar,
+                              rotation: req.body.rotation
                             }
                           },
                           { new: true }
@@ -166,7 +168,8 @@ router.post(
                           { _id: req.user.id },
                           {
                             $set: {
-                              avatar
+                              avatar,
+                              rotation: req.body.rotation
                             }
                           },
                           { new: true }

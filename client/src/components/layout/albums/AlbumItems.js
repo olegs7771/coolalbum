@@ -39,12 +39,16 @@ class AlbumItems extends Component {
         onMouseLeave={this._onMouseLeave}
         onClick={this._onClick}
       >
-        <div className="p-1" style={{ height: 200 }}>
+        <div className="p-1" style={{ height: 200, paddingBottom: "20%" }}>
           <img
             src={this.props.image}
             style={{ width: "100%", height: "100%" }}
             className="card-img-top"
             alt=""
+            style={{
+              width: "100%",
+              transform: `rotate(${this.props.rotation}deg)`
+            }}
           />
         </div>
         <div className="card-body">

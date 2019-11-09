@@ -110,7 +110,8 @@ router.post(
                   uid: req.user.id,
                   title: req.body.title,
                   desc: req.body.desc,
-                  image: themeImagePath
+                  image: themeImagePath,
+                  rotation: req.body.rotation
                 });
                 newAlbum
                   .save()
