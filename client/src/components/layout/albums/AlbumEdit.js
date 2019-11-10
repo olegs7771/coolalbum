@@ -122,6 +122,15 @@ class AlbumEdit extends Component {
                 src={this.props.album.album.image}
                 className="card-img-top "
                 alt="..."
+                style={{
+                  paddingTop:
+                    this.props.album.album.rotation !== "0" ? "12%" : null,
+
+                  paddingBottom:
+                    this.props.album.album.rotation !== "0" ? "12%" : null,
+                  width: "100%",
+                  transform: `rotate(${this.props.album.album.rotation}deg)`
+                }}
               />
 
               <div className="row">
@@ -268,6 +277,15 @@ class AlbumEdit extends Component {
                   src={this.props.album.album.image}
                   className="card-img-top "
                   alt="..."
+                  style={{
+                    paddingTop:
+                      this.props.album.album.rotation !== "0" ? "12%" : null,
+
+                    paddingBottom:
+                      this.props.album.album.rotation !== "0" ? "12%" : null,
+                    width: "100%",
+                    transform: `rotate(${this.props.album.album.rotation}deg)`
+                  }}
                 />
 
                 <div className="row">
@@ -314,7 +332,9 @@ class AlbumEdit extends Component {
                           <span className="text-success h6">
                             {this.state.message.gallery}
                           </span>
-                        ) : null}
+                        ) : (
+                          <Spinner />
+                        )}
                         <div className=" m-1  ">
                           <TextFormGroup
                             placeholder="Add Title to Picture.."
