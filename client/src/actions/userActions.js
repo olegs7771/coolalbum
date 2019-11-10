@@ -179,6 +179,8 @@ export const updateAvatar = (fd, history, userData) => dispatch => {
         console.log("ready to login again");
 
         axios.post("api/users/login", userData).then(res => {
+          console.log("userData", userData);
+
           // Save to localStorage token
           const { token } = res.data;
           //Set token to localStorage
