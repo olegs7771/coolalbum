@@ -177,7 +177,7 @@ export const updateAvatar = (fd, history, userData) => dispatch => {
         //login updated user
         // store.dispatch(loginUser(userData, history));
         console.log("ready to login again");
-
+        console.log("userData before login", userData);
         axios.post("api/users/login", userData).then(res => {
           console.log("userData", userData);
 
