@@ -178,6 +178,11 @@ export const updateAvatar = (fd, history, userData) => dispatch => {
         // store.dispatch(loginUser(userData, history));
         console.log("ready to login again");
         console.log("userData before login", userData);
+
+        if (userData.password === undefined) {
+          return history.push("/");
+        }
+
         axios.post("api/users/login", userData).then(res => {
           console.log("userData", userData);
 
