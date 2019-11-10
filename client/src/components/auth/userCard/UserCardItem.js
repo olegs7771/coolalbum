@@ -17,8 +17,8 @@ class UserCardItem extends Component {
 
     return (
       <div className="row ">
-        <div className="col-md-7  ">
-          <div className="pr-5  ">
+        <div className="col-md-7 border ">
+          <div className="pr-5 pt-5 ">
             <ul className="list-group-flush my-4 text-left  ">
               <li className="list-group-item  ">
                 <span className="text-info">Name </span>
@@ -55,18 +55,26 @@ class UserCardItem extends Component {
             <div className="a btn btn-danger ml-2">Delete Profile</div>
           </div>
         </div>
-        <div className="col-md-5  border-danger">
-          <div style={{ paddingTop: "25%", paddingBottom: "25%" }}>
-            <img
-              src={avatar}
-              className="my-3  "
-              style={{
-                width: "100%",
-                transform: ` rotate(${rotation}deg)`
-              }}
-              alt=""
-              onLoad={this._onloadImage}
-            />
+        <div className="col-md-5  border">
+          <div
+            style={
+              {
+                //  paddingTop: "25%", paddingBottom: "25%"
+              }
+            }
+          >
+            <div style={{ padding: "10%" }}>
+              <img
+                src={avatar}
+                className="my-3  "
+                style={{
+                  width: "100%",
+                  transform: ` rotate(${rotation}deg)`
+                }}
+                alt=""
+                onLoad={this._onloadImage}
+              />
+            </div>
           </div>
         </div>
       </div>

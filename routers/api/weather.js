@@ -10,13 +10,14 @@ var weather = require("openweather-apis");
 
 router.post("/weather", (req, res) => {
   const ip_info = get_ip(req);
-  // console.log("ip_info", ip_info.clientIp);
+
+  console.log("ip_info", ip_info.clientIp);
 
   //for test only we use our own IP
   const myIP = "84.109.36.175";
   let currentIP;
   if (process.env.NODE_ENV === "production") {
-    currentIP = myIP;
+    currentIP = ip_info.clientIp;
   } else {
     currentIP = myIP;
   }

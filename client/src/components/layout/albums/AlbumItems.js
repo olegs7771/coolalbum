@@ -39,7 +39,7 @@ class AlbumItems extends Component {
         onMouseLeave={this._onMouseLeave}
         onClick={this._onClick}
       >
-        <div className="p-1" style={{ height: 200, paddingBottom: "20%" }}>
+        <div className="p-1" style={{ paddingBottom: "20%" }}>
           <img
             src={this.props.image}
             style={{ width: "100%", height: "100%" }}
