@@ -117,8 +117,6 @@ export const getUser = () => dispatch => {
 
 //set logged user
 export const setCurrentUser = decoded => {
-  console.log("decoded user", decoded);
-
   return {
     type: SET_CURRENT_USER,
     payload: decoded
@@ -178,6 +176,8 @@ export const updateAvatar = (fd, history, userData) => dispatch => {
         });
         //login updated user
         // store.dispatch(loginUser(userData, history));
+        console.log("ready to login again");
+
         axios.post("api/users/login", userData).then(res => {
           // Save to localStorage token
           const { token } = res.data;
