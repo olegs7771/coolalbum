@@ -117,8 +117,6 @@ export const getUser = () => dispatch => {
 
 //set logged user
 export const setCurrentUser = decoded => {
-  console.log("decoded user", decoded);
-
   return {
     type: SET_CURRENT_USER,
     payload: decoded
@@ -178,7 +176,16 @@ export const updateAvatar = (fd, history, userData) => dispatch => {
         });
         //login updated user
         // store.dispatch(loginUser(userData, history));
+        console.log("ready to login again");
+        console.log("userData before login", userData);
+
+        if (userData.password === undefined) {
+          return history.push("/");
+        }
+
         axios.post("api/users/login", userData).then(res => {
+          console.log("userData", userData);
+
           // Save to localStorage token
           const { token } = res.data;
           //Set token to localStorage
@@ -247,6 +254,20 @@ export const deleteAvatar = (history, userData) => dispatch => {
     })
     .catch(err => {
       console.log(err);
+    });
+};
+
+//Delete Profile
+//@Private Route
+
+export const deleteProfile = history => dispatch => {
+  axios
+    .post("/api/users/delete_profile")
+    .then(res => {
+      console.log("res.data", res.data);
+    })
+    .catch(err => {
+      console.log("error to delete :", err.response.data);
     });
 };
 

@@ -85,6 +85,9 @@ class AlbumEdit extends Component {
 
   //Add Image To the Gallery
   _addImageToGallery = e => {
+    this.setState({
+      isSubmitted: true
+    });
     e.preventDefault();
     const fd = new FormData();
     fd.append("gallery_img", this.state.uploadImage);
@@ -116,110 +119,145 @@ class AlbumEdit extends Component {
     if (!this.state.albumHasGallery) {
       if (this.props.album.album) {
         return (
-          <div className="card py-2">
-            <img
-              src={this.props.album.album.image}
-              className="card-img-top"
-              alt="..."
-            />
-            <div className="row">
-              <div className="col-md-6">
-                <div className="card-body">
-                  <h5 className="card-title">{this.props.album.album.title}</h5>
-                  <p className="card-text">{this.props.album.album.desc}</p>
-                  <p className="card-text">
-                    <small className="text-muted">
-                      Created{" "}
-                      {Moment(this.props.album.album.date).format("DD/MM/YYYY")}
-                    </small>
-                  </p>
-                </div>
-              </div>
-              <div className="col-md-6 ">
-                {this.state.selectedImage ? (
-                  <div className="p-1 ">
-                    <img
-                      onLoad={this._onLoadImage}
-                      src={this.state.selectedImage}
-                      className="rounded"
-                      style={{
-                        imageOrientation: "180deg"
-                      }}
-                      alt=""
-                    />
-                    {this.state.message.gallery ? (
-                      <span className="text-success h6">
-                        {this.state.message.gallery}
-                      </span>
-                    ) : null}
-                    <div className=" m-1  ">
-                      <TextFormGroup
-                        placeholder="Add Title to Picture.."
-                        type="text"
-                        name="image_gallery_title"
-                        value={this.state.image_gallery_title}
-                        onChange={this._onChange}
-                        style={{
-                          marginTop: "-20px",
-                          marginBottom: "-10px"
-                        }}
-                      />
-                      <TextAreaFormGroup
-                        placeholder="Add some comments.."
-                        type="text"
-                        name="image_gallery_comment"
-                        value={this.state.image_gallery_comment}
-                        onChange={this._onChange}
-                        style={{
-                          marginTop: "-20px"
-                        }}
-                      />
-                    </div>
+          <div className="py-3">
+            <div className=" py-0">
+              <img
+                src={this.props.album.album.image}
+                className="card-img-top "
+                alt="..."
+                style={{
+                  paddingTop:
+                    this.props.album.album.rotation !== "0" ? "12%" : null,
+
+                  paddingBottom:
+                    this.props.album.album.rotation !== "0" ? "12%" : null,
+                  width: "100%",
+                  transform: `rotate(${this.props.album.album.rotation}deg)`
+                }}
+              />
+
+              <div className="row">
+                <div className="col-md-6">
+                  <div className="card-body">
+                    <h5 className="card-title">
+                      {this.props.album.album.title}
+                    </h5>
+                    <p className="card-text">{this.props.album.album.desc}</p>
+                    <p className="card-text">
+                      <small className="text-muted">
+                        Created{" "}
+                        {Moment(this.props.album.album.date).format(
+                          "DD/MM/YYYY"
+                        )}
+                      </small>
+                    </p>
                   </div>
-                ) : null}
-                <div
-                  style={{
-                    marginTop:
-                      this.state.selectedImage && !this.state.isMobile
-                        ? "-30px"
-                        : null
-                  }}
-                >
-                  <div className={this.state.isMobile ? "row" : "row my-4"}>
-                    <div className="col-md-6 col-6  ">
-                      <form onSubmit={this._addImageToGallery}>
-                        <div className="custom-file" style={{ width: "100%" }}>
-                          <input
-                            type="file"
-                            name="gallery_img"
-                            className="custom-file-input"
-                            onChange={this._selectFile}
-                          />
-                          <label className="custom-file-label bg-success">
-                            <p className="text-left text-white"> Pick Image</p>
-                          </label>
-                        </div>
-                        {this.state.selectedImage ? (
-                          <div className="my-2 mx-auto">
-                            <input
-                              type="submit"
-                              value="Add To The Gallery"
-                              className="btn btn-sm btn-success"
-                            />
-                          </div>
-                        ) : null}
-                      </form>
+                </div>
+                <div className="col-md-6 ">
+                  {this.state.selectedImage ? (
+                    <div className="p-1 border">
+                      <div
+                        style={{
+                          paddingTop: this.state.rotation === 0 ? null : "22%",
+
+                          paddingBottom:
+                            this.state.rotation === 0 ? null : "22%"
+                        }}
+                      >
+                        <img
+                          onLoad={this._onLoadImage}
+                          src={this.state.selectedImage}
+                          alt=""
+                          className="rounded"
+                          style={{
+                            width: "100%",
+                            transform: `rotate(${this.state.rotation}deg)`
+                          }}
+                        />
+                      </div>
+                      {!this.state.message.gallery && this.state.isSubmitted ? (
+                        <Spinner />
+                      ) : null}
+                      {this.state.message.gallery ? (
+                        <span className="text-success h6">
+                          {this.state.message.gallery}
+                        </span>
+                      ) : null}
+                      <div className=" m-1  ">
+                        <TextFormGroup
+                          placeholder="Add Title to Picture.."
+                          type="text"
+                          name="image_gallery_title"
+                          value={this.state.image_gallery_title}
+                          onChange={this._onChange}
+                          style={{
+                            marginTop: "-20px",
+                            marginBottom: "-10px"
+                          }}
+                        />
+                        <TextAreaFormGroup
+                          placeholder="Add some comments.."
+                          type="text"
+                          name="image_gallery_comment"
+                          value={this.state.image_gallery_comment}
+                          onChange={this._onChange}
+                          style={{
+                            marginTop: "-20px"
+                          }}
+                        />
+                      </div>
                     </div>
-                    <div className="col-md-6 col-6 pt-1  ">
-                      <button className="btn">
-                        <i
-                          className="fas fa-trash-alt text-danger "
-                          onClick={this._deleteAlbum}
-                        >
-                          {" "}
-                          Delete Album
-                        </i>
-                      </button>
+                  ) : null}
+                  <div
+                    style={{
+                      marginTop:
+                        this.state.selectedImage && !this.state.isMobile
+                          ? "-30px"
+                          : null
+                    }}
+                  >
+                    <div className={this.state.isMobile ? "row" : "row my-4"}>
+                      <div className="col-md-6 col-6  ">
+                        <form onSubmit={this._addImageToGallery}>
+                          <div
+                            className="custom-file"
+                            style={{ width: "100%" }}
+                          >
+                            <input
+                              type="file"
+                              name="gallery_img"
+                              className="custom-file-input"
+                              onChange={this._selectFile}
+                            />
+                            <label className="custom-file-label bg-success">
+                              <p className="text-left text-white">
+                                {" "}
+                                Pick Image
+                              </p>
+                            </label>
+                          </div>
+                          {this.state.selectedImage ? (
+                            <div className="my-2 mx-auto">
+                              <input
+                                type="submit"
+                                value="Add To The Gallery"
+                                className="btn btn-sm btn-success"
+                              />
+                            </div>
+                          ) : null}
+                        </form>
+                      </div>
+                      <div className="col-md-6 col-6 pt-1  ">
+                        <button className="btn">
+                          <i
+                            className="fas fa-trash-alt text-danger "
+                            onClick={this._deleteAlbum}
+                          >
+                            {" "}
+                            Delete Album
+                          </i>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -245,6 +283,15 @@ class AlbumEdit extends Component {
                   src={this.props.album.album.image}
                   className="card-img-top "
                   alt="..."
+                  style={{
+                    paddingTop:
+                      this.props.album.album.rotation !== "0" ? "12%" : null,
+
+                    paddingBottom:
+                      this.props.album.album.rotation !== "0" ? "12%" : null,
+                    width: "100%",
+                    transform: `rotate(${this.props.album.album.rotation}deg)`
+                  }}
                 />
 
                 <div className="row">
@@ -287,6 +334,10 @@ class AlbumEdit extends Component {
                             }}
                           />
                         </div>
+                        {!this.state.message.gallery &&
+                        this.state.isSubmitted ? (
+                          <Spinner />
+                        ) : null}
                         {this.state.message.gallery ? (
                           <span className="text-success h6">
                             {this.state.message.gallery}

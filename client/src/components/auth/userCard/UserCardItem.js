@@ -1,24 +1,29 @@
 import React, { Component } from "react";
 import moment from "moment";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import { deleteProfile } from "../../../actions/userActions";
 
 class UserCardItem extends Component {
-  componentDidMount() {
-    console.log("this.props.avatar", this.props.avatar);
-  }
-  _onloadImage = ({ target: img }) => {
-    console.log("offsetWidth", img.offsetWidth);
-    console.log("offsetHeight", img.offsetHeight);
+  _deleteProfile = () => {
+    this.props.deleteProfile(this.props.history);
   };
-
   render() {
-    const { name, email, avatar, phone, date, location, rotation } = this.props;
-    // console.log("this.props", this.props);
+    const {
+      name,
+      email,
+      avatar,
+      phone,
+      date,
+      location1,
+      rotation
+    } = this.props;
+    console.log("this.props", this.props);
 
     return (
       <div className="row ">
-        <div className="col-md-7  ">
-          <div className="pr-5  ">
+        <div className="col-md-7 border ">
+          <div className="pr-5 pt-5 ">
             <ul className="list-group-flush my-4 text-left  ">
               <li className="list-group-item  ">
                 <span className="text-info">Name </span>
@@ -34,7 +39,7 @@ class UserCardItem extends Component {
               </li>
               <li className="list-group-item  ">
                 <span className="text-info">Location</span>
-                {""} <span className=" h6 ml-4 ">{location}</span>
+                {""} <span className=" h6 ml-4 ">{location1}</span>
               </li>
               <li className="list-group-item  ">
                 <span className="text-info">Registered at </span>
@@ -52,25 +57,40 @@ class UserCardItem extends Component {
                 Edit Profile
               </div>
             </Link>
-            <div className="a btn btn-danger ml-2">Delete Profile</div>
+            <div
+              className="a btn btn-danger ml-2"
+              onClick={this._deleteProfile}
+            >
+              Delete Profile
+            </div>
           </div>
         </div>
-        <div className="col-md-5  border-danger">
-          <div style={{ paddingTop: "25%", paddingBottom: "25%" }}>
-            <img
-              src={avatar}
-              className="my-3  "
-              style={{
-                width: "100%",
-                transform: ` rotate(${rotation}deg)`
-              }}
-              alt=""
-              onLoad={this._onloadImage}
-            />
+        <div className="col-md-5  border">
+          <div
+            style={
+              {
+                //  paddingTop: "25%", paddingBottom: "25%"
+              }
+            }
+          >
+            <div style={{ padding: "10%" }}>
+              <img
+                src={avatar}
+                className="my-3  "
+                style={{
+                  width: "100%",
+                  transform: ` rotate(${rotation}deg)`
+                }}
+                alt=""
+              />
+            </div>
           </div>
         </div>
       </div>
     );
   }
 }
-export default UserCardItem;
+export default connect(
+  null,
+  { deleteProfile }
+)(withRouter(UserCardItem));

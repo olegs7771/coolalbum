@@ -4,10 +4,6 @@ const Schema = mongoose.Schema;
 //Create Schema
 
 const AlbumSchema = new Schema({
-  user: {
-    type: Schema.Types.ObjectId,
-    ref: "users"
-  },
   uid: {
     type: String,
     required: true
@@ -35,6 +31,9 @@ const AlbumSchema = new Schema({
   },
   gallery: [
     {
+      uid: {
+        type: String
+      },
       img: {
         type: String
       },
