@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 //Bring in Model (models/User.js)
 const User = require("../../models/User");
+const Album = require("../../models/Album");
 
 const bcrypt = require("bcryptjs");
 const gravatar = require("gravatar");

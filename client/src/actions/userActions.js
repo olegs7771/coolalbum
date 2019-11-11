@@ -257,6 +257,20 @@ export const deleteAvatar = (history, userData) => dispatch => {
     });
 };
 
+//Delete Profile
+//@Private Route
+
+export const deleteProfile = history => dispatch => {
+  axios
+    .post("/api/users/delete_profile")
+    .then(res => {
+      console.log("res.data", res.data);
+    })
+    .catch(err => {
+      console.log("error to delete :", err.response.data);
+    });
+};
+
 //Update Registered User with new data
 
 export const updateUser = (upUserCreds, history, userData) => dispatch => {

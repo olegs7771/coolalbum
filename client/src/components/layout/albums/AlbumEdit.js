@@ -85,6 +85,9 @@ class AlbumEdit extends Component {
 
   //Add Image To the Gallery
   _addImageToGallery = e => {
+    this.setState({
+      isSubmitted: true
+    });
     e.preventDefault();
     const fd = new FormData();
     fd.append("gallery_img", this.state.uploadImage);
@@ -172,6 +175,9 @@ class AlbumEdit extends Component {
                           }}
                         />
                       </div>
+                      {!this.state.message.gallery && this.state.isSubmitted ? (
+                        <Spinner />
+                      ) : null}
                       {this.state.message.gallery ? (
                         <span className="text-success h6">
                           {this.state.message.gallery}
@@ -328,13 +334,15 @@ class AlbumEdit extends Component {
                             }}
                           />
                         </div>
+                        {!this.state.message.gallery &&
+                        this.state.isSubmitted ? (
+                          <Spinner />
+                        ) : null}
                         {this.state.message.gallery ? (
                           <span className="text-success h6">
                             {this.state.message.gallery}
                           </span>
-                        ) : (
-                          <Spinner />
-                        )}
+                        ) : null}
                         <div className=" m-1  ">
                           <TextFormGroup
                             placeholder="Add Title to Picture.."

@@ -1,19 +1,24 @@
 import React, { Component } from "react";
 import moment from "moment";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import { deleteProfile } from "../../../actions/userActions";
 
 class UserCardItem extends Component {
-  componentDidMount() {
-    console.log("this.props.avatar", this.props.avatar);
-  }
-  _onloadImage = ({ target: img }) => {
-    console.log("offsetWidth", img.offsetWidth);
-    console.log("offsetHeight", img.offsetHeight);
+  _deleteProfile = () => {
+    this.props.deleteProfile(this.props.history);
   };
-
   render() {
-    const { name, email, avatar, phone, date, location, rotation } = this.props;
-    // console.log("this.props", this.props);
+    const {
+      name,
+      email,
+      avatar,
+      phone,
+      date,
+      location1,
+      rotation
+    } = this.props;
+    console.log("this.props", this.props);
 
     return (
       <div className="row ">
@@ -34,7 +39,7 @@ class UserCardItem extends Component {
               </li>
               <li className="list-group-item  ">
                 <span className="text-info">Location</span>
-                {""} <span className=" h6 ml-4 ">{location}</span>
+                {""} <span className=" h6 ml-4 ">{location1}</span>
               </li>
               <li className="list-group-item  ">
                 <span className="text-info">Registered at </span>
@@ -52,7 +57,12 @@ class UserCardItem extends Component {
                 Edit Profile
               </div>
             </Link>
-            <div className="a btn btn-danger ml-2">Delete Profile</div>
+            <div
+              className="a btn btn-danger ml-2"
+              onClick={this._deleteProfile}
+            >
+              Delete Profile
+            </div>
           </div>
         </div>
         <div className="col-md-5  border">
@@ -72,7 +82,6 @@ class UserCardItem extends Component {
                   transform: ` rotate(${rotation}deg)`
                 }}
                 alt=""
-                onLoad={this._onloadImage}
               />
             </div>
           </div>
@@ -81,4 +90,7 @@ class UserCardItem extends Component {
     );
   }
 }
-export default UserCardItem;
+export default connect(
+  null,
+  { deleteProfile }
+)(withRouter(UserCardItem));
