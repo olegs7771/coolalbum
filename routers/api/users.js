@@ -493,4 +493,22 @@ router.post("/match", (req, res) => {
   }
 });
 
+//Delete User
+
+router.post(
+  "/delete_profile",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    User.findById(req.user.id).then(user => {
+      if (!user) {
+        res.status(200).json({ message: "User does not exist!" });
+      }
+      user.deleteOne().then(result => {
+        if (result) {
+          res.status(200).json({ message: "Profile Deleted" });
+        }
+      });
+    });
+  }
+);
 module.exports = router;
