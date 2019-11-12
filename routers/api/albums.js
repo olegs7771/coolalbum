@@ -114,6 +114,7 @@ router.post(
                   rotation: req.body.rotation
                 });
                 newAlbum
+
                   .save()
                   .then(() => {
                     res.status(200).json({
@@ -175,12 +176,14 @@ router.post(
                 });
               console.log("req.body", req.body);
               Album.findById(req.body.id)
+
                 .then(album => {
                   console.log("album", album);
                   //Album has been found
                   // we can add to gallery
                   const imagePath = elem.path.substring(6);
                   const newGalleryItem = {
+                    uid: album.uid,
                     comments: req.body.comments,
                     img_title: req.body.img_title,
                     img: imagePath,

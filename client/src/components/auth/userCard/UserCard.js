@@ -17,15 +17,8 @@ class UserCard extends Component {
     props.getUserAlbums();
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps !== this.props) {
-      console.log("this.props.album", this.props.album);
-    }
-  }
-
   render() {
     const { user } = this.props;
-    console.log("user", user);
 
     let userContent;
     if (user) {
@@ -37,7 +30,7 @@ class UserCard extends Component {
           avatar={user.avatar}
           rotation={user.rotation}
           date={user.date}
-          location={user.location}
+          location1={user.location}
         />
       );
     } else {

@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { imageOrientation } from "../../../utils/imageOrientation";
 import { rotateDeg } from "../../../utils/imageOrientationSwitch";
+import Spinner from "../../../utils/Spinner";
 
 import TextFormGroup from "../../textFormGroup/TextFormGroup";
 import TextAreaFormGroup from "../../textFormGroup/TextAreaFormGroup";
@@ -48,7 +49,9 @@ export class AlbumCreate extends Component {
   //Create Album
   _createAlbum = e => {
     e.preventDefault();
-
+    this.setState({
+      submitted: true
+    });
     //create FormData
     const FD = new FormData();
     FD.append("album_theme", this.state.theme_upload);
@@ -109,6 +112,9 @@ export class AlbumCreate extends Component {
                 Create
               </button>
             </form>
+            {this.state.submitted && !this.props.message.album ? (
+              <Spinner />
+            ) : null}
             {this.props.message.album ? (
               <span className="text-success">{this.props.message.album}</span>
             ) : null}

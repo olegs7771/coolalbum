@@ -257,6 +257,36 @@ export const deleteAvatar = (history, userData) => dispatch => {
     });
 };
 
+//Delete Profile
+//@Private Route
+
+export const deleteProfile = history => dispatch => {
+  axios
+    .post("/api/users/delete_profile")
+    .then(res => {
+      console.log("res.data", res.data);
+      dispatch({
+        type: GET_MESSAGE,
+        payload: res.data
+      });
+      setTimeout(() => {
+        // Remove jwtToken from localStorage
+        localStorage.removeItem("jwtToken");
+        //Remove auth header for future request
+        setAuthToken(false);
+        //Set current user to {} which will set isAuthenticated to false
+        dispatch({
+          type: LOGOUT_USER,
+          payload: {}
+        });
+        history.push("/");
+      }, 3000);
+    })
+    .catch(err => {
+      console.log("error to delete :", err.response.data);
+    });
+};
+
 //Update Registered User with new data
 
 export const updateUser = (upUserCreds, history, userData) => dispatch => {

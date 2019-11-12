@@ -85,6 +85,9 @@ class AlbumEdit extends Component {
 
   //Add Image To the Gallery
   _addImageToGallery = e => {
+    this.setState({
+      isSubmitted: true
+    });
     e.preventDefault();
     const fd = new FormData();
     fd.append("gallery_img", this.state.uploadImage);
@@ -122,6 +125,15 @@ class AlbumEdit extends Component {
                 src={this.props.album.album.image}
                 className="card-img-top "
                 alt="..."
+                style={{
+                  paddingTop:
+                    this.props.album.album.rotation !== "0" ? "12%" : null,
+
+                  paddingBottom:
+                    this.props.album.album.rotation !== "0" ? "12%" : null,
+                  width: "100%",
+                  transform: `rotate(${this.props.album.album.rotation}deg)`
+                }}
               />
 
               <div className="row">
@@ -163,6 +175,9 @@ class AlbumEdit extends Component {
                           }}
                         />
                       </div>
+                      {!this.state.message.gallery && this.state.isSubmitted ? (
+                        <Spinner />
+                      ) : null}
                       {this.state.message.gallery ? (
                         <span className="text-success h6">
                           {this.state.message.gallery}
@@ -268,6 +283,15 @@ class AlbumEdit extends Component {
                   src={this.props.album.album.image}
                   className="card-img-top "
                   alt="..."
+                  style={{
+                    paddingTop:
+                      this.props.album.album.rotation !== "0" ? "12%" : null,
+
+                    paddingBottom:
+                      this.props.album.album.rotation !== "0" ? "12%" : null,
+                    width: "100%",
+                    transform: `rotate(${this.props.album.album.rotation}deg)`
+                  }}
                 />
 
                 <div className="row">
@@ -310,6 +334,10 @@ class AlbumEdit extends Component {
                             }}
                           />
                         </div>
+                        {!this.state.message.gallery &&
+                        this.state.isSubmitted ? (
+                          <Spinner />
+                        ) : null}
                         {this.state.message.gallery ? (
                           <span className="text-success h6">
                             {this.state.message.gallery}

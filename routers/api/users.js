@@ -1,8 +1,10 @@
 const express = require("express");
 const router = express.Router();
 //Bring in Model (models/User.js)
+//File System
+const fse = require("fs-extra");
 const User = require("../../models/User");
-
+const Album = require("../../models/Album");
 const bcrypt = require("bcryptjs");
 const gravatar = require("gravatar");
 const jwt = require("jsonwebtoken");
@@ -492,4 +494,84 @@ router.post("/match", (req, res) => {
   }
 });
 
+//Delete User
+
+router.post(
+  "/delete_profile",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    User.findById(req.user.id).then(user => {
+      if (!user) {
+        console.log("user not exists!");
+      }
+      //user exists
+      console.log("user", user);
+      //delete in /compressed_img
+      const avatarPath = "public" + user.avatar;
+      console.log("to delete in compreesd_img", avatarPath);
+      fse.pathExists(avatarPath, err => {
+        if (err) {
+          console.log("file not exists", err);
+        }
+        console.log("file exists");
+        fse.unlink(avatarPath, err => {
+          if (err) {
+            console.log("error to delete", err);
+          }
+          console.log("file deleted in compressed_img");
+          res.status(200).json({ message: "Profile was deleted!" });
+        });
+      });
+      //find all albums of this user
+      Album.find({ uid: req.user.id }).then(albums => {
+        if (!albums) {
+          console.log("no albums!");
+        }
+        //albums found
+        albums.forEach(album => {
+          //theme album to delete
+          const albumThemePath = "public" + album.image;
+          console.log("albumThemePath", albumThemePath);
+          //Delete in theme_img_compressed
+          fse.pathExists(albumThemePath).then(path => {
+            if (!path) {
+              console.log("no file");
+            } else {
+              console.log("file exists");
+              fse.unlink(albumThemePath, err => {
+                if (err) {
+                  return console.log("error to delete theme", err);
+                }
+                console.log("deleted successfully in public");
+                album.deleteOne().then(() => {
+                  res.status(200).json({ msg: "Deleted" });
+                });
+              });
+            }
+          });
+
+          //here album.gallery
+          album.gallery.forEach(imageGallery => {
+            const fileToDeleteGallery = "public\\" + imageGallery.img;
+            fse.pathExists(fileToDeleteGallery).then(exists => {
+              if (!exists) {
+                console.log("no files to delete");
+              }
+              fse.unlink(fileToDeleteGallery, err => {
+                console.log("error to delete gallery", err);
+              });
+            });
+          });
+        });
+      });
+
+      user.deleteOne().then(resolve => {
+        if (!resolve) {
+          console.log("cant delete user in db");
+        }
+        console.log("user been deleted in db");
+      });
+    });
+  }
+);
 module.exports = router;
