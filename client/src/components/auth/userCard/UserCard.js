@@ -17,12 +17,6 @@ class UserCard extends Component {
     props.getUserAlbums();
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps !== this.props) {
-      console.log("this.props.album", this.props.album);
-    }
-  }
-
   render() {
     const { user } = this.props;
 

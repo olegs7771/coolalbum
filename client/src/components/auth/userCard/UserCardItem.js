@@ -3,10 +3,17 @@ import moment from "moment";
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { deleteProfile } from "../../../actions/userActions";
+import Spinner from "../../../utils/Spinner";
 
 class UserCardItem extends Component {
+  state = {
+    message: {}
+  };
   _deleteProfile = () => {
     this.props.deleteProfile(this.props.history);
+    this.setState({
+      isSubmitted: true
+    });
   };
   render() {
     const {
@@ -18,7 +25,6 @@ class UserCardItem extends Component {
       location1,
       rotation
     } = this.props;
-    console.log("this.props", this.props);
 
     return (
       <div className="row ">
@@ -50,6 +56,14 @@ class UserCardItem extends Component {
               </li>
             </ul>
           </div>
+          {!this.state.message.message && this.state.isSubmitted ? (
+            <Spinner />
+          ) : null}
+          {this.state.message.message ? (
+            <span className="text-success h6">
+              {this.state.message.message}
+            </span>
+          ) : null}
           <div className="btn-group my-4">
             {/* { Edit userCard} */}
             <Link to="/userCard_edit">
@@ -66,13 +80,7 @@ class UserCardItem extends Component {
           </div>
         </div>
         <div className="col-md-5  border">
-          <div
-            style={
-              {
-                //  paddingTop: "25%", paddingBottom: "25%"
-              }
-            }
-          >
+          <div>
             <div style={{ padding: "10%" }}>
               <img
                 src={avatar}
@@ -90,7 +98,11 @@ class UserCardItem extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  message: state.message.message
+});
 export default connect(
-  null,
+  mapStateToProps,
   { deleteProfile }
 )(withRouter(UserCardItem));
