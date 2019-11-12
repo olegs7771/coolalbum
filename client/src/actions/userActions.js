@@ -265,6 +265,13 @@ export const deleteProfile = history => dispatch => {
     .post("/api/users/delete_profile")
     .then(res => {
       console.log("res.data", res.data);
+      dispatch({
+        type: GET_MESSAGE,
+        payload: res.data
+      });
+      setTimeout(() => {
+        history.push("/");
+      }, 3000);
     })
     .catch(err => {
       console.log("error to delete :", err.response.data);
