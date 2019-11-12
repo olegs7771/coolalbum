@@ -270,6 +270,15 @@ export const deleteProfile = history => dispatch => {
         payload: res.data
       });
       setTimeout(() => {
+        // Remove jwtToken from localStorage
+        localStorage.removeItem("jwtToken");
+        //Remove auth header for future request
+        setAuthToken(false);
+        //Set current user to {} which will set isAuthenticated to false
+        dispatch({
+          type: LOGOUT_USER,
+          payload: {}
+        });
         history.push("/");
       }, 3000);
     })
