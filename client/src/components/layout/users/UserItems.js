@@ -11,12 +11,12 @@ class UserItems extends Component {
     toID: ""
   };
 
-  showPostForm = (email, id) => {
+  showPostForm = () => {
     // here we bind email of each userCard
     this.setState({
       showPostForm: !this.state.showPostForm,
-      toEmail: email,
-      toID: id
+      toEmail: this.props.email,
+      toID: this.props.id
     });
   };
 
@@ -39,7 +39,7 @@ class UserItems extends Component {
             src={this.props.avatar}
             className="card-img-top"
             alt="..."
-            style={{ width: "100%", height: "110px" }}
+            style={{ width: "100%", height: "100%" }}
           />
         </div>
       );
@@ -49,7 +49,7 @@ class UserItems extends Component {
           src={this.props.avatar}
           className="card-img-top"
           alt="..."
-          style={{ width: "100%", height: "110px" }}
+          style={{ width: "100%", height: "100%" }}
         />
       );
     }
@@ -93,7 +93,7 @@ class UserItems extends Component {
     }
 
     return (
-      <div className="col-md-2 col-6 my-1">
+      <div className="col-md-4 col-5 my-1 p-2 border rounded">
         <Card className="card ">
           <div
             className="py-1 border"
@@ -161,10 +161,7 @@ class UserItems extends Component {
               backgroundColor: "rgb(60, 72, 77)"
             }}
           >
-            <div
-              className="btn btn-sm "
-              onClick={this.showPostForm.bind(this, email, id)}
-            >
+            <div className="btn btn-sm " onClick={this.showPostForm}>
               <FontSize>
                 <span
                   className="p-1 text-white  "
@@ -185,7 +182,12 @@ class UserItems extends Component {
           </div>
         </Card>
 
-        <div className="mx-auto">{postForm}</div>
+        <div
+          className="mx-auto border  border-success"
+          style={{ paddingTop: "5%" }}
+        >
+          {postForm}
+        </div>
       </div>
     );
   }
