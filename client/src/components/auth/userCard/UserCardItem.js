@@ -110,7 +110,6 @@ class UserCardItem extends Component {
 const mapStateToProps = state => ({
   message: state.message.message
 });
-export default connect(
-  mapStateToProps,
-  { deleteProfile }
-)(withRouter(UserCardItem));
+export default connect(mapStateToProps, { deleteProfile })(
+  withRouter(UserCardItem)
+);

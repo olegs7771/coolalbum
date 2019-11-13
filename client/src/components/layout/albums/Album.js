@@ -45,6 +45,7 @@ export class Album extends Component {
           date={album.date}
           rotation={album.rotation}
           id={album._id}
+          imagesQuant={album.gallery.length}
         />
       ));
     }
@@ -67,7 +68,7 @@ export class Album extends Component {
 
     return (
       <div
-        className="row  my-4"
+        className="row  my-4 "
         style={{ height: !this.state.isUserHasAlbums ? "600px" : null }}
       >
         <div className="col-md-2 ">
@@ -87,7 +88,4 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = { getUserAlbums };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Album);
+export default connect(mapStateToProps, mapDispatchToProps)(Album);

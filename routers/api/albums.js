@@ -91,7 +91,7 @@ router.post(
       console.log("req.body.desc", req.body.desc);
 
       if (req.file === undefined) {
-        return res.status(200).json({ error: "Please select file" });
+        return res.status(400).json({ error: "Please select file" });
       }
       if (err) {
         res.status(400).json({ error: err });
