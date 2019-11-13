@@ -20,10 +20,16 @@ export class AlbumCreate extends Component {
     message: {},
     rotation: 0
   };
+  componentDidMount() {
+    this.setState({
+      message: {}
+    });
+  }
 
   _onChange = e => {
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
+      submitted: false
     });
     this.props.clearErrors();
   };
@@ -33,7 +39,9 @@ export class AlbumCreate extends Component {
     console.log("e.target", e.target.files[0]);
     this.setState({
       theme_selected: URL.createObjectURL(e.target.files[0]),
-      theme_upload: e.target.files[0]
+      theme_upload: e.target.files[0],
+      errors: {},
+      submitted: false
     });
     getOrientation(e.target.files[0], orientation => {
       console.log("orientation", orientation);
@@ -64,10 +72,13 @@ export class AlbumCreate extends Component {
   //Get Errors And Messages
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.errors !== this.props.errors) {
-      return console.log("this.props.errors", this.props.errors);
+      console.log("this.props.errors", this.props.errors);
+      this.setState({
+        errors: this.props.errors
+      });
     }
     if (prevProps.message !== this.props.message) {
-      return console.log("this.props.message", this.props.message);
+      console.log("this.props.message", this.props.message);
     }
   }
 
@@ -108,21 +119,32 @@ export class AlbumCreate extends Component {
                   <p className="text-left"> Pick Image for Main Theme</p>
                 </label>
               </div>
+              <div className="mx-auto my-1">
+                {this.state.errors ? (
+                  <span className="text-danger">{this.state.errors.error}</span>
+                ) : null}
+              </div>
+              {this.state.submitted &&
+              !this.props.message.album &&
+              Object.keys(this.state.errors).length === 0 ? (
+                <Spinner />
+              ) : null}
+              <div className="mx-auto my-2">
+                {this.props.message.album ? (
+                  <span className="text-success">
+                    {this.props.message.album}
+                  </span>
+                ) : null}
+              </div>
               <button type="submit" className="btn btn-success my-3">
                 Create
               </button>
             </form>
-            {this.state.submitted && !this.props.message.album ? (
-              <Spinner />
-            ) : null}
-            {this.props.message.album ? (
-              <span className="text-success">{this.props.message.album}</span>
-            ) : null}
           </div>
           {this.state.theme_selected ? (
             <div className="col-md-6  pt-2 pb-5  ">
               <img
-                onLoad={this._onLoadImage}
+                // onLoad={this._onLoadImage}
                 src={this.state.theme_selected}
                 alt=""
                 style={{

@@ -91,7 +91,7 @@ router.post(
       console.log("req.body.desc", req.body.desc);
 
       if (req.file === undefined) {
-        return res.status(200).json({ error: "Please select file" });
+        return res.status(400).json({ error: "Please select file" });
       }
       if (err) {
         res.status(400).json({ error: err });
@@ -99,6 +99,16 @@ router.post(
         //No Errors in uploading image
         if (req.file.filename) {
           compressImgTheme(cb => {
+            // public/theme_image_upload
+            fse
+              .remove(req.file.path)
+              .then(() => {
+                console.log("deleted in uploads");
+              })
+              .catch(err => {
+                console.log("error to delete in uploads", err);
+              });
+
             cb.forEach(elem => {
               console.log("elem", elem);
               if (cb) {
@@ -122,15 +132,6 @@ router.post(
                     });
 
                     //New Album has been created then delete in
-                    // public/theme_image_upload
-                    fse
-                      .remove(req.file.path)
-                      .then(() => {
-                        console.log("deleted in uploads");
-                      })
-                      .catch(err => {
-                        console.log("error to delete in uploads", err);
-                      });
                   })
                   .catch(err => {
                     console.log("err to save album! :", err);
@@ -163,17 +164,18 @@ router.post(
         if (req.file.filename) {
           //fire up compressor
           compressImgGallery(cb => {
+            //Remove row file from /upload
+            fse
+              .remove(req.file.path)
+              .then(() => {
+                console.log("deleted in uploads");
+              })
+              .catch(err => {
+                console.log("error to delete in uploads", err);
+              });
             cb.forEach(elem => {
               console.log("elem", elem);
-              //Remove row file from /upload
-              fse
-                .remove(req.file.path)
-                .then(() => {
-                  console.log("deleted in uploads");
-                })
-                .catch(err => {
-                  console.log("error to delete in uploads", err);
-                });
+
               console.log("req.body", req.body);
               Album.findById(req.body.id)
 
