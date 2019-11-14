@@ -40,11 +40,12 @@ class Header extends Component {
     if (this.props.auth.user.name) {
       this.props.getWeather();
     }
+    this.props.getPosts();
   }
   componentDidUpdate(prevProps) {
     if (prevProps.post !== this.props.post) {
       this.setState({
-        posts: this.props.post.post
+        posts: this.props.post.posts
       });
     }
 

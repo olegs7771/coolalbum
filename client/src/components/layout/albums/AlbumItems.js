@@ -66,4 +66,7 @@ class AlbumItems extends Component {
   }
 }
 
-export default connect(null, { selectAlbum })(withRouter(AlbumItems));
+export default connect(
+  null,
+  { selectAlbum }
+)(withRouter(AlbumItems));

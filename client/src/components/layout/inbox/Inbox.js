@@ -18,7 +18,7 @@ class Inbox extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.post !== this.props.post) {
       this.setState({
-        posts: this.props.post
+        posts: this.props.post.posts
       });
     }
     if (prevProps.message !== this.props.message) {
@@ -64,7 +64,7 @@ class Inbox extends Component {
 }
 const mapStateToProps = state => ({
   auth: state.auth,
-  post: state.post.post,
+  post: state.post,
   message: state.message.message
 });
 export default connect(
