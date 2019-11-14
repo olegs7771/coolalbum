@@ -16,6 +16,9 @@ const PostSchema = new Schema({
   senderAvatar: {
     type: String
   },
+  senderAvatarRotation: {
+    type: String
+  },
   senderEmail: {
     type: String
   },

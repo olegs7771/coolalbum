@@ -17,6 +17,7 @@ router.post(
       text: req.body.senderText,
       toID: req.body.toId,
       senderAvatar: req.body.senderAvatar,
+      senderAvatarRotation: req.body.senderAvatarRotation,
       senderEmail: req.body.senderEmail,
       senderName: req.body.senderName,
       toEmail: req.body.toEmail
@@ -24,10 +25,13 @@ router.post(
     newPost
       .save()
       .then(post => {
+        if (!post) {
+          res.status(400).json({ post: "Can not send message" });
+        }
         res.status(200).json({ post: "Message has been sent" });
       })
       .catch(err => {
-        res.status(400).json({ post: "Can not send message" });
+        res.status(400).json(err);
       });
   }
 );
@@ -38,7 +42,7 @@ router.post(
   "/get_posts",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    Post.findById(req.user.id).then(post => {
+    Post.find({ toID: req.user.id }).then(post => {
       if (!post) {
         res.status(200).json({ post: "no posts" });
       } else {

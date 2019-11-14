@@ -5,7 +5,8 @@ import { connect } from "react-redux";
 import { deletePost } from "../../../actions/postAction";
 class InboxItems extends Component {
   state = {
-    showMore: false
+    showMore: false,
+    rotation: ""
   };
 
   //delete post
@@ -66,11 +67,14 @@ class InboxItems extends Component {
               {moment(date).format("DD/MM/YYYY")}
             </Font>
             <div className="row">
-              <div className="col-md-4 ">
+              <div className="col-md-4 border border-success p-3">
                 <img
                   src={avatar}
                   alt="avatar"
-                  style={{ width: "80px", height: "80px" }}
+                  style={{
+                    width: "100%",
+                    transform: `rotate(${this.state.rotation}deg)`
+                  }}
                   className="rounded-circle mt-3"
                 />
               </div>

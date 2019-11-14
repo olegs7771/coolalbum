@@ -50,6 +50,7 @@ class Users extends Component {
               avatar={item.avatar}
               date={item.date}
               id={item._id}
+              rotation={item.rotation}
             />
           ))}
         </div>

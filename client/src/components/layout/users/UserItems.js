@@ -8,10 +8,21 @@ class UserItems extends Component {
     showCreds: false,
     showPostForm: false,
     toEmail: "",
-    toID: ""
+    toID: "",
+    //add paddingTop if image rotation > 0deg
+    isPadding: false
   };
+  componentDidMount() {
+    console.log("this.props.rotation", this.props.rotation);
 
-  showPostForm = () => {
+    if (this.props.rotation > 0) {
+      this.setState({
+        isPadding: true
+      });
+    }
+  }
+
+  _showPostForm = () => {
     // here we bind email of each userCard
     this.setState({
       showPostForm: !this.state.showPostForm,
@@ -21,6 +32,8 @@ class UserItems extends Component {
   };
 
   render() {
+    console.log("this.props", this.props);
+
     //Styles
     const Card = styled.section`
       background: rgb(179, 215, 255, 0);
@@ -39,7 +52,10 @@ class UserItems extends Component {
             src={this.props.avatar}
             className="card-img-top"
             alt="..."
-            style={{ width: "100%", height: "100%" }}
+            style={{
+              width: "100%",
+              height: "100%"
+            }}
           />
         </div>
       );
@@ -49,12 +65,16 @@ class UserItems extends Component {
           src={this.props.avatar}
           className="card-img-top"
           alt="..."
-          style={{ width: "100%", height: "100%" }}
+          style={{
+            width: "100%",
+            height: "100%",
+            transform: `rotate(${this.props.rotation}deg)`
+          }}
         />
       );
     }
 
-    const { id, name, email, phone, location, date } = this.props;
+    const { name, email, phone, location, date } = this.props;
     const { showCreds, showPostForm, toEmail, toID } = this.state;
     //button show toggle
     let button;
@@ -93,7 +113,7 @@ class UserItems extends Component {
     }
 
     return (
-      <div className="col-md-4 col-5 my-1 p-2 border rounded">
+      <div className="col-md-4 col-12 my-1 p-2 ">
         <Card className="card ">
           <div
             className="py-1 border"
@@ -102,7 +122,12 @@ class UserItems extends Component {
             <span className="card-title mt-1 text-white ">{name}</span>
           </div>
 
-          <div className="card-img-top">{avatarResizes}</div>
+          <div
+            className="card-img-top"
+            style={{ paddingTop: this.state.isPadding ? "13%" : null }}
+          >
+            {avatarResizes}
+          </div>
           {/* {toggle btn} */}
           <span
             onClick={() =>
@@ -161,7 +186,7 @@ class UserItems extends Component {
               backgroundColor: "rgb(60, 72, 77)"
             }}
           >
-            <div className="btn btn-sm " onClick={this.showPostForm}>
+            <div className="btn btn-sm " onClick={this._showPostForm}>
               <FontSize>
                 <span
                   className="p-1 text-white  "
@@ -181,13 +206,9 @@ class UserItems extends Component {
             </div>
           </div>
         </Card>
-
-        <div
-          className="mx-auto border  border-success"
-          style={{ paddingTop: "5%" }}
-        >
-          {postForm}
-        </div>
+        {this.state.showPostForm ? (
+          <div className="mx-auto  p-2 border mt-2">{postForm}</div>
+        ) : null}
       </div>
     );
   }
