@@ -20,7 +20,7 @@ class InboxItems extends Component {
 
   render() {
     console.log("this.props.message", this.props.message);
-    console.log("this.state.message", this.state.message);
+    console.log("windowsize", window.innerWidth);
 
     //style
     // const Card = styled.section`
@@ -50,7 +50,7 @@ class InboxItems extends Component {
     let inboxContent;
     if (showMore) {
       inboxContent = (
-        <div className="card card-body px-4">
+        <div className="card  p-4">
           <i
             className="fas fa-sort-up ml-auto"
             onClick={() => {
@@ -59,26 +59,41 @@ class InboxItems extends Component {
               });
             }}
           />
-          <div>
-            <span className="card-title"> From {name} </span>
-
-            <Font>
-              <span className="text-muted">Received on: </span>
-              {moment(date).format("DD/MM/YYYY")}
-            </Font>
-            <div className="row">
-              <div className="col-md-4 border border-success p-3">
+          <div className="">
+            <div className="border py-3 bg-dark rounded">
+              <span className="card-title text-white"> From {name} </span>
+              <Font>
+                <span className="text-muted">Received on: </span>
+                <span className="text-success">
+                  {moment(date).format("DD/MM/YYYY")}
+                </span>
+              </Font>
+            </div>
+            <div className="row  mx-1">
+              <div
+                className="col-md-4   "
+                style={{
+                  paddingTop:
+                    window.innerWidth < 500 && this.props.rotation > 0
+                      ? "8%"
+                      : "3%",
+                  paddingBottom:
+                    window.innerWidth < 500 && this.props.rotation > 0
+                      ? "5%"
+                      : "3%"
+                }}
+              >
                 <img
                   src={avatar}
                   alt="avatar"
                   style={{
                     width: "100%",
-                    transform: `rotate(${this.state.rotation}deg)`
+                    transform: `rotate(${this.props.rotation}deg)`
                   }}
-                  className="rounded-circle mt-3"
+                  className=" rounded mt-2 "
                 />
               </div>
-              <Text className="col-md-8 rounded-pill p-5 my-4 ">
+              <Text className="col-md-8 rounded p-2 my-4 ">
                 <TextFont>{text}</TextFont>
               </Text>
             </div>
@@ -102,7 +117,7 @@ class InboxItems extends Component {
             style={{ backgroundColor: "rgb(192, 187, 196,0.7)" }}
           >
             <div className="row">
-              <div className="col-10">
+              <div className="col-10 ">
                 <span className="text-center text-white"> From {name}</span>
                 <div className="text-center">
                   <Font>
@@ -127,7 +142,4 @@ class InboxItems extends Component {
 const mapStateToProps = state => ({
   message: state.message.message
 });
-export default connect(
-  mapStateToProps,
-  { deletePost }
-)(InboxItems);
+export default connect(mapStateToProps, { deletePost })(InboxItems);

@@ -7,6 +7,8 @@ import Spinner from "../../../utils/Spinner";
 
 import TextFormGroup from "../../textFormGroup/TextFormGroup";
 import TextAreaFormGroup from "../../textFormGroup/TextAreaFormGroup";
+import TextFormCheckbox from "../../textFormGroup/TextFormCheckbox";
+
 import { updateAlbum, clearErrors } from "../../../actions/albumAction";
 
 const getOrientation = imageOrientation();
@@ -18,7 +20,8 @@ export class AlbumCreate extends Component {
     theme_selected: null,
     errors: {},
     message: {},
-    rotation: 0
+    rotation: 0,
+    albumTypePrivate: false
   };
   componentDidMount() {
     this.setState({
@@ -53,6 +56,15 @@ export class AlbumCreate extends Component {
       });
     });
   };
+  //Define the type of Album
+  _changeType = e => {
+    console.log("e.type", e.type);
+    if (e.type === "change") {
+      this.setState({
+        albumTypePrivate: !this.state.albumTypePrivate
+      });
+    }
+  };
 
   //Create Album
   _createAlbum = e => {
@@ -60,12 +72,15 @@ export class AlbumCreate extends Component {
     this.setState({
       submitted: true
     });
+
     //create FormData
     const FD = new FormData();
     FD.append("album_theme", this.state.theme_upload);
     FD.append("title", this.state.title);
     FD.append("desc", this.state.desc);
     FD.append("rotation", this.state.rotation);
+    FD.append("albumType", this.state.albumTypePrivate);
+
     const history = this.props.history;
     this.props.updateAlbum(FD, history);
   };
@@ -136,9 +151,20 @@ export class AlbumCreate extends Component {
                   </span>
                 ) : null}
               </div>
-              <button type="submit" className="btn btn-success my-3">
-                Create
-              </button>
+              <div className="row my-2">
+                <div className="col-md-4 col-4">
+                  <TextFormCheckbox
+                    text="Private"
+                    onChange={this._changeType}
+                  />
+                </div>
+
+                <div className="col-md-4 col-4">
+                  <button type="submit" className="btn btn-success my-3">
+                    Create
+                  </button>
+                </div>
+              </div>
             </form>
           </div>
           {this.state.theme_selected ? (

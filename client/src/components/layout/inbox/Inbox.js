@@ -45,6 +45,7 @@ class Inbox extends Component {
               key={index}
               name={item.senderName}
               avatar={item.senderAvatar}
+              rotation={item.senderAvatarRotation}
               date={item.date}
               text={item.text}
               id={item._id}
@@ -67,7 +68,4 @@ const mapStateToProps = state => ({
   post: state.post,
   message: state.message.message
 });
-export default connect(
-  mapStateToProps,
-  { getPosts }
-)(Inbox);
+export default connect(mapStateToProps, { getPosts })(Inbox);

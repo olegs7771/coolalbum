@@ -4,6 +4,10 @@ const isEmpty = require("./isEmpty");
 module.exports = function validateAlbumCreate(data) {
   let errors = {};
   console.log("data in validation", data);
+
+  data.title = !isEmpty(data.title) ? data.title : "";
+  data.desc = !isEmpty(data.desc) ? data.desc : "";
+
   if (!validator.isLength(data.title, { min: 3, max: 20 })) {
     errors.title = " Title between 3-20 chars";
   }

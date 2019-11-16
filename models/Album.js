@@ -24,6 +24,9 @@ const AlbumSchema = new Schema({
   rotation: {
     type: String
   },
+  private: {
+    type: String
+  },
 
   date: {
     type: Date,
