@@ -52,6 +52,27 @@ router.post(
       });
   }
 );
+//Get User Albums by req.body.id
+//@Private Route
+router.post(
+  "/albumsById",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    console.log("req.body", req.body);
+
+    Album.find({ uid: req.body.id })
+      .then(albums => {
+        if (!albums) {
+          res.status(401).json({ Msg: "No Albums" });
+        } else {
+          res.status(200).json(albums);
+        }
+      })
+      .catch(err => {
+        res.status(400).json(err);
+      });
+  }
+);
 //Get Album by id
 //@Private Route
 router.post(
@@ -78,15 +99,13 @@ router.post(
   "/update",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    console.log("req.body", req.body);
-
     upload(req, res, err => {
       const { isValid, errors } = validateAlbumCreate(req.body);
       if (!isValid) {
         return res.status(400).json(errors);
       }
+      console.log("passed validation");
 
-      console.log("req.file", req.file);
       console.log("req.body.title", req.body.title);
       console.log("req.body.desc", req.body.desc);
 
@@ -121,7 +140,8 @@ router.post(
                   title: req.body.title,
                   desc: req.body.desc,
                   image: themeImagePath,
-                  rotation: req.body.rotation
+                  rotation: req.body.rotation,
+                  private: req.body.albumType
                 });
                 newAlbum
 

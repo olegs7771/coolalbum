@@ -4,30 +4,17 @@ import moment from "moment";
 import styled from "styled-components";
 
 class WeatherWidGet extends Component {
-  state = {
-    weather: {}
-  };
-
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps !== this.props) {
-      this.setState({
-        weather: this.props.weather
-      });
-    }
-  }
-
   render() {
     //styles
     const FontSize = styled.span`
       font-size: 12px;
     `;
-    const { weather } = this.state;
-    let weatherContent;
+
     let dayTime;
     let skyCon;
-    if (weather.weather) {
+    const { weather } = this.props;
+    if (this.props.weather.weather) {
       const { data1, data2, location, daytime } = weather.weather;
-
       if (
         daytime.sunrise < Math.trunc(Date.now() / 1000) &&
         daytime.sunset > Math.trunc(Date.now() / 1000)
@@ -98,7 +85,7 @@ class WeatherWidGet extends Component {
         skyCon = <i className="fas fa-poo-storm" />;
       }
 
-      weatherContent = (
+      return (
         <div className="row">
           <div className="col-md-6 col-6 ">
             <div className="text-success ">
@@ -123,19 +110,15 @@ class WeatherWidGet extends Component {
             </FontSize>
           </div>
         </div>
+        //         <div>all data</div>
       );
     } else {
-      weatherContent = <div className="text-danger">getting data...</div>;
+      return <div className="text-danger">Loading..</div>;
     }
-
-    return <div className="text-white">{weatherContent}</div>;
   }
 }
-
 const mapStateToProps = state => ({
   weather: state.weather
 });
-export default connect(
-  mapStateToProps,
-  {}
-)(WeatherWidGet);
+
+export default connect(mapStateToProps)(WeatherWidGet);

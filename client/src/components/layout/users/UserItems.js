@@ -1,8 +1,9 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import moment from "moment";
 import Post from "../posts/Post";
 import styled from "styled-components";
-
+import { getUserAlbumsById } from "../../../actions/albumAction";
 class UserItems extends Component {
   state = {
     showCreds: false,
@@ -10,10 +11,12 @@ class UserItems extends Component {
     toEmail: "",
     toID: "",
     //add paddingTop if image rotation > 0deg
-    isPadding: false
+    isPadding: false,
+    albums: []
   };
   componentDidMount() {
-    console.log("this.props.rotation", this.props.rotation);
+    console.log("mounted");
+    console.log("ids ", this.props.id);
 
     if (this.props.rotation > 0) {
       this.setState({
@@ -31,9 +34,23 @@ class UserItems extends Component {
     });
   };
 
-  render() {
-    console.log("this.props", this.props);
+  _showCreds = id => {
+    this.setState({
+      showCreds: !this.state.showCreds
+    });
+    const data = {
+      id
+    };
+    this.props.getUserAlbumsById(data);
+  };
 
+  render() {
+    let albumsCount;
+    if (this.props.album.albums) {
+      albumsCount = this.props.album.albums.length;
+    } else {
+      albumsCount = 0;
+    }
     //Styles
     const Card = styled.section`
       background: rgb(179, 215, 255, 0);
@@ -53,54 +70,32 @@ class UserItems extends Component {
             className="card-img-top"
             alt="..."
             style={{
-              width: "100%",
-              height: "100%"
+              width: "100%"
             }}
           />
         </div>
       );
     } else {
       avatarResizes = (
-        <img
-          src={this.props.avatar}
-          className="card-img-top"
-          alt="..."
-          style={{
-            width: "100%",
-            height: "100%",
-            transform: `rotate(${this.props.rotation}deg)`
-          }}
-        />
+        <div style={{ paddingBottom: this.props.rotation > 0 ? "11%" : null }}>
+          <img
+            src={this.props.avatar}
+            className="card-img-top"
+            alt="..."
+            style={{
+              width: "100%",
+
+              transform: `rotate(${this.props.rotation}deg)`
+            }}
+          />
+        </div>
       );
     }
 
     const { name, email, phone, location, date } = this.props;
     const { showCreds, showPostForm, toEmail, toID } = this.state;
     //button show toggle
-    let button;
-    if (showCreds) {
-      button = (
-        <FontSize>
-          <span
-            className="p-1 text-white "
-            style={{ backgroundColor: "rgb(126, 140, 145)" }}
-          >
-            Show less..
-          </span>
-        </FontSize>
-      );
-    } else {
-      button = (
-        <FontSize>
-          <span
-            className="p-1 text-white "
-            style={{ backgroundColor: "rgb(126, 140, 145)" }}
-          >
-            Show more..
-          </span>
-        </FontSize>
-      );
-    }
+
     //messageForm toggle
     //if message been sent -->this.state.message===true --->dispaly message
     let postForm;
@@ -113,7 +108,7 @@ class UserItems extends Component {
     }
 
     return (
-      <div className="col-md-4 col-12 my-1 p-2 ">
+      <div className="col-md-4 col-12 my-1 p-2 rounded">
         <Card className="card ">
           <div
             className="py-1 border"
@@ -124,7 +119,7 @@ class UserItems extends Component {
 
           <div
             className="card-img-top"
-            style={{ paddingTop: this.state.isPadding ? "13%" : null }}
+            style={{ paddingTop: this.state.isPadding ? "12%" : null }}
           >
             {avatarResizes}
           </div>
@@ -135,19 +130,31 @@ class UserItems extends Component {
                 showCreds: !this.state.showCreds
               })
             }
-          >
-            <div className="div my-2">{button}</div>
-          </span>
+          ></span>
 
           {showCreds ? (
-            <ul className="list-group list-group-flush">
+            <ul className="list-group list-group-flush mt-2">
               <li
                 className="list-group-item"
                 style={{ backgroundColor: "rgb(60, 72, 77,0.5)" }}
               >
-                <FontSize>
-                  <span className="text-white">{email}</span>
-                </FontSize>
+                <div className="row">
+                  <div className="col-md-10 col-10">
+                    <FontSize>
+                      <span className="text-white">{email}</span>
+                    </FontSize>
+                  </div>
+                  <div className="col-md-2 col-2">
+                    <i
+                      className="fas fa-times text-white"
+                      onClick={() =>
+                        this.setState({
+                          showCreds: false
+                        })
+                      }
+                    ></i>
+                  </div>
+                </div>
               </li>
               <li
                 className="list-group-item"
@@ -169,13 +176,27 @@ class UserItems extends Component {
                 className="list-group-item"
                 style={{ backgroundColor: "rgb(60, 72, 77,0.5)" }}
               >
-                <FontSize>
-                  <span className="text-white">
-                    Registered on
-                    <br />
-                    {moment(date).format("DD/MM/YYYY")}
-                  </span>
-                </FontSize>
+                {/* {Additional Data on user} */}
+                <div className="row">
+                  <div className="col-md-6 col-6">
+                    <FontSize>
+                      <span className="text-white">
+                        Registered on
+                        <br />
+                        {moment(date).format("DD/MM/YYYY")}
+                      </span>
+                    </FontSize>
+                  </div>
+                  <div className="col-md-6 col-6">
+                    <FontSize>
+                      <span className="text-white">
+                        Private Albums:{albumsCount}
+                        <br />
+                        Public Albums:
+                      </span>
+                    </FontSize>
+                  </div>
+                </div>
               </li>
             </ul>
           ) : null}
@@ -186,7 +207,7 @@ class UserItems extends Component {
               backgroundColor: "rgb(60, 72, 77)"
             }}
           >
-            <div className="btn btn-sm " onClick={this._showPostForm}>
+            <div className="btn  btn-sm " onClick={this._showPostForm}>
               <FontSize>
                 <span
                   className="p-1 text-white  "
@@ -204,6 +225,16 @@ class UserItems extends Component {
                 <span className="p-1 text-white  ">Like</span>
               </FontSize>
             </div>
+            <div className="btn   btn-sm">
+              <FontSize>
+                <span
+                  className="p-1 text-white  "
+                  onClick={this._showCreds.bind(this, this.props.id)}
+                >
+                  Show More
+                </span>
+              </FontSize>
+            </div>
           </div>
         </Card>
         {this.state.showPostForm ? (
@@ -213,5 +244,8 @@ class UserItems extends Component {
     );
   }
 }
+const mapStateToProps = state => ({
+  album: state.album
+});
 
-export default UserItems;
+export default connect(mapStateToProps, { getUserAlbumsById })(UserItems);
