@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import "./Users.css";
 import moment from "moment";
 import Post from "../posts/Post";
 import styled from "styled-components";
@@ -12,12 +13,10 @@ class UserItems extends Component {
     toID: "",
     //add paddingTop if image rotation > 0deg
     isPadding: false,
-    albums: []
+    privateAlbumCount: 0,
+    publicAlbumCount: 0
   };
   componentDidMount() {
-    console.log("mounted");
-    console.log("ids ", this.props.id);
-
     if (this.props.rotation > 0) {
       this.setState({
         isPadding: true
@@ -44,19 +43,28 @@ class UserItems extends Component {
     this.props.getUserAlbumsById(data);
   };
 
-  render() {
-    let albumsCount;
-    if (this.props.album.albums) {
-      albumsCount = this.props.album.albums.length;
-    } else {
-      albumsCount = 0;
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.album !== this.props.album) {
+      if (this.props.album.albums) {
+        const privateAlbumCount = this.props.album.albums.filter(album => {
+          return album.private === "true";
+        });
+        const publicAlbumCount = this.props.album.albums.filter(album => {
+          return album.private === "false";
+        });
+
+        this.setState({
+          privateAlbumCount: privateAlbumCount.length,
+          publicAlbumCount: publicAlbumCount.length
+        });
+      }
     }
+  }
+
+  render() {
     //Styles
     const Card = styled.section`
       background: rgb(179, 215, 255, 0);
-    `;
-    const FontSize = styled.span`
-      font-size: 12px;
     `;
 
     //resize avatar if it includes gravatar
@@ -108,7 +116,16 @@ class UserItems extends Component {
     }
 
     return (
-      <div className="col-md-4 col-12 my-1 p-2 rounded">
+      <div
+        className="col-md-4 col-12 my-1 p-2 rounded"
+        onMouseLeave={() => {
+          this.setState({
+            showCreds: false,
+            privateAlbumCount: 0,
+            publicAlbumCount: 0
+          });
+        }}
+      >
         <Card className="card ">
           <div
             className="py-1 border"
@@ -138,39 +155,19 @@ class UserItems extends Component {
                 className="list-group-item"
                 style={{ backgroundColor: "rgb(60, 72, 77,0.5)" }}
               >
-                <div className="row">
-                  <div className="col-md-10 col-10">
-                    <FontSize>
-                      <span className="text-white">{email}</span>
-                    </FontSize>
-                  </div>
-                  <div className="col-md-2 col-2">
-                    <i
-                      className="fas fa-times text-white"
-                      onClick={() =>
-                        this.setState({
-                          showCreds: false
-                        })
-                      }
-                    ></i>
-                  </div>
-                </div>
+                <span className="text-white"> Email: {email}</span>
               </li>
               <li
                 className="list-group-item"
                 style={{ backgroundColor: "rgb(60, 72, 77,0.5)" }}
               >
-                <FontSize>
-                  <span className="text-white">{phone}</span>
-                </FontSize>
+                <span className="text-white">Phone: {phone}</span>
               </li>
               <li
                 className="list-group-item"
                 style={{ backgroundColor: "rgb(60, 72, 77,0.5)" }}
               >
-                <FontSize>
-                  <span className="text-white">{location}</span>
-                </FontSize>
+                <span className="text-white"> Location: {location}</span>
               </li>
               <li
                 className="list-group-item"
@@ -178,23 +175,25 @@ class UserItems extends Component {
               >
                 {/* {Additional Data on user} */}
                 <div className="row">
-                  <div className="col-md-6 col-6">
-                    <FontSize>
-                      <span className="text-white">
-                        Registered on
-                        <br />
-                        {moment(date).format("DD/MM/YYYY")}
-                      </span>
-                    </FontSize>
+                  <div className="col-md-4 col-4">
+                    <span className="text-white">
+                      Since
+                      <br />
+                      {moment(date).format("DD/MM/YYYY")}
+                    </span>
                   </div>
-                  <div className="col-md-6 col-6">
-                    <FontSize>
-                      <span className="text-white">
-                        Private Albums:{albumsCount}
-                        <br />
-                        Public Albums:
+                  <div className="col-md-8 col-8">
+                    <span className="text-white h5">
+                      Private Albums:{" "}
+                      <span className="text-danger h5">
+                        {this.state.privateAlbumCount}
                       </span>
-                    </FontSize>
+                      <br />
+                      Public Albums:{" "}
+                      <span className="text-success h5">
+                        {this.state.publicAlbumCount}
+                      </span>
+                    </span>
                   </div>
                 </div>
               </li>
@@ -208,32 +207,28 @@ class UserItems extends Component {
             }}
           >
             <div className="btn  btn-sm " onClick={this._showPostForm}>
-              <FontSize>
-                <span
-                  className="p-1 text-white  "
-                  style={{
-                    marginLeft: "-6px"
-                  }}
-                >
-                  Message
-                </span>
-              </FontSize>
+              <span
+                className="p-1 text-white  "
+                style={{
+                  marginLeft: "-6px"
+                }}
+              >
+                Message
+              </span>
             </div>
 
             <div className="btn   btn-sm">
-              <FontSize>
-                <span className="p-1 text-white  ">Like</span>
-              </FontSize>
+              <span className="p-1 text-white  ">Like</span>
             </div>
             <div className="btn   btn-sm">
-              <FontSize>
-                <span
-                  className="p-1 text-white  "
-                  onClick={this._showCreds.bind(this, this.props.id)}
-                >
-                  Show More
-                </span>
-              </FontSize>
+              <span
+                className="p-1 text-white  "
+                onMouseEnter={this._showCreds.bind(this, this.props.id)}
+              >
+                {this.state.showCreds ? null : (
+                  <i className="fas fa-caret-down fa-2x"></i>
+                )}
+              </span>
             </div>
           </div>
         </Card>

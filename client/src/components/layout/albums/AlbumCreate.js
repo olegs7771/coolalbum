@@ -19,6 +19,8 @@ export class AlbumCreate extends Component {
     desc: "",
     theme_selected: null,
     errors: {},
+    //ReactJS errors
+
     message: {},
     rotation: 0,
     albumTypePrivate: false
@@ -34,7 +36,6 @@ export class AlbumCreate extends Component {
       [e.target.name]: e.target.value,
       submitted: false
     });
-    this.props.clearErrors();
   };
 
   //Select File
@@ -113,16 +114,21 @@ export class AlbumCreate extends Component {
               <TextFormGroup
                 name="title"
                 value={this.state.title}
-                placeholder="Choose Title for Album"
+                placeholder="Choose Title for Album (max 20 chars)"
                 onChange={this._onChange}
                 error={this.props.errors.title}
+                minLength={3}
+                maxLength={20}
               />
+
               <TextAreaFormGroup
                 name="desc"
-                placeholder="Some Description of Album"
+                placeholder="Some Description of Album (max 20 chars)"
                 value={this.state.desc}
                 onChange={this._onChange}
                 error={this.props.errors.desc}
+                minLength={3}
+                maxLength={20}
               />
               <div className="custom-file">
                 <input

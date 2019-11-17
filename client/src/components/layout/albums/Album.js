@@ -46,6 +46,7 @@ export class Album extends Component {
           rotation={album.rotation}
           id={album._id}
           imagesQuant={album.gallery.length}
+          private={album.private}
         />
       ));
     }

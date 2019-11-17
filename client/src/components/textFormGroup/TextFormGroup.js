@@ -12,7 +12,9 @@ const TextFormGroup = ({
   onChange,
   error,
   message,
-  style
+  style,
+  maxLength,
+  minLength
 }) => {
   return (
     <div className="form-group ">
@@ -25,6 +27,8 @@ const TextFormGroup = ({
         )}
         placeholder={placeholder}
         type={type}
+        maxLength={maxLength}
+        minLength={minLength}
         value={value}
         name={name}
         onChange={onChange}

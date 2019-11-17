@@ -4,6 +4,7 @@ import { getAllUsers } from "../../../actions/userActions";
 
 import Spinner from "../../../utils/Spinner";
 import UserItems from "./UserItems";
+
 // import styled from "styled-components";
 
 class Users extends Component {

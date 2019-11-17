@@ -10,7 +10,9 @@ const TextAreaFormGroup = ({
   value,
   name,
   onChange,
-  error
+  error,
+  minLength,
+  maxLength
 }) => {
   return (
     <div className="form-group">
@@ -22,6 +24,8 @@ const TextAreaFormGroup = ({
         type={type}
         cols="10"
         rows="1"
+        minLength={minLength}
+        maxLength={maxLength}
         onChange={onChange}
         className={classnames("form-control", { "is-invalid": error })}
         style={{ marginTop: "-25px" }}

@@ -9,7 +9,6 @@ const User = require("../../models/User");
 const Album = require("../../models/Album");
 
 const passport = require("passport");
-const validateAlbumCreate = require("../validation/albumCreate");
 
 //Bring compressor  Album Theme
 const compressorTheme = require("../../utils/compressor/compressorAlbumTheme");
@@ -100,10 +99,6 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     upload(req, res, err => {
-      const { isValid, errors } = validateAlbumCreate(req.body);
-      if (!isValid) {
-        return res.status(400).json(errors);
-      }
       console.log("passed validation");
 
       console.log("req.body.title", req.body.title);
@@ -272,6 +267,9 @@ router.post(
       fse.pathExists(albumThemePath).then(path => {
         if (!path) {
           console.log("no file");
+          album.deleteOne().then(() => {
+            res.status(200).json({ msg: "Deleted" });
+          });
         } else {
           console.log("file exists");
           fse.unlink(albumThemePath, err => {
