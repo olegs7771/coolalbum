@@ -11,11 +11,28 @@ import {
 } from "./types";
 import axios from "axios";
 
-//Get Users Albums bu uid
+//Get Users Albums with user id form token
 export const getUserAlbums = () => dispatch => {
   dispatch(loadingAlbum());
   axios
     .post("/api/albums/albums")
+    .then(res => {
+      dispatch({
+        type: GET_USER_ALBUMS,
+        payload: res.data
+      });
+    })
+    .catch(err => {
+      console.log("err:", err);
+    });
+};
+//Get Users Albums with user id from UserItems.js
+export const getUserAlbumsById = data => dispatch => {
+  console.log("data", data);
+
+  dispatch(loadingAlbum());
+  axios
+    .post("/api/albums/albumsById", data)
     .then(res => {
       dispatch({
         type: GET_USER_ALBUMS,

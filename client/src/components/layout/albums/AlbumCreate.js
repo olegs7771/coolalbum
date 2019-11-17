@@ -7,6 +7,8 @@ import Spinner from "../../../utils/Spinner";
 
 import TextFormGroup from "../../textFormGroup/TextFormGroup";
 import TextAreaFormGroup from "../../textFormGroup/TextAreaFormGroup";
+import TextFormCheckbox from "../../textFormGroup/TextFormCheckbox";
+
 import { updateAlbum, clearErrors } from "../../../actions/albumAction";
 
 const getOrientation = imageOrientation();
@@ -17,15 +19,23 @@ export class AlbumCreate extends Component {
     desc: "",
     theme_selected: null,
     errors: {},
+    //ReactJS errors
+
     message: {},
-    rotation: 0
+    rotation: 0,
+    albumTypePrivate: false
   };
+  componentDidMount() {
+    this.setState({
+      message: {}
+    });
+  }
 
   _onChange = e => {
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
+      submitted: false
     });
-    this.props.clearErrors();
   };
 
   //Select File
@@ -33,7 +43,9 @@ export class AlbumCreate extends Component {
     console.log("e.target", e.target.files[0]);
     this.setState({
       theme_selected: URL.createObjectURL(e.target.files[0]),
-      theme_upload: e.target.files[0]
+      theme_upload: e.target.files[0],
+      errors: {},
+      submitted: false
     });
     getOrientation(e.target.files[0], orientation => {
       console.log("orientation", orientation);
@@ -45,6 +57,15 @@ export class AlbumCreate extends Component {
       });
     });
   };
+  //Define the type of Album
+  _changeType = e => {
+    console.log("e.type", e.type);
+    if (e.type === "change") {
+      this.setState({
+        albumTypePrivate: !this.state.albumTypePrivate
+      });
+    }
+  };
 
   //Create Album
   _createAlbum = e => {
@@ -52,22 +73,28 @@ export class AlbumCreate extends Component {
     this.setState({
       submitted: true
     });
+
     //create FormData
     const FD = new FormData();
     FD.append("album_theme", this.state.theme_upload);
     FD.append("title", this.state.title);
     FD.append("desc", this.state.desc);
     FD.append("rotation", this.state.rotation);
+    FD.append("albumType", this.state.albumTypePrivate);
+
     const history = this.props.history;
     this.props.updateAlbum(FD, history);
   };
   //Get Errors And Messages
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.errors !== this.props.errors) {
-      return console.log("this.props.errors", this.props.errors);
+      console.log("this.props.errors", this.props.errors);
+      this.setState({
+        errors: this.props.errors
+      });
     }
     if (prevProps.message !== this.props.message) {
-      return console.log("this.props.message", this.props.message);
+      console.log("this.props.message", this.props.message);
     }
   }
 
@@ -87,16 +114,21 @@ export class AlbumCreate extends Component {
               <TextFormGroup
                 name="title"
                 value={this.state.title}
-                placeholder="Choose Title for Album"
+                placeholder="Choose Title for Album (max 20 chars)"
                 onChange={this._onChange}
                 error={this.props.errors.title}
+                minLength={3}
+                maxLength={20}
               />
+
               <TextAreaFormGroup
                 name="desc"
-                placeholder="Some Description of Album"
+                placeholder="Some Description of Album (max 20 chars)"
                 value={this.state.desc}
                 onChange={this._onChange}
                 error={this.props.errors.desc}
+                minLength={3}
+                maxLength={20}
               />
               <div className="custom-file">
                 <input
@@ -108,21 +140,43 @@ export class AlbumCreate extends Component {
                   <p className="text-left"> Pick Image for Main Theme</p>
                 </label>
               </div>
-              <button type="submit" className="btn btn-success my-3">
-                Create
-              </button>
+              <div className="mx-auto my-1">
+                {this.state.errors ? (
+                  <span className="text-danger">{this.state.errors.error}</span>
+                ) : null}
+              </div>
+              {this.state.submitted &&
+              !this.props.message.album &&
+              Object.keys(this.state.errors).length === 0 ? (
+                <Spinner />
+              ) : null}
+              <div className="mx-auto my-2">
+                {this.props.message.album ? (
+                  <span className="text-success">
+                    {this.props.message.album}
+                  </span>
+                ) : null}
+              </div>
+              <div className="row my-2">
+                <div className="col-md-4 col-4">
+                  <TextFormCheckbox
+                    text="Private"
+                    onChange={this._changeType}
+                  />
+                </div>
+
+                <div className="col-md-4 col-4">
+                  <button type="submit" className="btn btn-success my-3">
+                    Create
+                  </button>
+                </div>
+              </div>
             </form>
-            {this.state.submitted && !this.props.message.album ? (
-              <Spinner />
-            ) : null}
-            {this.props.message.album ? (
-              <span className="text-success">{this.props.message.album}</span>
-            ) : null}
           </div>
           {this.state.theme_selected ? (
             <div className="col-md-6  pt-2 pb-5  ">
               <img
-                onLoad={this._onLoadImage}
+                // onLoad={this._onLoadImage}
                 src={this.state.theme_selected}
                 alt=""
                 style={{

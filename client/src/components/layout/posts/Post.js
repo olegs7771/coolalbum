@@ -3,7 +3,7 @@ import TextAreaFormGroup from "../../textFormGroup/TextAreaFormGroup";
 import FaceBookBtn from "../../../utils/FaceBookBtn";
 import { connect } from "react-redux";
 import { sendPost } from "../../../actions/postAction";
-import Avatar from "../../../utils/Avatar";
+
 import styled from "styled-components";
 
 class Post extends Component {
@@ -36,7 +36,8 @@ class Post extends Component {
       this.setState({
         avatar: auth.user.avatar,
         name: auth.user.name,
-        email: auth.user.email
+        email: auth.user.email,
+        rotation: auth.user.rotation
       });
     }
   }
@@ -55,11 +56,13 @@ class Post extends Component {
       showBtn: true
     });
   };
-  sendPost = e => {
+  _sendPost = e => {
     e.preventDefault();
-    const { text, name, email, avatar, toEmail, toID } = this.state;
+    const { text, name, email, avatar, rotation, toEmail, toID } = this.state;
+
     const senderText = text; //text of post
     const senderAvatar = avatar; //sender avatar
+    const senderAvatarRotation = rotation; //sender avatar rotation
     const senderName = name; //sender name
     const senderEmail = email; //sender name
     const toId = toID; // receiver ID
@@ -67,6 +70,7 @@ class Post extends Component {
     const data = {
       senderText,
       senderAvatar,
+      senderAvatarRotation,
       senderName,
       senderEmail,
       toEmail,
@@ -81,7 +85,7 @@ class Post extends Component {
     const FontSize = styled.span`
       font-size: 12px;
     `;
-    console.log("this.state", this.state);
+
     let formContent;
     let btnContent;
     let avatarContent;
@@ -95,7 +99,21 @@ class Post extends Component {
           </div>
         );
         avatarContent = (
-          <img src={avatar} alt="user" style={{ width: "2.7rem" }} />
+          <div
+            style={{
+              paddingTop: this.props.auth.user.rotation > 0 ? "13%" : null,
+              width: "100%"
+            }}
+          >
+            <img
+              src={avatar}
+              alt="user"
+              style={{
+                width: "100%",
+                transform: `rotate(${this.state.rotation}deg)`
+              }}
+            />
+          </div>
         );
       } else {
         btnContent = (
@@ -103,8 +121,6 @@ class Post extends Component {
             <FaceBookBtn />
           </div>
         );
-
-        avatarContent = <Avatar />;
       }
     }
     //show message instead of textarea form
@@ -118,16 +134,16 @@ class Post extends Component {
       );
     } else {
       formContent = (
-        <div className="row ">
-          <div className="col-lg-3  col-3 mt-1  ">{avatarContent}</div>
+        <div className="row  ">
+          <div className="col-lg-4   col-4 mt-1 ">{avatarContent}</div>
 
           <div
-            className="col-md-12 col-lg-8 col-9
+            className=" col-lg-8 col-8  pt-5 
           
             "
-            style={{ marginTop: "-20px" }}
+            // style={{ marginTop: "-20px" }}
           >
-            <form onSubmit={this.sendPost}>
+            <form onSubmit={this._sendPost}>
               <TextAreaFormGroup
                 name="text"
                 value={text}

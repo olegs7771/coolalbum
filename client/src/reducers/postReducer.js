@@ -3,7 +3,7 @@ import { GET_POSTS, LOADING_POSTS } from "../actions/types";
 
 const initialState = {
   loading: false,
-  post: null
+  posts: null
 };
 export default function(state = initialState, action) {
   switch (action.type) {
@@ -15,7 +15,7 @@ export default function(state = initialState, action) {
     case GET_POSTS:
       return {
         ...state,
-        post: action.payload,
+        posts: action.payload,
         loading: false
       };
     default:

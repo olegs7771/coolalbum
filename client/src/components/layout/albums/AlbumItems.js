@@ -30,7 +30,7 @@ class AlbumItems extends Component {
   render() {
     return (
       <div
-        className="card col-lg-4  "
+        className="card col-lg-3 ml-1  p-2 mb-1"
         style={{
           width: "100%",
           backgroundColor: this.state.onMouseEnter ? "#e9f0eb" : null
@@ -39,29 +39,44 @@ class AlbumItems extends Component {
         onMouseLeave={this._onMouseLeave}
         onClick={this._onClick}
       >
-        <div style={{ paddingBottom: "20%", paddingTop: "20%" }}>
+        <div style={{ paddingBottom: "15%", paddingTop: "25%" }}>
           <img
             src={this.props.image}
             className="card-img-top"
             alt=""
             style={{
               width: "100%",
+              height: "100%",
               transform: `rotate(${this.props.rotation}deg)`
             }}
           />
         </div>
-        <div className="card-body">
+        <div className="card-body border " style={{ height: "100%" }}>
           <h5 className="card-title">{this.props.title}</h5>
 
           <p className="card-text">{this.props.desc}</p>
         </div>
         <span>Created {Moment(this.props.date).format("DD/MM/YYYY")}</span>
+
+        <div className="py-2 border bg-dark">
+          <div className="row">
+            <div className="col-md-6 col-6">
+              {this.props.private === "true" ? (
+                <span className="text-danger">Private</span>
+              ) : (
+                <span className="text-success">Public</span>
+              )}
+            </div>
+            <div className="col-md-6 col-6">
+              <span className="text-white">
+                {this.props.imagesQuant} Images
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
 }
 
-export default connect(
-  null,
-  { selectAlbum }
-)(withRouter(AlbumItems));
+export default connect(null, { selectAlbum })(withRouter(AlbumItems));

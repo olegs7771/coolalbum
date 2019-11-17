@@ -127,10 +127,10 @@ class AlbumEdit extends Component {
                 alt="..."
                 style={{
                   paddingTop:
-                    this.props.album.album.rotation !== "0" ? "12%" : null,
+                    this.props.album.album.rotation !== "0" ? "25%" : null,
 
                   paddingBottom:
-                    this.props.album.album.rotation !== "0" ? "12%" : null,
+                    this.props.album.album.rotation !== "0" ? "25%" : null,
                   width: "100%",
                   transform: `rotate(${this.props.album.album.rotation}deg)`
                 }}
@@ -277,7 +277,7 @@ class AlbumEdit extends Component {
       if (this.props.album.album) {
         return (
           <div className="row py-2">
-            <div className="col-lg-10">
+            <div className="col-lg-10 border">
               <div className=" py-0">
                 <img
                   src={this.props.album.album.image}
@@ -285,10 +285,10 @@ class AlbumEdit extends Component {
                   alt="..."
                   style={{
                     paddingTop:
-                      this.props.album.album.rotation !== "0" ? "12%" : null,
+                      this.props.album.album.rotation !== "0" ? "25%" : null,
 
                     paddingBottom:
-                      this.props.album.album.rotation !== "0" ? "12%" : null,
+                      this.props.album.album.rotation !== "0" ? "25%" : null,
                     width: "100%",
                     transform: `rotate(${this.props.album.album.rotation}deg)`
                   }}
@@ -455,7 +455,9 @@ const mapStateToProps = state => ({
   message: state.message.message
 });
 
-export default connect(
-  mapStateToProps,
-  { selectAlbum, addImageToGallery, deleteAlbum, getGallery }
-)(withRouter(AlbumEdit));
+export default connect(mapStateToProps, {
+  selectAlbum,
+  addImageToGallery,
+  deleteAlbum,
+  getGallery
+})(withRouter(AlbumEdit));

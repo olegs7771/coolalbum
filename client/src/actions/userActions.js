@@ -358,7 +358,6 @@ export const isEmailExists = data => dispatch => {
   axios
     .post("/api/users/email", data)
     .then(res => {
-      console.log("res.data", res.data);
       dispatch(clearErrors());
       dispatch({
         type: GET_MESSAGE,

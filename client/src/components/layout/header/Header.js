@@ -37,21 +37,23 @@ class Header extends Component {
       this.props.setCurrentUser(decodedToken);
     }
     // Fetch Weather API from OPEN WEATHER MAP
-    if (this.props.auth.user.name) {
+    if (this.props.auth.isAuthenticated) {
       this.props.getWeather();
+      this.props.getPosts();
     }
   }
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     if (prevProps.post !== this.props.post) {
       this.setState({
-        posts: this.props.post.post
+        posts: this.props.post.posts
       });
     }
-
-    //get posts after user logged
-    if (prevProps.auth !== this.props.auth) {
-      //Rotate Avatar in Header if not taken from Facebook or Gravatar
-      // const reg = new RegExp("^(http|https)://|^//www", "i");
+    //Reload Posts and Weather
+    if (prevProps.auth.user.id !== this.props.auth.user.id) {
+      if (this.props.auth.isAuthenticated) {
+        this.props.getWeather();
+        this.props.getPosts();
+      }
     }
   }
 
@@ -112,7 +114,9 @@ class Header extends Component {
             </a>
             <ul className="navbar-nav ml-auto mt-2 ">
               <li className="nav-item ">
-                <WeatherWidGet />
+                <WeatherWidGet
+                  isAuthenticated={this.props.auth.isAuthenticated}
+                />
               </li>
             </ul>
             <nav className="navbar navbar-dark bg-dark navbar-expand-lg ml-auto ">
@@ -198,7 +202,9 @@ const mapStateToProps = state => ({
   post: state.post
 });
 
-export default connect(
-  mapStateToProps,
-  { setCurrentUser, logoutUser, getWeather, getPosts }
-)(withRouter(Header));
+export default connect(mapStateToProps, {
+  setCurrentUser,
+  logoutUser,
+  getWeather,
+  getPosts
+})(withRouter(Header));

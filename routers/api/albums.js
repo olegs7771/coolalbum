@@ -9,7 +9,6 @@ const User = require("../../models/User");
 const Album = require("../../models/Album");
 
 const passport = require("passport");
-const validateAlbumCreate = require("../validation/albumCreate");
 
 //Bring compressor  Album Theme
 const compressorTheme = require("../../utils/compressor/compressorAlbumTheme");
@@ -52,6 +51,27 @@ router.post(
       });
   }
 );
+//Get User Albums by req.body.id
+//@Private Route
+router.post(
+  "/albumsById",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    console.log("req.body", req.body);
+
+    Album.find({ uid: req.body.id })
+      .then(albums => {
+        if (!albums) {
+          res.status(401).json({ Msg: "No Albums" });
+        } else {
+          res.status(200).json(albums);
+        }
+      })
+      .catch(err => {
+        res.status(400).json(err);
+      });
+  }
+);
 //Get Album by id
 //@Private Route
 router.post(
@@ -78,20 +98,14 @@ router.post(
   "/update",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    console.log("req.body", req.body);
-
     upload(req, res, err => {
-      const { isValid, errors } = validateAlbumCreate(req.body);
-      if (!isValid) {
-        return res.status(400).json(errors);
-      }
+      console.log("passed validation");
 
-      console.log("req.file", req.file);
       console.log("req.body.title", req.body.title);
       console.log("req.body.desc", req.body.desc);
 
       if (req.file === undefined) {
-        return res.status(200).json({ error: "Please select file" });
+        return res.status(400).json({ error: "Please select file" });
       }
       if (err) {
         res.status(400).json({ error: err });
@@ -99,6 +113,16 @@ router.post(
         //No Errors in uploading image
         if (req.file.filename) {
           compressImgTheme(cb => {
+            // public/theme_image_upload
+            fse
+              .remove(req.file.path)
+              .then(() => {
+                console.log("deleted in uploads");
+              })
+              .catch(err => {
+                console.log("error to delete in uploads", err);
+              });
+
             cb.forEach(elem => {
               console.log("elem", elem);
               if (cb) {
@@ -111,7 +135,8 @@ router.post(
                   title: req.body.title,
                   desc: req.body.desc,
                   image: themeImagePath,
-                  rotation: req.body.rotation
+                  rotation: req.body.rotation,
+                  private: req.body.albumType
                 });
                 newAlbum
 
@@ -122,15 +147,6 @@ router.post(
                     });
 
                     //New Album has been created then delete in
-                    // public/theme_image_upload
-                    fse
-                      .remove(req.file.path)
-                      .then(() => {
-                        console.log("deleted in uploads");
-                      })
-                      .catch(err => {
-                        console.log("error to delete in uploads", err);
-                      });
                   })
                   .catch(err => {
                     console.log("err to save album! :", err);
@@ -163,17 +179,18 @@ router.post(
         if (req.file.filename) {
           //fire up compressor
           compressImgGallery(cb => {
+            //Remove row file from /upload
+            fse
+              .remove(req.file.path)
+              .then(() => {
+                console.log("deleted in uploads");
+              })
+              .catch(err => {
+                console.log("error to delete in uploads", err);
+              });
             cb.forEach(elem => {
               console.log("elem", elem);
-              //Remove row file from /upload
-              fse
-                .remove(req.file.path)
-                .then(() => {
-                  console.log("deleted in uploads");
-                })
-                .catch(err => {
-                  console.log("error to delete in uploads", err);
-                });
+
               console.log("req.body", req.body);
               Album.findById(req.body.id)
 
@@ -250,6 +267,9 @@ router.post(
       fse.pathExists(albumThemePath).then(path => {
         if (!path) {
           console.log("no file");
+          album.deleteOne().then(() => {
+            res.status(200).json({ msg: "Deleted" });
+          });
         } else {
           console.log("file exists");
           fse.unlink(albumThemePath, err => {

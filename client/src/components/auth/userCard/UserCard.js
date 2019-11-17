@@ -46,7 +46,4 @@ const mapStateToProps = state => ({
   album: state.album
 });
 
-export default connect(
-  mapStateToProps,
-  { getUserAlbums }
-)(UserCard);
+export default connect(mapStateToProps, { getUserAlbums })(UserCard);
