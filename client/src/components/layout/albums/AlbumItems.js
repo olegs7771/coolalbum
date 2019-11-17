@@ -39,7 +39,7 @@ class AlbumItems extends Component {
         onMouseLeave={this._onMouseLeave}
         onClick={this._onClick}
       >
-        <div style={{ paddingBottom: "25%", paddingTop: "25%" }}>
+        <div style={{ paddingBottom: "15%", paddingTop: "25%" }}>
           <img
             src={this.props.image}
             className="card-img-top"
@@ -59,14 +59,24 @@ class AlbumItems extends Component {
         <span>Created {Moment(this.props.date).format("DD/MM/YYYY")}</span>
 
         <div className="py-2 border bg-dark">
-          <span className="text-white">{this.props.imagesQuant} Images</span>
+          <div className="row">
+            <div className="col-md-6 col-6">
+              {this.props.private === "true" ? (
+                <span className="text-danger">Private</span>
+              ) : (
+                <span className="text-success">Public</span>
+              )}
+            </div>
+            <div className="col-md-6 col-6">
+              <span className="text-white">
+                {this.props.imagesQuant} Images
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     );
   }
 }
 
-export default connect(
-  null,
-  { selectAlbum }
-)(withRouter(AlbumItems));
+export default connect(null, { selectAlbum })(withRouter(AlbumItems));
