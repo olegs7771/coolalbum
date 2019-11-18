@@ -67,14 +67,12 @@ class RegisterForm extends Component {
       email: this.state.email,
       phone: this.state.phone,
       location: this.state.location,
-
       password: this.state.password
     };
-    console.log("this.props", this.props);
 
     const { history } = this.props;
     this.props.registerUser(newUser, history);
-    console.log(newUser);
+    console.log("newUser", newUser);
   };
 
   render() {
@@ -95,7 +93,15 @@ class RegisterForm extends Component {
         <div className="mx-auto" style={{ marginTop: "-1rem" }}>
           <FaceBookBtn />
         </div>
-        <div className="mx-auto">Or fill out the forms</div>
+        {this.state.message.message ? (
+          <span className="text-success h5 mx-auto">
+            {this.state.message.message}
+          </span>
+        ) : (
+          <div className="mx-auto">
+            <span className="h5 mx-auto">Or fill out the forms</span>
+          </div>
+        )}
 
         <div className="card card-body">
           <div className="container">
@@ -126,9 +132,18 @@ class RegisterForm extends Component {
                   onChange={phone => this.setState({ phone })}
                 />{" "}
                 <br />
-                <div className="mb-2" style={{ fontSize: "0.9rem" }}>
-                  Your number needed for login with SMS (Optinal)
-                </div>
+                {this.state.errors.phone ? (
+                  <div>
+                    <span className="text-danger">
+                      {this.state.errors.phone}
+                    </span>
+                    <br />
+                    <span className="text-muted">
+                      Hint: Pick your country and write your mobile number
+                      without international code
+                    </span>
+                  </div>
+                ) : null}
               </div>
               <TextFormGroup
                 placeholder="Location..."
@@ -159,7 +174,8 @@ const mapStateToProps = state => ({
   message: state.message.message
 });
 
-export default connect(
-  mapStateToProps,
-  { registerUser, deleteErrors, isUserEmailExists }
-)(withRouter(RegisterForm));
+export default connect(mapStateToProps, {
+  registerUser,
+  deleteErrors,
+  isUserEmailExists
+})(withRouter(RegisterForm));
