@@ -112,8 +112,10 @@ class WeatherWidGet extends Component {
         </div>
         //         <div>all data</div>
       );
-    } else {
+    } else if (this.props.isAuthenticated) {
       return <div className="text-danger">Loading..</div>;
+    } else {
+      return null;
     }
   }
 }

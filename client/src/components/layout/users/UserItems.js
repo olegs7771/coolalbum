@@ -232,6 +232,7 @@ class UserItems extends Component {
             </div>
           </div>
         </Card>
+
         {this.state.showPostForm ? (
           <div className="mx-auto  p-2 border mt-2">{postForm}</div>
         ) : null}

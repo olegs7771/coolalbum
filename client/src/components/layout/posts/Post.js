@@ -47,6 +47,11 @@ class Post extends Component {
       this.setState({
         message: this.props.message.message.post
       });
+      setTimeout(() => {
+        this.setState({
+          message: []
+        });
+      }, 5000);
     }
   }
 
@@ -163,7 +168,4 @@ const mapStateToprops = state => ({
   auth: state.auth,
   message: state.message
 });
-export default connect(
-  mapStateToprops,
-  { sendPost }
-)(Post);
+export default connect(mapStateToprops, { sendPost })(Post);
