@@ -9,7 +9,7 @@ import Register from "./components/auth/register/Register";
 import Login from "./components/auth/login/Login";
 import RecoverPassword from "./components/auth/login/RecoverPassword";
 import RecoverNewPassword from "./components/auth/login/RecoverNewPassword";
-import SuccessRegMsg from "./utils/SuccessRegMsg";
+
 //here comes confirmation for registartion
 import ConfirmRegister from "./utils/ConfirmRegister";
 import Contact from "./utils/Contact";
@@ -96,7 +96,7 @@ class App extends Component {
                     component={RecoverNewPassword}
                   />
                   <Route exact path="/register" component={Register} />
-                  <Route exact path="/success_msg" component={SuccessRegMsg} />
+
                   <Route
                     exact
                     path="/confirm_registration/:token/:_id"

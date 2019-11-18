@@ -13,7 +13,8 @@ class Users extends Component {
     loading: false,
     albumsPublic: "",
     albumsPrivate: "",
-    albums: []
+    albums: [],
+    noUsers: true
   };
 
   componentDidMount() {
@@ -25,6 +26,15 @@ class Users extends Component {
   }
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.users !== this.props.users) {
+      if (this.props.users.users) {
+        console.log("this.props.users", this.props.users);
+        if (this.props.users.users.length > 0) {
+          this.setState({
+            noUsers: false
+          });
+        }
+      }
+
       this.setState({
         users: this.props.users.users
       });
@@ -38,16 +48,25 @@ class Users extends Component {
   }
 
   render() {
-    console.log("this.props.album.albums", this.props.album.albums);
+    console.log("this.state", this.state);
 
     let userContent;
 
     const { users, loading } = this.state;
     if (users === null || loading) {
-      userContent = <Spinner />;
+      userContent = (
+        <div className="pt-5 ">
+          <Spinner />
+        </div>
+      );
     } else {
       userContent = (
         <div className="row">
+          {this.state.noUsers ? (
+            <div className="my-3 mx-auto">
+              <span className="h5">No users to show</span>
+            </div>
+          ) : null}
           {users.map((item, index) => (
             <UserItems
               key={index}
@@ -64,24 +83,15 @@ class Users extends Component {
         </div>
       );
     }
-    console.log("userContent._self.state.users", userContent._self.state.users);
-    if (userContent._self.state.users) {
-      if (userContent._self.state.users.length === 0) {
-        return (
-          <div className="my-4 mx-auto" style={{ height: 500 }}>
-            <span className="h5">No Users to show</span>
-          </div>
-        );
-      } else {
-        return <div className="my-4 mx-auto">{userContent}</div>;
-      }
-    } else {
-      return (
-        <div className="my-4 mx-auto pt-5" style={{ height: 500 }}>
-          <Spinner />
-        </div>
-      );
-    }
+
+    return (
+      <div
+        className="my-4 mx-auto"
+        style={{ height: this.state.noUsers ? 600 : null }}
+      >
+        {userContent}
+      </div>
+    );
   }
 }
 

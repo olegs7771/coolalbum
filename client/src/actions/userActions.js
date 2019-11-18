@@ -20,9 +20,15 @@ export const registerUser = (userData, history) => dispatch => {
     .post("api/users/register", userData)
     .then(res => {
       console.log("res.data", res.data);
+      dispatch({
+        type: GET_MESSAGE,
+        payload: res.data
+      });
     })
     .then(() => {
-      history.push("/success_msg");
+      setTimeout(() => {
+        history.push("/login");
+      }, 5000);
     })
 
     .catch(err =>
