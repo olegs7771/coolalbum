@@ -35,9 +35,6 @@ class Users extends Component {
       });
       console.log("albums", this.props.album.albums);
     }
-    if (prevState.users !== this.state.users) {
-      console.log("users", this.state.users);
-    }
   }
 
   render() {
@@ -67,8 +64,24 @@ class Users extends Component {
         </div>
       );
     }
-
-    return <div className="my-4 mx-auto">{userContent}</div>;
+    console.log("userContent._self.state.users", userContent._self.state.users);
+    if (userContent._self.state.users) {
+      if (userContent._self.state.users.length === 0) {
+        return (
+          <div className="my-4 mx-auto" style={{ height: 500 }}>
+            <span className="h5">No Users to show</span>
+          </div>
+        );
+      } else {
+        return <div className="my-4 mx-auto">{userContent}</div>;
+      }
+    } else {
+      return (
+        <div className="my-4 mx-auto pt-5" style={{ height: 500 }}>
+          <Spinner />
+        </div>
+      );
+    }
   }
 }
 
