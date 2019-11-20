@@ -57,6 +57,12 @@ class Chat extends Component {
     });
   };
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.auth !== this.props.auth) {
+      this.props.loadChatMessages();
+    }
+  }
+
   componentDidMount() {
     this.props.loadChatMessages();
     const socket = Socket_io();
@@ -92,6 +98,8 @@ class Chat extends Component {
 
     let chatMessagesContent;
     if (chatMessages) {
+      console.log("chat messages", chatMessages);
+
       chatMessagesContent = chatMessages.map((item, index) => (
         <ChatItem
           key={index}
@@ -120,20 +128,30 @@ class Chat extends Component {
             <div>{chatMessagesContent}</div>
             {/* {End Chat} */}
             <div className="mx-auto text-success">{onlineUserMessage}</div>
-            <form onSubmit={this.messageSendHandler}>
-              <TextAreaFormGroup
-                onChange={this.onChange}
-                value={text}
-                name="text"
-                placeholder="write something.."
-              />
-
-              <input
-                type="submit"
-                value="send"
-                className="btn btn-light mx-auto mb-2"
-              />
-            </form>
+            <div className="mt-4 mx-auto" style={{ width: "50%" }}>
+              <form onSubmit={this.messageSendHandler}>
+                <div className="row">
+                  <div className="col-md-8 col-8 ">
+                    <TextAreaFormGroup
+                      onChange={this.onChange}
+                      value={text}
+                      name="text"
+                      placeholder="write something.."
+                    />
+                  </div>
+                  <div
+                    className="col-md-4 col-4  "
+                    style={{ paddingRight: "27%" }}
+                  >
+                    <input
+                      type="submit"
+                      value="send"
+                      className="btn btn-light border  mb-2"
+                    />
+                  </div>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>
@@ -143,7 +161,8 @@ class Chat extends Component {
 const mapStateToProps = state => ({
   auth: state.auth
 });
-export default connect(
-  mapStateToProps,
-  { chatMessage, loadChatMessages, loadChatMessagesByDate }
-)(Chat);
+export default connect(mapStateToProps, {
+  chatMessage,
+  loadChatMessages,
+  loadChatMessagesByDate
+})(Chat);

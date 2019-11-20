@@ -12,18 +12,17 @@ class ChatItem extends Component {
   };
 
   render() {
-    const authName = this.props.auth.user.name; //to differ messages of logged user and the rest
     const authID = this.props.auth.user.id; //logged uid for filter delete btn
 
-    const { name, date, text, id, uid } = this.props;
+    const { name, date, text, id, uid, email } = this.props;
 
     //backgroundColor for User(auth/rest)
     let userColorContent;
     //margin for User(auth/rest)
     let marginContent;
 
-    if (name === authName) {
-      userColorContent = "rgb(197, 247, 190)";
+    if (uid === authID) {
+      userColorContent = "#c7cdd4";
       marginContent = "0px";
     } else {
       userColorContent = "rgb(243, 247, 242)";
@@ -76,7 +75,4 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(
-  mapStateToProps,
-  { deleteChatMessage }
-)(ChatItem);
+export default connect(mapStateToProps, { deleteChatMessage })(ChatItem);
