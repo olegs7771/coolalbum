@@ -72,7 +72,7 @@ class UserItems extends Component {
 
     if (this.props.avatar.includes("www.gravatar.com")) {
       avatarResizes = (
-        <div>
+        <div className="p-3">
           <img
             src={this.props.avatar}
             className="card-img-top"
@@ -85,7 +85,12 @@ class UserItems extends Component {
       );
     } else {
       avatarResizes = (
-        <div style={{ paddingBottom: this.props.rotation > 0 ? "11%" : null }}>
+        <div
+          style={{
+            paddingBottom: this.props.rotation > 0 ? "16%" : null,
+            paddingTop: this.props.rotation > 0 ? "3%" : null
+          }}
+        >
           <img
             src={this.props.avatar}
             className="card-img-top"
@@ -127,11 +132,8 @@ class UserItems extends Component {
         }}
       >
         <Card className="card ">
-          <div
-            className="py-1 border"
-            style={{ backgroundColor: "rgb(60, 72, 77)" }}
-          >
-            <span className="card-title mt-1 text-white ">{name}</span>
+          <div className="py-1 border" style={{ backgroundColor: "#c7cdd4" }}>
+            <span className="card-title mt-1 text-success ">{name}</span>
           </div>
 
           <div
@@ -150,55 +152,89 @@ class UserItems extends Component {
           ></span>
 
           {showCreds ? (
-            <ul className="list-group list-group-flush mt-2">
-              <li
-                className="list-group-item"
-                style={{ backgroundColor: "rgb(60, 72, 77,0.5)" }}
-              >
-                <span className="text-white"> Email: {email}</span>
-              </li>
-              <li
-                className="list-group-item"
-                style={{ backgroundColor: "rgb(60, 72, 77,0.5)" }}
-              >
-                <span className="text-white">Phone: {phone}</span>
-              </li>
-              <li
-                className="list-group-item"
-                style={{ backgroundColor: "rgb(60, 72, 77,0.5)" }}
-              >
-                <span className="text-white"> Location: {location}</span>
-              </li>
-              <li
-                className="list-group-item"
-                style={{ backgroundColor: "rgb(60, 72, 77,0.5)" }}
-              >
-                {/* {Additional Data on user} */}
-                <div className="row">
-                  <div className="col-md-4 col-4">
-                    <span className="text-white">
-                      Since
-                      <br />
-                      {moment(date).format("DD/MM/YYYY")}
-                    </span>
-                  </div>
-                  <div className="col-md-8 col-8">
-                    <span className="text-white h5">
-                      Private Albums:{" "}
-                      <span className="text-danger h5">
-                        {this.state.privateAlbumCount}
-                      </span>
-                      <br />
-                      Public Albums:{" "}
-                      <span className="text-success h5">
-                        {this.state.publicAlbumCount}
-                      </span>
-                    </span>
-                  </div>
+            <div className="card ">
+              <div className="p-2 ">
+                <div className="text-left">
+                  <span className="text-success"> Email: {email}</span>
+                  <hr />
+                  <span className="text-success">Phone: {phone}</span>
+                  <hr />
+                  <span className="text-success"> Location: {location}</span>
                 </div>
-              </li>
-            </ul>
-          ) : null}
+              </div>
+              <hr />
+              <div className="row">
+                <div className="col-md-4 col-4">
+                  <span className="text-success">
+                    Since
+                    <br />
+                    {moment(date).format("DD/MM/YYYY")}
+                  </span>
+                </div>
+                <div className="col-md-8 col-8">
+                  <span className="text-success h5">
+                    Private Albums:{" "}
+                    <span className="text-danger h5">
+                      {this.state.privateAlbumCount}
+                    </span>
+                    <br />
+                    Public Albums:{" "}
+                    <span className="text-success h5">
+                      {this.state.publicAlbumCount}
+                    </span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          ) : // <ul className="list-group list-group-flush mt-2 border">
+          //   <li
+          //     className="list-group-item"
+          //     style={{ backgroundColor: "rgb(60, 72, 77,0.5)" }}
+          //   >
+          //     <span className="text-white"> Email: {email}</span>
+          //   </li>
+          //   <li
+          //     className="list-group-item"
+          //     style={{ backgroundColor: "rgb(60, 72, 77,0.5)" }}
+          //   >
+          //     <span className="text-white">Phone: {phone}</span>
+          //   </li>
+          //   <li
+          //     className="list-group-item"
+          //     style={{ backgroundColor: "rgb(60, 72, 77,0.5)" }}
+          //   >
+          //     <span className="text-white"> Location: {location}</span>
+          //   </li>
+          //   <li
+          //     className="list-group-item"
+          //     style={{ backgroundColor: "rgb(60, 72, 77,0.5)" }}
+          //   >
+          //     {/* {Additional Data on user} */}
+          // <div className="row">
+          //   <div className="col-md-4 col-4">
+          //     <span className="text-white">
+          //       Since
+          //       <br />
+          //       {moment(date).format("DD/MM/YYYY")}
+          //     </span>
+          //   </div>
+          //   <div className="col-md-8 col-8">
+          //     <span className="text-white h5">
+          //       Private Albums:{" "}
+          //       <span className="text-danger h5">
+          //         {this.state.privateAlbumCount}
+          //       </span>
+          //       <br />
+          //       Public Albums:{" "}
+          //       <span className="text-success h5">
+          //         {this.state.publicAlbumCount}
+          //       </span>
+          //     </span>
+          //   </div>
+          // </div>
+          //   </li>
+          // </ul>
+          null}
 
           <div
             className="btn-group border "
