@@ -34,7 +34,7 @@
     "ipware": "^2.0.0",
     "jsonwebtoken": "^8.5.1",
     "jwa": "^1.4.1",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "mongoose": "^5.5.8",
     "multer": "^1.4.1",
     "nexmo": "^2.4.1",
